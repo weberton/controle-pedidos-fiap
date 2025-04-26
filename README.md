@@ -30,3 +30,9 @@ src/main/resources/db/migration
 ./mvnw spring-boot:run
 
 ```
+### Coleção Postman
+A coleção Postman com exemplos de requisições para testar a API está disponível em:
+
+```shell
+postman/controle-pedidos.postman_collection.json
+```
