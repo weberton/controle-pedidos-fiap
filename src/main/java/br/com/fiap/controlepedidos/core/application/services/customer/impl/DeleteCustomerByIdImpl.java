@@ -9,14 +9,14 @@ import java.util.UUID;
 @Service
 public class DeleteCustomerByIdImpl implements IDeleteCustomerById {
 
-    private final ICustomerRepository _customerRepository;
+    private final ICustomerRepository customerRepository;
 
     public DeleteCustomerByIdImpl(ICustomerRepository customerRepository) {
-       _customerRepository = customerRepository;
+       this.customerRepository = customerRepository;
     }
 
     @Override
     public void delete(UUID id) {
-        this._customerRepository.deleteById(id);
+        this.customerRepository.deleteById(id);
     }
 }

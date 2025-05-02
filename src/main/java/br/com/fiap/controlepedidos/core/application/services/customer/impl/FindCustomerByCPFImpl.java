@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class FindCustomerByCPFImpl implements IFindCustomerByCPF {
 
-    private final ICustomerRepository _customerRepository;
+    private final ICustomerRepository customerRepository;
 
 
     public FindCustomerByCPFImpl(ICustomerRepository customerRepository) {
-        _customerRepository = customerRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Override
     public Customer findByCPF(String cpf) {
-        return this._customerRepository.findByCpf(cpf)
+        return this.customerRepository.findByCpf(cpf)
                 .orElseThrow(() -> new RecordNotFoundException("CPF %s não encontrado.".formatted(cpf)));
     }
 }

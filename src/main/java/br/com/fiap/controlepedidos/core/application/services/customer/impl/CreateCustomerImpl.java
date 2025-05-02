@@ -11,10 +11,10 @@ import java.util.Objects;
 @Service
 public class CreateCustomerImpl implements ICreateCustomer {
 
-    private final ICustomerRepository _customerRepository;
+    private final ICustomerRepository customerRepository;
 
     public CreateCustomerImpl(ICustomerRepository customerRepository) {
-        _customerRepository = customerRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Override
@@ -30,14 +30,14 @@ public class CreateCustomerImpl implements ICreateCustomer {
                     .formatted(customer.getEmail()));
         }
 
-        return this._customerRepository.save(customer);
+        return this.customerRepository.save(customer);
     }
 
     private boolean isCpfExists(final String cpf) {
-        return Objects.nonNull(cpf) && this._customerRepository.findByCpf(cpf).isPresent();
+        return Objects.nonNull(cpf) && this.customerRepository.findByCpf(cpf).isPresent();
     }
 
     private boolean isEmailExists(final String email) {
-        return this._customerRepository.findByEmail(email).isPresent();
+        return this.customerRepository.findByEmail(email).isPresent();
     }
 }
