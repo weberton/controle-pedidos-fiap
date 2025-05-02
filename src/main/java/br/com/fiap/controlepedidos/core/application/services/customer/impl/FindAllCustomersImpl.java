@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class FindAllCustomersImpl implements IFindAllCustomers {
 
-    private final ICustomerRepository _customerRepository;
+    private final ICustomerRepository customerRepository;
 
     public FindAllCustomersImpl(ICustomerRepository customerRepository) {
-        _customerRepository = customerRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Override
     public Page<Customer> findAll(Pageable pageable) {
-        return this._customerRepository.findAll(pageable);
+        return this.customerRepository.findAll(pageable);
     }
 }

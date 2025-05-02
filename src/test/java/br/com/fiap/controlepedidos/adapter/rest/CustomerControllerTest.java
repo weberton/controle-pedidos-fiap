@@ -1,10 +1,15 @@
 package br.com.fiap.controlepedidos.adapter.rest;
 
-import br.com.fiap.controlepedidos.adapters.driver.apirest.controllers.CustomerController;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.CustomerApi;
+import br.com.fiap.controlepedidos.adapters.driver.apirest.controllers.CustomerController;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.CustomerDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.exceptions.RestExceptionHandler;
+import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
+import br.com.fiap.controlepedidos.core.application.services.customer.ICreateCustomer;
+import br.com.fiap.controlepedidos.core.application.services.customer.IFindCustomerByCPF;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
+import br.com.fiap.controlepedidos.core.domain.validations.ExistentRecordException;
+import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
@@ -26,22 +31,28 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @ExtendWith(MockitoExtension.class)
-class ClienteControllerTest {
+class CustomerControllerTest {
 
     public static final String CPF = "89405972812";
     public static final String NOME_COMPLETO = "Nome completo";
     public static final String MAIL = "email@gmail.com";
 
     @Mock
-    //private ClienteService clienteService;
+    private ICreateCustomer createCustomerService;
+    @Mock
+    private IFindCustomerByCPF findCustomerByCPF;
+    @Mock
+    private ICustomerRepository deleteCustomerById;
     @InjectMocks
     private CustomerController clienteController;
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
-    private CustomerDTO clienteDto;
+    private CustomerDTO customerDto;
 
     @BeforeEach
     void setup() {
@@ -49,27 +60,27 @@ class ClienteControllerTest {
                 .setControllerAdvice(new RestExceptionHandler())
                 .build();
         this.objectMapper = new ObjectMapper();
-        this.clienteDto = new CustomerDTO(UUID.randomUUID(), CPF, NOME_COMPLETO, MAIL);
+        this.customerDto = new CustomerDTO(UUID.randomUUID(), CPF, NOME_COMPLETO, MAIL);
     }
 
     @Test
     void criar_quandoCpfEmailNaoExistem_retornaStatusCreated() throws Exception {
 
-        //when(clienteService.criarCliente(any())).thenReturn(clienteDto.converteParaModel());
+        when(createCustomerService.createCustomer(any())).thenReturn(customerDto.convertToModel());
 
         mockMvc.perform(post(CustomerApi.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(toJson(clienteDto)))
+                        .content(toJson(customerDto)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     void criar_quandoServiceLancerRegistroExistente_retornaStatus400() throws Exception {
-        //when(clienteService.criarCliente(any())).thenThrow(RegistroExistenteException.class);
+        when(createCustomerService.createCustomer(any())).thenThrow(ExistentRecordException.class);
         mockMvc.perform(post(CustomerApi.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(toJson(clienteDto)))
+                        .content(toJson(customerDto)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
@@ -77,10 +88,10 @@ class ClienteControllerTest {
 
     @Test
     void criar_quandoCpfInvalido_retornaStatus400() throws Exception {
-        CustomerDTO clienteComCpfInvalido = new CustomerDTO(this.clienteDto.id(),
+        CustomerDTO clienteComCpfInvalido = new CustomerDTO(this.customerDto.id(),
                 "123",
-                this.clienteDto.nome(),
-                this.clienteDto.email());
+                this.customerDto.nome(),
+                this.customerDto.email());
 
         mockMvc.perform(post(CustomerApi.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -94,9 +105,9 @@ class ClienteControllerTest {
     @NullSource
     @ValueSource(strings = {"invalidEmail@", ""})
     void criar_quandoEmailInvalido_retornaStatus400(String invalidEmail) throws Exception {
-        CustomerDTO clienteComEmailInvalido = new CustomerDTO(this.clienteDto.id(),
-                this.clienteDto.cpf(),
-                this.clienteDto.nome(),
+        CustomerDTO clienteComEmailInvalido = new CustomerDTO(this.customerDto.id(),
+                this.customerDto.cpf(),
+                this.customerDto.nome(),
                 invalidEmail);
 
         mockMvc.perform(post(CustomerApi.BASE_URL)
@@ -111,35 +122,35 @@ class ClienteControllerTest {
     @NullSource
     @ValueSource(strings = {""})
     void criar_quandoNomeInvalido_retornaStatus400(String invalidName) throws Exception {
-        CustomerDTO clienteComEmailInvalido = new CustomerDTO(this.clienteDto.id(),
-                this.clienteDto.cpf(),
+        CustomerDTO clienteComEmailInvalido = new CustomerDTO(this.customerDto.id(),
+                this.customerDto.cpf(),
                 invalidName,
-                this.clienteDto.email());
+                this.customerDto.email());
 
         mockMvc.perform(post(CustomerApi.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(toJson(clienteComEmailInvalido)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString(CustomerDTO.INVALID_EMAIL)));
+                .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString(CustomerDTO.INVALID_NAME)));
     }
 
     @Test
     void buscarPorCpf_quandoCpfEncontrado_retornaCliente() throws Exception {
-        Customer cliente = clienteDto.convertToModel();
+        Customer customer = customerDto.convertToModel();
 
-        //when(clienteService.buscarPorCpf(any())).thenReturn(cliente);
+        when(findCustomerByCPF.findByCPF(any())).thenReturn(customer);
 
-        mockMvc.perform(get(CustomerApi.BASE_URL + "/" + cliente.getCpf()))
+        mockMvc.perform(get(CustomerApi.BASE_URL + "/" + customer.getCpf()))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     void buscarPorCpf_quandoCpfNaoEncontrado_retorna404() throws Exception {
-        Customer cliente = clienteDto.convertToModel();
+        Customer cliente = customerDto.convertToModel();
 
-        //when(clienteService.buscarPorCpf(any())).thenThrow(RecordNotFoundException.class);
+        when(findCustomerByCPF.findByCPF(any())).thenThrow(RecordNotFoundException.class);
 
         mockMvc.perform(get(CustomerApi.BASE_URL + "/" + cliente.getCpf()))
                 .andDo(MockMvcResultHandlers.print())
@@ -148,9 +159,9 @@ class ClienteControllerTest {
 
     @Test
     void apagar_retornaOk() throws Exception {
-        Customer cliente = clienteDto.convertToModel();
+        Customer cliente = customerDto.convertToModel();
 
-        //doNothing().when(clienteService).apagar(any());
+        doNothing().when(deleteCustomerById).deleteById(cliente.getId());
 
         mockMvc.perform(delete(CustomerApi.BASE_URL + "/" + cliente.getId()))
                 .andDo(MockMvcResultHandlers.print())

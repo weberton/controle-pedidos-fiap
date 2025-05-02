@@ -20,39 +20,42 @@ import java.util.UUID;
 @RestController
 public class CustomerController implements CustomerApi {
 
-    private final ICreateCustomer _createCustomerService;
-    private final IFindAllCustomers _findAllCustomerService;
-    private final IFindCustomerByCPF _findAllCustomerByCPFService;
-    private final ICustomerRepository _deleteCustomerByIdService;
+    private final ICreateCustomer createCustomerService;
+    private final IFindAllCustomers findAllCustomerService;
+    private final IFindCustomerByCPF findAllCustomerByCPFService;
+    private final ICustomerRepository deleteCustomerByIdService;
 
-    public CustomerController(ICreateCustomer createCustomerService, IFindAllCustomers findAllCustomerService, IFindCustomerByCPF findAllCustomerByCPFService, ICustomerRepository deleteCustomerByIdService) {
-        _createCustomerService = createCustomerService;
-        _findAllCustomerService = findAllCustomerService;
-        _findAllCustomerByCPFService = findAllCustomerByCPFService;
-        _deleteCustomerByIdService = deleteCustomerByIdService;
+    public CustomerController(ICreateCustomer createCustomerService,
+                              IFindAllCustomers findAllCustomerService,
+                              IFindCustomerByCPF findAllCustomerByCPFService,
+                              ICustomerRepository deleteCustomerByIdService) {
+        this.createCustomerService = createCustomerService;
+        this.findAllCustomerService = findAllCustomerService;
+        this.findAllCustomerByCPFService = findAllCustomerByCPFService;
+        this.deleteCustomerByIdService = deleteCustomerByIdService;
     }
 
     @Override
     public ResponseEntity<CustomerDTO> create(final CustomerDTO clienteDTO) {
-        Customer clienteSalvo = this._createCustomerService.createCustomer(clienteDTO.convertToModel());
+        Customer clienteSalvo = this.createCustomerService.createCustomer(clienteDTO.convertToModel());
         return new ResponseEntity<>(CustomerDTO.convertToDTO(clienteSalvo),HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<CustomerDTO> findByCPF(final String cpf) {
-        Customer clienteEncontraddo = this._findAllCustomerByCPFService.findByCPF(cpf);
+        Customer clienteEncontraddo = this.findAllCustomerByCPFService.findByCPF(cpf);
         return ResponseEntity.ok(CustomerDTO.convertToDTO(clienteEncontraddo));
     }
 
     @Override
     public ResponseEntity<PagedResponse<CustomerDTO>> findAll(final Pageable pageable) {
-        Page<CustomerDTO> result = this._findAllCustomerService.findAll(pageable).map(CustomerDTO::convertToDTO);
+        Page<CustomerDTO> result = this.findAllCustomerService.findAll(pageable).map(CustomerDTO::convertToDTO);
         return ResponseEntity.ok(PagedResponse.of(result));
     }
 
     @Override
     public ResponseEntity<Void> deleteById(@PathVariable final UUID id) {
-        this._deleteCustomerByIdService.deleteById(id);
+        this.deleteCustomerByIdService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

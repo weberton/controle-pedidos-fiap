@@ -1,6 +1,5 @@
-package br.com.fiap.controlepedidos.core.domain.repository;
+package br.com.fiap.controlepedidos.core.application.ports;
 
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,14 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-class ClienteRepositoryTest {
+class CustomerRepositoryTest {
 
-    //    @Autowired
-    private ICustomerRepository _customerRepository;
-
-    public ClienteRepositoryTest(ICustomerRepository customerRepository) {
-        this._customerRepository = customerRepository;
-    }
+    @Autowired
+    private ICustomerRepository customerRepository;
 
     @Autowired
     private Flyway flyway;
@@ -43,8 +38,8 @@ class ClienteRepositoryTest {
                 .build();
 
         //Salvar novo cliente
-        var clienteSalvo = this._customerRepository.save(cliente);
-        var clienteSalvo1 = this._customerRepository.save(cliente);
+        var clienteSalvo = this.customerRepository.save(cliente);
+        var clienteSalvo1 = this.customerRepository.save(cliente);
 
         assertThat(clienteSalvo.getId()).isNotNull();
         assertThat(clienteSalvo.getName()).isEqualTo(cliente.getName());
@@ -60,10 +55,10 @@ class ClienteRepositoryTest {
                 .email("joao@gmail.com")
                 .build();
         // Salvar novo cliente
-        var clienteSalvo = this._customerRepository.save(cliente);
+        var clienteSalvo = this.customerRepository.save(cliente);
 
         // Salvar cliente salvo por ID.
-        Customer clienteEncontrado = this._customerRepository.findById(clienteSalvo.getId())
+        Customer clienteEncontrado = this.customerRepository.findById(clienteSalvo.getId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
 
         assertThat(clienteEncontrado.getName()).isEqualTo(cliente.getName());
@@ -79,10 +74,10 @@ class ClienteRepositoryTest {
                 .email("joao@gmail.com")
                 .build();
         // Salvar novo cliente
-        this._customerRepository.save(cliente);
+        this.customerRepository.save(cliente);
 
         //Pesquisar cliente salvo por email
-        var clienteEncontrado = this._customerRepository.findByEmail(cliente.getEmail())
+        var clienteEncontrado = this.customerRepository.findByEmail(cliente.getEmail())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
 
         assertThat(clienteEncontrado.getName()).isEqualTo(cliente.getName());
@@ -98,10 +93,10 @@ class ClienteRepositoryTest {
                 .email("joao@gmail.com")
                 .build();
         // Salvar novo cliente
-        var clienteSalvo = _customerRepository.save(cliente);
+        var clienteSalvo = customerRepository.save(cliente);
 
         //Pesquisar cliente salvo por ID
-        var clienteEncontrado = _customerRepository.findById(clienteSalvo.getId())
+        var clienteEncontrado = customerRepository.findById(clienteSalvo.getId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         // Atualizar campos
@@ -109,7 +104,7 @@ class ClienteRepositoryTest {
         clienteEncontrado.setCpf("98765432100");
 
         // Salvar novamente
-        var clienteAtualizado = _customerRepository.save(clienteEncontrado);
+        var clienteAtualizado = customerRepository.save(clienteEncontrado);
 
         // Verificar se foi atualizado
         assertThat(clienteAtualizado.getName()).isEqualTo("Nome Atualizado");
@@ -124,14 +119,14 @@ class ClienteRepositoryTest {
                 .email("joao@gmail.com")
                 .build();
 
-        var clienteSalvo = this._customerRepository.save(cliente);
+        var clienteSalvo = this.customerRepository.save(cliente);
 
         // Verificar se existe no banco de dados
-        assertThat(this._customerRepository.findById(clienteSalvo.getId())).isNotEmpty();
+        assertThat(this.customerRepository.findById(clienteSalvo.getId())).isNotEmpty();
         //delete o cliente
-        this._customerRepository.delete(clienteSalvo);
+        this.customerRepository.delete(clienteSalvo);
         //verifica se existe no banco de dados
-        assertThat(this._customerRepository.findById(clienteSalvo.getId())).isEmpty();
+        assertThat(this.customerRepository.findById(clienteSalvo.getId())).isEmpty();
 
     }
 }
