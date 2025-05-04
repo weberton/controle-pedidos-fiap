@@ -19,7 +19,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Verify build and run tests
-      run: mvn -B test --file pom.xml
+      run: mvn clean package -B test --file pom.xml
 
     - name: Build Docker Image
       run: docker compose up --build --exit-code-from controlepedidos
