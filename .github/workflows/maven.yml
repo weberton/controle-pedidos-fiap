@@ -7,8 +7,7 @@ on:
     branches: [ "main", "release"]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,5 +18,8 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
+    - name: Verify build and run tests
       run: mvn -B test --file pom.xml
+
+    - name: Build Docker Image
+      run: docker-compose -f docker-compose.yml up --build --exit-code-from controlepedidos
