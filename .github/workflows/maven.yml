@@ -21,5 +21,14 @@ jobs:
     - name: Verify build and run tests
       run: mvn clean package -B test --file pom.xml
 
+    - name: Criar arquivo .env para o Docker Compose
+      run: |
+          echo "SPRING_DB_URL=jdbc:mysql://mysql:3306/controle_pedidos" >> .env
+          echo "SPRING_DB_USER=spring" >> .env
+          echo "SPRING_DB_PASS=spring" >> .env
+          echo "MYSQL_DB=controle_pedidos" >> .env
+          echo "MYSQL_USER=spring" >> .env
+          echo "MYSQL_PASSWORD=spring" >> .env
+
     - name: Build Docker Image
       run: docker compose up --build --exit-code-from controlepedidos
