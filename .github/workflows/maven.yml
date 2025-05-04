@@ -22,4 +22,4 @@ jobs:
       run: mvn -B test --file pom.xml
 
     - name: Build Docker Image
-      run: docker-compose -f docker-compose.yml up --build --exit-code-from controlepedidos
+      run: docker compose up --build --exit-code-from controlepedidos
