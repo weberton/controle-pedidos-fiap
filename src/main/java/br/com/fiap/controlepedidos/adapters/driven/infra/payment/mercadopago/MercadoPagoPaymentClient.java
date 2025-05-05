@@ -5,6 +5,7 @@ import br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago.dto
 import br.com.fiap.controlepedidos.core.application.ports.IPaymentGateway;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -14,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+@Service
 public class MercadoPagoPaymentClient implements IPaymentGateway {
 
     private final MercadoPagoProperties properties;

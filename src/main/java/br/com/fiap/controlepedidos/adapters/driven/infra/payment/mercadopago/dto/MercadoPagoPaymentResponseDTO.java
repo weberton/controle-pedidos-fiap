@@ -11,9 +11,22 @@ public class MercadoPagoPaymentResponseDTO {
     @SerializedName("qr_data")
     private String qrCodeData;
 
-    public MercadoPagoPaymentResponseDTO(String mercadoPagoOrderId, String qrCodeData) {
+    @SerializedName("error")
+    private String errorTitle;
+
+    @SerializedName("message")
+    private String errorDescription;
+
+    @SerializedName("status")
+    private String statusCode;
+
+
+    public MercadoPagoPaymentResponseDTO(String mercadoPagoOrderId, String qrCodeData, String errorTitle, String errorDescription, String statusCode) {
         this.mercadoPagoOrderId = mercadoPagoOrderId;
         this.qrCodeData = qrCodeData;
+        this.errorTitle = errorTitle;
+        this.errorDescription = errorDescription;
+        this.statusCode = statusCode;
     }
 
     public String getMercadoPagoOrderId() {
@@ -22,5 +35,17 @@ public class MercadoPagoPaymentResponseDTO {
 
     public String getQrCodeData() {
         return qrCodeData;
+    }
+
+    public String getErrorTitle() {
+        return errorTitle;
+    }
+
+    public String getErrorDescription() {
+        return errorDescription;
+    }
+
+    public String getStatusCode() {
+        return statusCode;
     }
 }
