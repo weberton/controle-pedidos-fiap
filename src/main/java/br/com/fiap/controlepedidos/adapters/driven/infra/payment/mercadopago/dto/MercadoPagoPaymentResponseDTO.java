@@ -1,23 +1,23 @@
 package br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago.dto;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MercadoPagoPaymentResponseDTO {
 
 
-    @SerializedName("in_store_order_id")
+    @JsonProperty("in_store_order_id")
     private String mercadoPagoOrderId;
 
-    @SerializedName("qr_data")
+    @JsonProperty("qr_data")
     private String qrCodeData;
 
-    @SerializedName("error")
+    @JsonProperty("error")
     private String errorTitle;
 
-    @SerializedName("message")
+    @JsonProperty("message")
     private String errorDescription;
 
-    @SerializedName("status")
+    @JsonProperty("status")
     private String statusCode;
 
 

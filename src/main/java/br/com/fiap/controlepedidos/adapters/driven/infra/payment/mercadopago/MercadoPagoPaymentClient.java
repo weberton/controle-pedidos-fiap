@@ -3,8 +3,7 @@ package br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago;
 import br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago.dto.MercadoPagoPaymentRequestDTO;
 import br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago.dto.MercadoPagoPaymentResponseDTO;
 import br.com.fiap.controlepedidos.core.application.ports.IPaymentGateway;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -19,10 +18,12 @@ import java.nio.charset.StandardCharsets;
 public class MercadoPagoPaymentClient implements IPaymentGateway {
 
     private final MercadoPagoProperties properties;
-    private final Gson gson = new GsonBuilder().create();
+    private final ObjectMapper objectMapper;
 
-    public MercadoPagoPaymentClient(MercadoPagoProperties properties) {
+    public MercadoPagoPaymentClient(final MercadoPagoProperties properties,
+                                    final ObjectMapper objectMapper) {
         this.properties = properties;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -36,7 +37,7 @@ public class MercadoPagoPaymentClient implements IPaymentGateway {
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
 
-            String jsonInput = gson.toJson(request);
+            String jsonInput = objectMapper.writeValueAsString(request);
 
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = jsonInput.getBytes(StandardCharsets.UTF_8);
@@ -57,7 +58,7 @@ public class MercadoPagoPaymentClient implements IPaymentGateway {
                     responseBuilder.append(line.trim());
                 }
 
-                return gson.fromJson(responseBuilder.toString(), MercadoPagoPaymentResponseDTO.class);
+                return objectMapper.readValue(responseBuilder.toString(), MercadoPagoPaymentResponseDTO.class);
             }
 
         } catch (Exception e) {

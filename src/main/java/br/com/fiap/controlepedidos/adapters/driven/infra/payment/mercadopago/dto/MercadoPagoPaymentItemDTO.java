@@ -1,42 +1,36 @@
 package br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago.dto;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MercadoPagoPaymentItemDTO {
 
-    @SerializedName("sku_number")
+    @JsonProperty("sku_number")
     private String productId;
 
-    @SerializedName("category")
+    @JsonProperty("category")
     private String category;
 
-    @SerializedName("title")
+    @JsonProperty("title")
     private String title;
 
-    @SerializedName("description")
+    @JsonProperty("description")
     private String description;
 
-    @SerializedName("unit_price")
+    @JsonProperty("unit_price")
     private Float productPrice;
 
-    @SerializedName("quantity")
+    @JsonProperty("quantity")
     private Integer quantity;
 
-    @SerializedName("unit_measure")
+    @JsonProperty("unit_measure")
     private String productUnit;
 
-    @SerializedName("total_amount")
+    @JsonProperty("total_amount")
     private Float totalAmount;
-
-    public MercadoPagoPaymentItemDTO(String productId, String category, String title, String description,
-                                     Float productPrice, Integer quantity, String productUnit, Float totalAmount) {
-        this.productId = productId;
-        this.category = category;
-        this.title = title;
-        this.description = description;
-        this.productPrice = productPrice;
-        this.quantity = quantity;
-        this.productUnit = productUnit;
-        this.totalAmount = totalAmount;
-    }
 }
