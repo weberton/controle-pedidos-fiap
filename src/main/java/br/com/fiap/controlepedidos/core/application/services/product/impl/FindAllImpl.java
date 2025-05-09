@@ -18,7 +18,7 @@ public class FindAllImpl implements IFindAll {
 
     @Override
     public Page<Product> findAll(Pageable pageable) {
-        productRepository.findAll();
+        return productRepository.findAll(pageable);
     }
 
 }

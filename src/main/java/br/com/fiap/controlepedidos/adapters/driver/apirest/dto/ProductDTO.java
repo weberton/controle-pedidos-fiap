@@ -3,16 +3,18 @@ package br.com.fiap.controlepedidos.adapters.driver.apirest.dto;
 import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ProductDTO(
         UUID id,
-        @NotEmpty(message = "") String name,
-        @NotEmpty(message = "") String price,
-        @NotEmpty(message = "") Category category,
-        @NotEmpty(message = "") String description,
+        @NotEmpty(message = "Não não pode ser em branco") String name,
+        @NotEmpty(message = "Preço não pode ser nulo") BigDecimal price,
+        @NotNull(message = "Categoria não pode ser nula") Category category,
+        @NotEmpty(message = "Descrição não pode ser em branco") String description,
         boolean active,
         String image
 ) {

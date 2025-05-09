@@ -43,8 +43,8 @@ public class CustomerController implements CustomerApi {
 
     @Override
     public ResponseEntity<CustomerDTO> findByCPF(final String cpf) {
-        Customer clienteEncontraddo = this.findAllCustomerByCPFService.findByCPF(cpf);
-        return ResponseEntity.ok(CustomerDTO.convertToDTO(clienteEncontraddo));
+        Customer clienteEncontrado = this.findAllCustomerByCPFService.findByCPF(cpf);
+        return ResponseEntity.ok(CustomerDTO.convertToDTO(clienteEncontrado));
     }
 
     @Override

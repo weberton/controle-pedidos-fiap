@@ -20,7 +20,7 @@ public class FindByIdImpl implements IFindById {
     @Override
     public Product findById(UUID id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Produto com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new RecordNotFoundException("Produto com ID %s não encontrado.".formatted(id)));
     }
 
 }

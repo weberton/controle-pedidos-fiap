@@ -1,5 +1,6 @@
 package br.com.fiap.controlepedidos.core.application.services.product.impl;
 
+import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.ProductDTO;
 import br.com.fiap.controlepedidos.core.application.ports.IProductRepository;
 import br.com.fiap.controlepedidos.core.application.services.product.ICreate;
 import br.com.fiap.controlepedidos.core.domain.entities.Product;
@@ -15,8 +16,8 @@ public class CreateImpl implements ICreate {
     }
 
     @Override
-    public Product create(Product product) {
-        return null;
+    public Product create(ProductDTO productDTO) {
+        return productRepository.save(productDTO.convertToModel());
     }
 
 }

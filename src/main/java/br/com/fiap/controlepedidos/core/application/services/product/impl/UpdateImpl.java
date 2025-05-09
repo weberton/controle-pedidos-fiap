@@ -20,7 +20,7 @@ public class UpdateImpl implements IUpdate {
     public Product update(ProductDTO product) {
 
         Product persistedProduct = productRepository.findById(product.id())
-                .orElseThrow(() -> new RecordNotFoundException("Produto com ID " + product.id() + " não encontrado."));
+                .orElseThrow(() -> new RecordNotFoundException("Produto com ID %s não encontrado.".formatted(product.id())));
 
         persistedProduct.setName(product.name() != null ? product.name() : persistedProduct.getName());
         persistedProduct.setPrice(product.name() != null ? product.price() : persistedProduct.getPrice());
