@@ -7,6 +7,8 @@ info:
 paths:
   /api/v1/customers:
     post:
+      tags:
+        - Customers
       summary: Criar novo cliente
       requestBody:
         required: true
@@ -35,6 +37,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
     get:
+      tags:
+        - Customers
       summary: Listar clientes com paginação
       parameters:
         - name: page
@@ -61,6 +65,8 @@ paths:
 
   /api/v1/customers/{cpf}:
     get:
+      tags:
+        - Customers
       summary: Buscar cliente por CPF
       parameters:
         - name: cpf
@@ -90,6 +96,8 @@ paths:
 
   /api/v1/customers/{id}:
     delete:
+      tags:
+        - Customers
       summary: Deletar cliente por ID
       parameters:
         - name: id
@@ -103,6 +111,246 @@ paths:
           description: Cliente deletado com sucesso
         '404':
           description: Cliente não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/carts:
+    post:
+      tags:
+        - Carts
+      summary: Cria um novo carrinho e adiciona um item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItemRequest'
+      responses:
+        201:
+          description: Carrinho criado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '400':
+          description: Requisição inválida (validação ou erro de negócio)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/carts/{cartId}:
+    get:
+      tags:
+        - Carts
+      summary: Recupera o estado atual do carrinho
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: Identificador único do carrinho (UUID)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Carrinho encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '404':
+          description: Carrinho não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Carts
+      summary: Limpa todos os itens de um carrinho
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: Identificador único do carrinho (UUID)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Carrinho esvaziado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '404':
+          description: Carrinho não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/carts/{cartId}/items:
+    post:
+      tags:
+        - Carts
+      summary: Adiciona um item a um carrinho existente
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: Identificador único do carrinho (UUID)
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItemRequest'
+
+      responses:
+        200:
+          description: Item adicionado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '400':
+          description: Requisição inválida (validação ou erro de negócio)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/carts/{cartId}/items/{productId}:
+   patch:
+     tags:
+       - Carts
+     summary: Atualiza quantidade de um item no carrinho
+     parameters:
+       - name: cartId
+         in: path
+         required: true
+         description: Identificador único do carrinho (UUID)
+         schema:
+           type: string
+       - name: productId
+         in: path
+         required: true
+         description: Identificador único do produto a ser removido
+         schema:
+           type: string
+     requestBody:
+       required: true
+       content:
+         application/json:
+           schema:
+             $ref: '#/components/schemas/CartItemRequest'
+     responses:
+       '200':
+         description: Quantidade atualizada
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/CartResponse'
+       '400':
+         description: Requisição inválida (validação ou erro de negócio).
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorResponse'
+       '500':
+         description: Erro interno do servidor
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorResponse'
+
+   delete:
+     tags:
+       - Carts
+     summary: Remove um item de um carrinho existente
+     parameters:
+       - name: cartId
+         in: path
+         required: true
+         description: Identificador único do carrinho (UUID)
+         schema:
+           type: string
+       - name: productId
+         in: path
+         required: true
+         description: Identificador único do produto a ser removido
+         schema:
+           type: string
+     responses:
+      '200':
+        description: Item removido com sucesso
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartResponse'
+      '404':
+        description: Carrinho ou produto não encontrado
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/carts/{cartId}/identify:
+    post:
+      tags:
+        - Carts
+      summary: Associa customerId a um carrinho anônimo
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: Identificador único do carrinho (UUID)
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentifyRequest'
+      responses:
+        '200':
+          description: Carrinho atualizado com customerId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '404':
+          description: Carrinho não encontrado
           content:
             application/json:
               schema:
@@ -172,3 +420,68 @@ components:
           type: string
           format: date-time
           description: Data e hora do erro
+    CartItemResponse:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: Identificador único do produto
+        name:
+          type: string
+        priceCents:
+          type: number
+          description: Nome do produto
+        quantity:
+          type: integer
+          description: Quantidade do produto adicionada
+        subtotalCents:
+          type: number
+          description: Subtotal em centavos (priceCents * quantity)
+
+    CartItemRequest:
+      type: object
+      required:
+        - productId
+        - quantity
+      properties:
+        productId:
+          type: string
+          description: Identificador único do produto
+        quantity:
+          type: integer
+          description: Quantidade do produto adicionada(>=1)
+          minimum: 1
+
+    CartResponse:
+      type: object
+      properties:
+        cartId:
+          type: string
+          format: uuid
+          description: Identificador único do carrinho (UUID)
+        customerId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID do customer. Pode ser nulo para carrinho anônimo
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItemResponse'
+        totalCents:
+          type: integer
+          description: Soma de todos os subtotalCents do carrinho
+    IdentifyRequest:
+      type: object
+      required:
+        - customerId
+      properties:
+        customerId:
+          type: string
+          description: Identificador do cliente para associação ao carrinho
+
+tags:
+  - name: Carts
+    description: Endpoints para gerenciamento de carrinhos de compra.
+  - name: Customers
+    description: Endpoints para gerenciamento de clientes.
