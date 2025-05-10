@@ -28,7 +28,7 @@ public class Product {
     private BigDecimal price;
     private Category category;
     private String description;
-    private boolean active;
+    private boolean active = true;
     private String image;
 
     @PrePersist

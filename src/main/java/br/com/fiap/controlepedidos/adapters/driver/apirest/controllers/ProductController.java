@@ -32,31 +32,31 @@ public class ProductController implements ProductApi {
     }
 
     @Override
-    public ResponseEntity<ProductDTO> create(ProductDTO productDTO) {
+    public ResponseEntity<ProductDTO> create(final ProductDTO productDTO) {
         Product product = createProductService.create(productDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(ProductDTO.convertToDTO(product));
     }
 
     @Override
-    public ResponseEntity<ProductDTO> findById(UUID id) {
+    public ResponseEntity<ProductDTO> findById(final UUID id) {
         return ResponseEntity.ok(ProductDTO.convertToDTO(findProductService.findById(id)));
 
     }
 
     @Override
-    public ResponseEntity<PagedResponse<ProductDTO>> findAll(Pageable pageable) {
+    public ResponseEntity<PagedResponse<ProductDTO>> findAll(final Pageable pageable) {
         Page<ProductDTO> products = findAllProductService.findAll(pageable).map(ProductDTO::convertToDTO);
         return ResponseEntity.ok(PagedResponse.of(products));
     }
 
     @Override
-    public ResponseEntity<ProductDTO> update(ProductDTO customerDTO) {
-        Product product = updateProductService.update(customerDTO);
+    public ResponseEntity<ProductDTO> update(final UUID id, final ProductDTO customerDTO) {
+        Product product = updateProductService.update(id, customerDTO);
         return ResponseEntity.ok(ProductDTO.convertToDTO(product));
     }
 
     @Override
-    public ResponseEntity<Void> deleteById(UUID id) {
+    public ResponseEntity<Void> deleteById(final UUID id) {
         deleteProductService.delete(id);
         return ResponseEntity.noContent().build();
     }

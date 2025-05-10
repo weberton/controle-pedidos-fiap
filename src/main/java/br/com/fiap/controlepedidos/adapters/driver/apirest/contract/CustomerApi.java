@@ -24,5 +24,5 @@ public interface CustomerApi {
     ResponseEntity<PagedResponse<CustomerDTO>> findAll(Pageable pageable);
 
     @DeleteMapping("{id}")
-    ResponseEntity<Void> deleteById(UUID id);
+    ResponseEntity<Void> deleteById(@PathVariable UUID id);
 }

@@ -7,6 +7,8 @@ import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class UpdateImpl implements IUpdate {
 
@@ -17,17 +19,17 @@ public class UpdateImpl implements IUpdate {
     }
 
     @Override
-    public Product update(ProductDTO product) {
+    public Product update(UUID id, ProductDTO product) {
 
-        Product persistedProduct = productRepository.findById(product.id())
+        Product persistedProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Produto com ID %s não encontrado.".formatted(product.id())));
 
         persistedProduct.setName(product.name() != null ? product.name() : persistedProduct.getName());
-        persistedProduct.setPrice(product.name() != null ? product.price() : persistedProduct.getPrice());
-        persistedProduct.setCategory(product.name() != null ? product.category() : persistedProduct.getCategory());
-        persistedProduct.setDescription(product.name() != null ? product.description() : persistedProduct.getDescription());
-        persistedProduct.setActive(product.name() != null ? product.active() : persistedProduct.isActive());
-        persistedProduct.setImage(product.name() != null ? product.image() : persistedProduct.getImage());
+        persistedProduct.setPrice(product.price() != null ? product.price() : persistedProduct.getPrice());
+        persistedProduct.setCategory(product.category() != null ? product.category() : persistedProduct.getCategory());
+        persistedProduct.setDescription(product.description() != null ? product.description() : persistedProduct.getDescription());
+        persistedProduct.setActive(product.active() != null ? product.active() : persistedProduct.isActive());
+        persistedProduct.setImage(product.image() != null ? product.image() : persistedProduct.getImage());
 
         productRepository.save(persistedProduct);
 

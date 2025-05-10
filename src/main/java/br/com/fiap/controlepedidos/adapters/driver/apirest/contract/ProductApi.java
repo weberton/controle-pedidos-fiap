@@ -24,10 +24,10 @@ public interface ProductApi {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PagedResponse<ProductDTO>> findAll(@PathVariable Pageable pageable);
 
-    @PutMapping()
-    ResponseEntity<ProductDTO> update(@RequestBody ProductDTO productDTO);
+    @PutMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ProductDTO> update(@PathVariable UUID id, @RequestBody ProductDTO productDTO);
 
-    @DeleteMapping("{id}")
-    ResponseEntity<Void> deleteById(UUID id);
+    @DeleteMapping(value = "{id}")
+    ResponseEntity<Void> deleteById(@PathVariable UUID id);
 
 }

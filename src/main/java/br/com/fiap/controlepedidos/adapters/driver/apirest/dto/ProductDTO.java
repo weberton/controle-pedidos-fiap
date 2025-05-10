@@ -12,10 +12,10 @@ import java.util.UUID;
 public record ProductDTO(
         UUID id,
         @NotEmpty(message = "Não não pode ser em branco") String name,
-        @NotEmpty(message = "Preço não pode ser nulo") BigDecimal price,
+        @NotNull(message = "Preço não pode ser nulo") BigDecimal price,
         @NotNull(message = "Categoria não pode ser nula") Category category,
         @NotEmpty(message = "Descrição não pode ser em branco") String description,
-        boolean active,
+        Boolean active,
         String image
 ) {
 

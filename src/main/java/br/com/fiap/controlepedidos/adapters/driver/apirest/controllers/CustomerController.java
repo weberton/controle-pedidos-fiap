@@ -54,7 +54,7 @@ public class CustomerController implements CustomerApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteById(@PathVariable final UUID id) {
+    public ResponseEntity<Void> deleteById(final UUID id) {
         this.deleteCustomerByIdService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
