@@ -2,7 +2,7 @@ name: Test Application
 
 on:
   push:
-    branches: [ "feature/jacoco" ]
+    branches: [ "main", "feature/jacoco" ]
 
 jobs:
   build:
