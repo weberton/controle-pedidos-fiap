@@ -8,11 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FindAllCustomersImpl implements IFindAllCustomers {
+public class FindAllCustomersServiceImpl implements IFindAllCustomers {
 
     private final ICustomerRepository customerRepository;
 
-    public FindAllCustomersImpl(ICustomerRepository customerRepository) {
+    public FindAllCustomersServiceImpl(ICustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 

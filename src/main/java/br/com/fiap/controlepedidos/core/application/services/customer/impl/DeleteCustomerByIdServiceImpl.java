@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class DeleteCustomerByIdImpl implements IDeleteCustomerById {
+public class DeleteCustomerByIdServiceImpl implements IDeleteCustomerById {
 
     private final ICustomerRepository customerRepository;
 
-    public DeleteCustomerByIdImpl(ICustomerRepository customerRepository) {
+    public DeleteCustomerByIdServiceImpl(ICustomerRepository customerRepository) {
        this.customerRepository = customerRepository;
     }
 
