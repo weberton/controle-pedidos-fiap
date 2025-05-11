@@ -39,7 +39,6 @@ class CustomerRepositoryTest {
 
         //Salvar novo cliente
         var clienteSalvo = this.customerRepository.save(cliente);
-        var clienteSalvo1 = this.customerRepository.save(cliente);
 
         assertThat(clienteSalvo.getId()).isNotNull();
         assertThat(clienteSalvo.getName()).isEqualTo(cliente.getName());

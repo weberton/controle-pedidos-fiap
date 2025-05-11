@@ -4,8 +4,9 @@ import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.CustomerApi;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.controllers.CustomerController;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.CustomerDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.exceptions.RestExceptionHandler;
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
 import br.com.fiap.controlepedidos.core.application.services.customer.ICreateCustomer;
+import br.com.fiap.controlepedidos.core.application.services.customer.IDeleteCustomerById;
+import br.com.fiap.controlepedidos.core.application.services.customer.IFindAllCustomers;
 import br.com.fiap.controlepedidos.core.application.services.customer.IFindCustomerByCPF;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.validations.ExistentRecordException;
@@ -22,12 +23,16 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -47,7 +52,9 @@ class CustomerControllerTest {
     @Mock
     private IFindCustomerByCPF findCustomerByCPF;
     @Mock
-    private ICustomerRepository deleteCustomerById;
+    private IDeleteCustomerById deleteCustomerById;
+    @Mock
+    private IFindAllCustomers findAllCustomerService;
     @InjectMocks
     private CustomerController clienteController;
     private MockMvc mockMvc;
@@ -58,6 +65,7 @@ class CustomerControllerTest {
     void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(clienteController)
                 .setControllerAdvice(new RestExceptionHandler())
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .build();
         this.objectMapper = new ObjectMapper();
         this.customerDto = new CustomerDTO(UUID.randomUUID(), CPF, NOME_COMPLETO, MAIL);
@@ -158,10 +166,26 @@ class CustomerControllerTest {
     }
 
     @Test
+    void findAll_returnsAllCustomers() throws Exception {
+        var customer = customerDto.convertToModel();
+        var customers = List.of(customer);
+
+        Page<Customer> responsePage = new PageImpl<>(customers);
+
+        when(findAllCustomerService.findAll(any())).thenReturn(responsePage);
+
+        mockMvc.perform(get("/api/v1/customers")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
     void apagar_retornaOk() throws Exception {
         Customer cliente = customerDto.convertToModel();
 
-        doNothing().when(deleteCustomerById).deleteById(cliente.getId());
+        doNothing().when(deleteCustomerById).delete(cliente.getId());
 
         mockMvc.perform(delete(CustomerApi.BASE_URL + "/" + cliente.getId()))
                 .andDo(MockMvcResultHandlers.print())

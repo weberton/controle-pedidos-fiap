@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 @Service
-public class CreateCustomerImpl implements ICreateCustomer {
+public class CreateCustomerServiceImpl implements ICreateCustomer {
 
     private final ICustomerRepository customerRepository;
 
-    public CreateCustomerImpl(ICustomerRepository customerRepository) {
+    public CreateCustomerServiceImpl(ICustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
