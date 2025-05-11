@@ -2,9 +2,7 @@ name: Test Application
 
 on:
   push:
-    branches: [ "main", "release", "feature/jacoco" ]
-  pull_request:
-    branches: [ "main", "release"]
+    branches: [ "feature/jacoco" ]
 
 jobs:
   build:
