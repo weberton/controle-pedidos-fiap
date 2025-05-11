@@ -22,7 +22,6 @@ class CreateCustomerTest {
     private ICustomerRepository customerRepository;
     @InjectMocks
     private CreateCustomerImpl createCustomer;
-    //private IFindCustomerByCPF findCustomerByCPF;
 
     @Test
     void criarCliente_quandoEmailAndCpfNaoExiste_criarCliente() {

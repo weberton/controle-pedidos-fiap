@@ -1,7 +1,6 @@
-package br.com.fiap.controlepedidos.adapter.rest;
+package br.com.fiap.controlepedidos.adapters.driver.apirest.controllers;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.CustomerApi;
-import br.com.fiap.controlepedidos.adapters.driver.apirest.controllers.CustomerController;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.CustomerDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.exceptions.RestExceptionHandler;
 import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
