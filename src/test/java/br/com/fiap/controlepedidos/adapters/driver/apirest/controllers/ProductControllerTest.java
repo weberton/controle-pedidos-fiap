@@ -8,6 +8,7 @@ import br.com.fiap.controlepedidos.core.application.services.product.CreateProdu
 import br.com.fiap.controlepedidos.core.application.services.product.FindProductByIdService;
 import br.com.fiap.controlepedidos.core.application.services.product.UpdateProductService;
 import br.com.fiap.controlepedidos.core.domain.entities.Product;
+import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -81,6 +82,14 @@ class ProductControllerTest {
         mockMvc.perform(get(ProductApi.BASE_URL + "/" + productId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(productId.toString()));
+    }
+
+    @Test
+    void testFindById_whenProductDoesNotExist_returns404() throws Exception {
+        Mockito.when(findByIdService.findById(productId)).thenThrow(RecordNotFoundException.class);
+
+        mockMvc.perform(get(ProductApi.BASE_URL + "/" + productId))
+                .andExpect(status().isNotFound());
     }
 
     @Test
