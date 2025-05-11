@@ -1,0 +1,35 @@
+version: "3.9"
+
+volumes:
+  mysql_data: {}
+
+services:
+  controlepedidos:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DB_PASS}
+
+  mysql:
+    container_name: controle_pedidos_db_container
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DB}
+      - MYSQL_USER=${SPRING_DB_USER}
+      - MYSQL_PASSWORD=${SPRING_DB_PASS}
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
