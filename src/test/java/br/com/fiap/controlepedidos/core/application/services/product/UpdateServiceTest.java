@@ -2,8 +2,8 @@ package br.com.fiap.controlepedidos.core.application.services.product;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.Category;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.ProductDTO;
-import br.com.fiap.controlepedidos.core.application.ports.IProductRepository;
-import br.com.fiap.controlepedidos.core.application.services.product.impl.UpdateImpl;
+import br.com.fiap.controlepedidos.core.application.ports.ProductRepository;
+import br.com.fiap.controlepedidos.core.application.services.product.impl.UpdateProductServiceImpl;
 import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,28 +18,28 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UpdateImplTest {
+class UpdateServiceTest {
 
-    private IProductRepository productRepository;
-    private UpdateImpl updateImpl;
+    private ProductRepository productRepository;
+    private UpdateProductServiceImpl updateImpl;
 
     @BeforeEach
     void setUp() {
-        productRepository = mock(IProductRepository.class);
-        updateImpl = new UpdateImpl(productRepository);
+        productRepository = mock(ProductRepository.class);
+        updateImpl = new UpdateProductServiceImpl(productRepository);
     }
 
     @Test
     void testUpdate_WhenProductExists_ShouldUpdateAndReturnProduct() {
         UUID id = UUID.randomUUID();
 
-        Product persistedProduct = new Product(UUID.randomUUID(), "Produto Teste", new BigDecimal("19.99"),
+        Product persistedProduct = new Product(UUID.randomUUID(), "Produto Teste", 1999,
                 Category.LANCHE, "Hamburguer", true, "");
 
         ProductDTO updateDTO = new ProductDTO(
                 id,
                 "Atualizado",
-                new BigDecimal("20.00"),
+                2000,
                 Category.LANCHE,
                 "Nova descrição",
                 false,
@@ -52,7 +51,7 @@ class UpdateImplTest {
         Product updatedProduct = updateImpl.update(id, updateDTO);
 
         assertEquals("Atualizado", updatedProduct.getName());
-        assertEquals(new BigDecimal("20.00"), updatedProduct.getPrice());
+        assertEquals(2000, updatedProduct.getPrice());
         assertEquals(Category.LANCHE, updatedProduct.getCategory());
         assertEquals("Nova descrição", updatedProduct.getDescription());
         assertFalse(updatedProduct.isActive());
@@ -64,7 +63,7 @@ class UpdateImplTest {
     @Test
     void testUpdate_WhenProductNotFound_ShouldThrowException() {
         UUID id = UUID.randomUUID();
-        ProductDTO updateDTO = new ProductDTO(id, "Teste", BigDecimal.ONE, Category.LANCHE, "Desc", true, "img.png");
+        ProductDTO updateDTO = new ProductDTO(id, "Teste", 1899, Category.LANCHE, "Desc", true, "img.png");
 
         when(productRepository.findById(id)).thenReturn(Optional.empty());
 

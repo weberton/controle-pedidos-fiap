@@ -1,19 +1,19 @@
 package br.com.fiap.controlepedidos.core.application.services.customer.impl;
 
 import br.com.fiap.controlepedidos.core.domain.validations.ExistentRecordException;
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
-import br.com.fiap.controlepedidos.core.application.services.customer.ICreateCustomer;
+import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
+import br.com.fiap.controlepedidos.core.application.services.customer.CreateCustomerService;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
-public class CreateCustomerImpl implements ICreateCustomer {
+public class CreateCustomerServiceImpl implements CreateCustomerService {
 
-    private final ICustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
-    public CreateCustomerImpl(ICustomerRepository customerRepository) {
+    public CreateCustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 

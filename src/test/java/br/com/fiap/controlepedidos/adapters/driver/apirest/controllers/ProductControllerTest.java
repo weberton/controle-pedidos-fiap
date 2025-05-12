@@ -4,10 +4,9 @@ import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.ProductApi;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.Category;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.ProductDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.exceptions.RestExceptionHandler;
-import br.com.fiap.controlepedidos.core.application.services.product.ICreate;
-import br.com.fiap.controlepedidos.core.application.services.product.IFindAll;
-import br.com.fiap.controlepedidos.core.application.services.product.IFindById;
-import br.com.fiap.controlepedidos.core.application.services.product.IUpdate;
+import br.com.fiap.controlepedidos.core.application.services.product.CreateProductService;
+import br.com.fiap.controlepedidos.core.application.services.product.FindProductByIdService;
+import br.com.fiap.controlepedidos.core.application.services.product.UpdateProductService;
 import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,16 +16,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -42,16 +35,13 @@ class ProductControllerTest {
     private ObjectMapper objectMapper;
 
     @Mock
-    private ICreate createService;
+    private CreateProductService createService;
 
     @Mock
-    private IFindById findByIdService;
+    private FindProductByIdService findByIdService;
 
     @Mock
-    private IFindAll findAllService;
-
-    @Mock
-    private IUpdate updateService;
+    private UpdateProductService updateService;
 
     @InjectMocks
     private ProductController productController;
@@ -67,7 +57,7 @@ class ProductControllerTest {
                 .build();
         this.objectMapper = new ObjectMapper();
         productId = UUID.randomUUID();
-        product = new Product(productId, "Produto Teste", new BigDecimal("19.99"),
+        product = new Product(productId, "Produto Teste", 1999,
                 Category.LANCHE, "Hamburguer", true, "");
 
         productDTO = ProductDTO.convertToDTO(product);
@@ -93,16 +83,6 @@ class ProductControllerTest {
                 .andExpect(jsonPath("$.id").value(productId.toString()));
     }
 
-//    @Test
-//    void testFindAll() throws Exception {
-//        Page<Product> page = new PageImpl<>(List.of(product), PageRequest.of(0, 10), 1);
-//        Mockito.when(findAllService.findAll(any(Pageable.class))).thenReturn(page);
-//
-//        mockMvc.perform(get(ProductApi.BASE_URL + "?nome=Produto Teste"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.content[0].id").value(productId.toString()));
-//    }
-
     @Test
     void testUpdateProduct() throws Exception {
         Mockito.when(updateService.update(any(), any())).thenReturn(product);
@@ -113,14 +93,5 @@ class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(product.getName()));
     }
-
-//    @Test
-//    void testDeleteProduct() throws Exception {
-//
-//        this.testCreateProduct();
-//
-//        mockMvc.perform(delete(ProductApi.BASE_URL + "/" + productId))
-//                .andExpect(status().isNoContent());
-//    }
 
 }

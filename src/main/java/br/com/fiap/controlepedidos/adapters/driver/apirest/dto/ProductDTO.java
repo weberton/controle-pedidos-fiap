@@ -5,14 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ProductDTO(
         UUID id,
         @NotEmpty(message = "Não não pode ser em branco") String name,
-        @NotNull(message = "Preço não pode ser nulo") BigDecimal price,
+        @NotNull(message = "Preço não pode ser nulo") Integer price,
         @NotNull(message = "Categoria não pode ser nula") Category category,
         @NotEmpty(message = "Descrição não pode ser em branco") String description,
         Boolean active,

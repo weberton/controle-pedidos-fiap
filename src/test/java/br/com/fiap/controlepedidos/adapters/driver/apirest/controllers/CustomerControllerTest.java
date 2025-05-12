@@ -3,9 +3,9 @@ package br.com.fiap.controlepedidos.adapters.driver.apirest.controllers;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.CustomerApi;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.CustomerDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.exceptions.RestExceptionHandler;
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
-import br.com.fiap.controlepedidos.core.application.services.customer.ICreateCustomer;
-import br.com.fiap.controlepedidos.core.application.services.customer.IFindCustomerByCPF;
+import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
+import br.com.fiap.controlepedidos.core.application.services.customer.CreateCustomerService;
+import br.com.fiap.controlepedidos.core.application.services.customer.FindCustomerByCPFService;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.validations.ExistentRecordException;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
@@ -42,11 +42,11 @@ class CustomerControllerTest {
     public static final String MAIL = "email@gmail.com";
 
     @Mock
-    private ICreateCustomer createCustomerService;
+    private CreateCustomerService createCustomerService;
     @Mock
-    private IFindCustomerByCPF findCustomerByCPF;
+    private FindCustomerByCPFService findCustomerByCPF;
     @Mock
-    private ICustomerRepository deleteCustomerById;
+    private CustomerRepository deleteCustomerById;
     @InjectMocks
     private CustomerController clienteController;
     private MockMvc mockMvc;

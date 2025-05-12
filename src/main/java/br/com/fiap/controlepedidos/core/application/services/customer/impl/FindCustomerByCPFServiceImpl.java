@@ -1,18 +1,18 @@
 package br.com.fiap.controlepedidos.core.application.services.customer.impl;
 
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
-import br.com.fiap.controlepedidos.core.application.services.customer.IFindCustomerByCPF;
+import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
+import br.com.fiap.controlepedidos.core.application.services.customer.FindCustomerByCPFService;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FindCustomerByCPFImpl implements IFindCustomerByCPF {
+public class FindCustomerByCPFServiceImpl implements FindCustomerByCPFService {
 
-    private final ICustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
 
-    public FindCustomerByCPFImpl(ICustomerRepository customerRepository) {
+    public FindCustomerByCPFServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 

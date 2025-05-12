@@ -1,8 +1,8 @@
 package br.com.fiap.controlepedidos.core.application.services.product.impl;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.ProductDTO;
-import br.com.fiap.controlepedidos.core.application.ports.IProductRepository;
-import br.com.fiap.controlepedidos.core.application.services.product.IUpdate;
+import br.com.fiap.controlepedidos.core.application.ports.ProductRepository;
+import br.com.fiap.controlepedidos.core.application.services.product.UpdateProductService;
 import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
 import org.springframework.stereotype.Service;
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class UpdateImpl implements IUpdate {
+public class UpdateProductServiceImpl implements UpdateProductService {
 
-    private final IProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    public UpdateImpl(IProductRepository productRepository) {
+    public UpdateProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 

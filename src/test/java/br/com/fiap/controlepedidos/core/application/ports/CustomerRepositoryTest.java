@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CustomerRepositoryTest {
 
     @Autowired
-    private ICustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
     private Flyway flyway;
@@ -39,7 +39,6 @@ class CustomerRepositoryTest {
 
         //Salvar novo cliente
         var clienteSalvo = this.customerRepository.save(cliente);
-        var clienteSalvo1 = this.customerRepository.save(cliente);
 
         assertThat(clienteSalvo.getId()).isNotNull();
         assertThat(clienteSalvo.getName()).isEqualTo(cliente.getName());

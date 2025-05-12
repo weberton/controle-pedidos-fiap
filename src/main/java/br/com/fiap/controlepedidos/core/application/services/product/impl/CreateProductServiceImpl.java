@@ -1,17 +1,17 @@
 package br.com.fiap.controlepedidos.core.application.services.product.impl;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.ProductDTO;
-import br.com.fiap.controlepedidos.core.application.ports.IProductRepository;
-import br.com.fiap.controlepedidos.core.application.services.product.ICreate;
+import br.com.fiap.controlepedidos.core.application.ports.ProductRepository;
+import br.com.fiap.controlepedidos.core.application.services.product.CreateProductService;
 import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CreateImpl implements ICreate {
+public class CreateProductServiceImpl implements CreateProductService {
 
-    private final IProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    public CreateImpl(IProductRepository productRepository) {
+    public CreateProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 

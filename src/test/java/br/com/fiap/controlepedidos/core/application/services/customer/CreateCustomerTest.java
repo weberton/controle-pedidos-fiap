@@ -1,7 +1,7 @@
 package br.com.fiap.controlepedidos.core.application.services.customer;
 
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
-import br.com.fiap.controlepedidos.core.application.services.customer.impl.CreateCustomerImpl;
+import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
+import br.com.fiap.controlepedidos.core.application.services.customer.impl.CreateCustomerServiceImpl;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.validations.ExistentRecordException;
 import org.junit.jupiter.api.Test;
@@ -19,9 +19,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CreateCustomerTest {
     @Mock
-    private ICustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
     @InjectMocks
-    private CreateCustomerImpl createCustomer;
+    private CreateCustomerServiceImpl createCustomer;
 
     @Test
     void criarCliente_quandoEmailAndCpfNaoExiste_criarCliente() {

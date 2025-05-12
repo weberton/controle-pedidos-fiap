@@ -1,7 +1,7 @@
 package br.com.fiap.controlepedidos.core.application.services.product.impl;
 
-import br.com.fiap.controlepedidos.core.application.ports.IProductRepository;
-import br.com.fiap.controlepedidos.core.application.services.product.IFindById;
+import br.com.fiap.controlepedidos.core.application.ports.ProductRepository;
+import br.com.fiap.controlepedidos.core.application.services.product.FindProductByIdService;
 import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
 import org.springframework.stereotype.Service;
@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class FindByIdImpl implements IFindById {
+public class FindProductByIdServiceImpl implements FindProductByIdService {
 
-    private final IProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    public FindByIdImpl(IProductRepository productRepository) {
+    public FindProductByIdServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 

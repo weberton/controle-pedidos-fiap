@@ -8,7 +8,6 @@ import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 
-import java.math.BigDecimal;
 import java.sql.Types;
 import java.util.UUID;
 
@@ -25,7 +24,7 @@ public class Product {
     @JdbcTypeCode(Types.BINARY)
     private UUID id;
     private String name;
-    private BigDecimal price;
+    private Integer price;
     private Category category;
     private String description;
     private boolean active = true;

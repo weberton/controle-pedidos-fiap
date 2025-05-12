@@ -1,8 +1,5 @@
 package br.com.fiap.controlepedidos.adapters.driver.apirest.dto;
 
-import lombok.Getter;
-
-@Getter
 public enum Category {
 
     LANCHE(1, "Lanche"),

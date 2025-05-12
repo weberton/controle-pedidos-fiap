@@ -3,10 +3,10 @@ package br.com.fiap.controlepedidos.adapters.driver.apirest.controllers;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.CustomerApi;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.CustomerDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.PagedResponse;
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
-import br.com.fiap.controlepedidos.core.application.services.customer.ICreateCustomer;
-import br.com.fiap.controlepedidos.core.application.services.customer.IFindAllCustomers;
-import br.com.fiap.controlepedidos.core.application.services.customer.IFindCustomerByCPF;
+import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
+import br.com.fiap.controlepedidos.core.application.services.customer.CreateCustomerService;
+import br.com.fiap.controlepedidos.core.application.services.customer.FindAllCustomersService;
+import br.com.fiap.controlepedidos.core.application.services.customer.FindCustomerByCPFService;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,15 +19,15 @@ import java.util.UUID;
 @RestController
 public class CustomerController implements CustomerApi {
 
-    private final ICreateCustomer createCustomerService;
-    private final IFindAllCustomers findAllCustomerService;
-    private final IFindCustomerByCPF findAllCustomerByCPFService;
-    private final ICustomerRepository deleteCustomerByIdService;
+    private final CreateCustomerService createCustomerService;
+    private final FindAllCustomersService findAllCustomerService;
+    private final FindCustomerByCPFService findAllCustomerByCPFService;
+    private final CustomerRepository deleteCustomerByIdService;
 
-    public CustomerController(ICreateCustomer createCustomerService,
-                              IFindAllCustomers findAllCustomerService,
-                              IFindCustomerByCPF findAllCustomerByCPFService,
-                              ICustomerRepository deleteCustomerByIdService) {
+    public CustomerController(CreateCustomerService createCustomerService,
+                              FindAllCustomersService findAllCustomerService,
+                              FindCustomerByCPFService findAllCustomerByCPFService,
+                              CustomerRepository deleteCustomerByIdService) {
         this.createCustomerService = createCustomerService;
         this.findAllCustomerService = findAllCustomerService;
         this.findAllCustomerByCPFService = findAllCustomerByCPFService;

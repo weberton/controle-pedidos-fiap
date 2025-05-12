@@ -16,14 +16,14 @@ import java.util.UUID;
 @RestController
 public class ProductController implements ProductApi {
 
-    private final ICreate createProductService;
-    private final IFindById findProductService;
-    private final IFindAll findAllProductService;
-    private final IUpdate updateProductService;
-    private final IDeleteById deleteProductService;
+    private final CreateProductService createProductService;
+    private final FindProductByIdService findProductService;
+    private final FindAllProductsService findAllProductService;
+    private final UpdateProductService updateProductService;
+    private final DeleteProductByIdService deleteProductService;
 
-    public ProductController(ICreate createProductService, IFindById findProductService, IFindAll findAllProductService,
-                             IUpdate updateProductService, IDeleteById deleteProductService) {
+    public ProductController(CreateProductService createProductService, FindProductByIdService findProductService, FindAllProductsService findAllProductService,
+                             UpdateProductService updateProductService, DeleteProductByIdService deleteProductService) {
         this.createProductService = createProductService;
         this.findProductService = findProductService;
         this.findAllProductService = findAllProductService;
@@ -40,7 +40,6 @@ public class ProductController implements ProductApi {
     @Override
     public ResponseEntity<ProductDTO> findById(final UUID id) {
         return ResponseEntity.ok(ProductDTO.convertToDTO(findProductService.findById(id)));
-
     }
 
     @Override
