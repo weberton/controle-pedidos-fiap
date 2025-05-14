@@ -5,6 +5,7 @@ import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.CustomerDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.PagedResponse;
 import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
 import br.com.fiap.controlepedidos.core.application.services.customer.CreateCustomerService;
+import br.com.fiap.controlepedidos.core.application.services.customer.DeleteCustomerByIdService;
 import br.com.fiap.controlepedidos.core.application.services.customer.FindAllCustomersService;
 import br.com.fiap.controlepedidos.core.application.services.customer.FindCustomerByCPFService;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
@@ -19,15 +20,16 @@ import java.util.UUID;
 @RestController
 public class CustomerController implements CustomerApi {
 
+
     private final CreateCustomerService createCustomerService;
     private final FindAllCustomersService findAllCustomerService;
     private final FindCustomerByCPFService findAllCustomerByCPFService;
-    private final CustomerRepository deleteCustomerByIdService;
+    private final DeleteCustomerByIdService deleteCustomerByIdService;
 
     public CustomerController(CreateCustomerService createCustomerService,
                               FindAllCustomersService findAllCustomerService,
                               FindCustomerByCPFService findAllCustomerByCPFService,
-                              CustomerRepository deleteCustomerByIdService) {
+                              DeleteCustomerByIdService deleteCustomerByIdService) {
         this.createCustomerService = createCustomerService;
         this.findAllCustomerService = findAllCustomerService;
         this.findAllCustomerByCPFService = findAllCustomerByCPFService;
@@ -37,7 +39,7 @@ public class CustomerController implements CustomerApi {
     @Override
     public ResponseEntity<CustomerDTO> create(final CustomerDTO clienteDTO) {
         Customer clienteSalvo = this.createCustomerService.createCustomer(clienteDTO.convertToModel());
-        return new ResponseEntity<>(CustomerDTO.convertToDTO(clienteSalvo),HttpStatus.CREATED);
+        return new ResponseEntity<>(CustomerDTO.convertToDTO(clienteSalvo), HttpStatus.CREATED);
     }
 
     @Override
@@ -54,7 +56,7 @@ public class CustomerController implements CustomerApi {
 
     @Override
     public ResponseEntity<Void> deleteById(final UUID id) {
-        this.deleteCustomerByIdService.deleteById(id);
+        this.deleteCustomerByIdService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

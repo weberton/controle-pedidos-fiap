@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FindAllCustomersServiceImpl implements FindAllCustomersService {
-
     private final CustomerRepository customerRepository;
 
     public FindAllCustomersServiceImpl(CustomerRepository customerRepository) {

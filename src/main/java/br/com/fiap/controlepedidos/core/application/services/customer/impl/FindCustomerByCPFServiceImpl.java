@@ -7,10 +7,10 @@ import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundExcepti
 import org.springframework.stereotype.Service;
 
 @Service
+
 public class FindCustomerByCPFServiceImpl implements FindCustomerByCPFService {
 
     private final CustomerRepository customerRepository;
-
 
     public FindCustomerByCPFServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;

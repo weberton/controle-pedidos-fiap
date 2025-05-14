@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class FindCustomerByCPFImplTest {
+class FindCustomerByCPFServiceImplTest {
     @Mock
     private CustomerRepository customerRepository;
     @InjectMocks

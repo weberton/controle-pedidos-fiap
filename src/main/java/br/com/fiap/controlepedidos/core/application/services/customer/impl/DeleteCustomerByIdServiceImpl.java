@@ -11,8 +11,9 @@ public class DeleteCustomerByIdServiceImpl implements DeleteCustomerByIdService 
 
     private final CustomerRepository customerRepository;
 
+
     public DeleteCustomerByIdServiceImpl(CustomerRepository customerRepository) {
-       this.customerRepository = customerRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Override

@@ -2,6 +2,9 @@
 
 Projeto backend para controle de pedidos de uma lanchonete, utilizando Spring Boot, Arquitetura Hexagonal e Flyway para migração de banco de dados.
 
+![Cobertura de Código](.github/badges/jacoco.svg)
+![Cobertura de Branches](.github/badges/branches.svg)
+
 ## Pré-requisitos
 - Java 21+
 - MySQL 8+
