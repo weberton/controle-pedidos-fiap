@@ -3,7 +3,6 @@ package br.com.fiap.controlepedidos.adapters.driver.apirest.controllers;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.CustomerApi;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.CustomerDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.PagedResponse;
-import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
 import br.com.fiap.controlepedidos.core.application.services.customer.CreateCustomerService;
 import br.com.fiap.controlepedidos.core.application.services.customer.DeleteCustomerByIdService;
 import br.com.fiap.controlepedidos.core.application.services.customer.FindAllCustomersService;
