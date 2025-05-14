@@ -1,6 +1,6 @@
 package br.com.fiap.controlepedidos.core.application.services.customer;
 
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
+import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
 import br.com.fiap.controlepedidos.core.application.services.customer.impl.CreateCustomerServiceImpl;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.validations.ExistentRecordException;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CreateCustomerServiceTest {
     @Mock
-    private ICustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
     @InjectMocks
     private CreateCustomerServiceImpl createCustomer;
 
