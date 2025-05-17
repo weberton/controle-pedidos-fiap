@@ -25,7 +25,8 @@ public record ProductDTO(
                 .price(this.price)
                 .category(this.category)
                 .description(this.description)
-                .active(this.active)
+                //.active(this.active) //TODO Weberton Review
+                .active(true)
                 .image(this.image)
                 .build();
     }

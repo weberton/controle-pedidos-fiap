@@ -1,6 +1,7 @@
 package br.com.fiap.controlepedidos.adapters.driver.apirest.exceptions;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.ErrorResponse;
+import br.com.fiap.controlepedidos.core.domain.validations.CartAlreadyAssociatedException;
 import br.com.fiap.controlepedidos.core.domain.validations.ExistentRecordException;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse(exception.getMessage(),
                 LocalDateTime.now()),
                 HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({CartAlreadyAssociatedException.class})
+    public ResponseEntity<ErrorResponse> handleCartAlreadyAssociated(Exception exception, WebRequest request) {
+        return new ResponseEntity<>(new ErrorResponse(exception.getMessage(),
+                LocalDateTime.now()),
+                HttpStatus.CONFLICT);
     }
 
     @Override

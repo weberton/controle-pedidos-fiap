@@ -341,7 +341,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IdentifyRequest'
+              $ref: '#/components/schemas/CartAssociateCustomerRequest'
       responses:
         '200':
           description: Carrinho atualizado com customerId
@@ -351,6 +351,12 @@ paths:
                 $ref: '#/components/schemas/CartResponse'
         '404':
           description: Carrinho não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflito – carrinho já possui um customer associado
           content:
             application/json:
               schema:
@@ -471,7 +477,7 @@ components:
         totalCents:
           type: integer
           description: Soma de todos os subtotalCents do carrinho
-    IdentifyRequest:
+    CartAssociateCustomerRequest:
       type: object
       required:
         - customerId
