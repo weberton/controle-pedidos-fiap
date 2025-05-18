@@ -1,7 +1,7 @@
 package br.com.fiap.controlepedidos.core.application.services.customer;
 
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
-import br.com.fiap.controlepedidos.core.application.services.customer.impl.FindCustomerByCPFImpl;
+import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
+import br.com.fiap.controlepedidos.core.application.services.customer.impl.FindCustomerByCPFServiceImpl;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -19,11 +19,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class FindCustomerByCPFImplTest {
+class FindCustomerByCPFServiceImplTest {
     @Mock
-    private ICustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
     @InjectMocks
-    private FindCustomerByCPFImpl findCustomerByCPF;
+    private FindCustomerByCPFServiceImpl findCustomerByCPF;
 
     @Test
     void findByCPF_whenCpfIsFound_returnsCustomer() {

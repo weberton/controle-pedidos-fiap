@@ -3,6 +3,7 @@ package br.com.fiap.controlepedidos.adapters.driver.apirest.exceptions;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.ErrorResponse;
 import br.com.fiap.controlepedidos.core.domain.validations.ExistentRecordException;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
+@Slf4j
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -47,6 +49,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ErrorResponse> handleGenericException(Exception exception, WebRequest request) {
+        logger.error(exception.getMessage(), exception);
         return ResponseEntity.internalServerError().body(new ErrorResponse(GENERIC_MESSAGE,
                 LocalDateTime.now()));
     }
