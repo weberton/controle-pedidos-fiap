@@ -222,4 +222,122 @@ class CreateUpdateCartServiceImplTest {
         assertThat(cartUpdated.getItems().getFirst()).isEqualTo(item);
         assertThat(cartUpdated.getTotalCents()).isEqualTo(item.getPriceCents() * item.getQuantity());
     }
+
+    @Test
+    void updateQuantity_whenQuantityIsUpdatedTo_cartShouldBeEmpty() {
+        //Given
+        var cartId = UUID.randomUUID();
+        var itemId = UUID.randomUUID();
+        var zeroQuantityItem = 0;
+
+        var item = CartItem.builder()
+                .priceCents(product.getPrice())
+                .quantity(2)
+                .product(product)
+                .build();
+        item.setId(itemId);
+
+        Cart cart = new Cart();
+        cart.setId(cartId);
+        cart.addItem(item);
+
+        ArgumentCaptor<Cart> cartArgumentCaptor = ArgumentCaptor.forClass(Cart.class);
+
+        //When
+        when(findCartService.findById(cartId)).thenReturn(cart);
+        cartsService.updateQuantity(cartId, itemId, zeroQuantityItem);
+
+        //Then
+        verify(cartsRepository).save(cartArgumentCaptor.capture());
+        var cartUpdated = cartArgumentCaptor.getValue();
+
+        assertThat(cartUpdated.getItems()).isEmpty();
+        assertThat(cartUpdated.getTotalCents()).isZero();
+    }
+
+    @Test
+    void updateQuantity_whenItemQuantityIsUpdateToZero_removesOnlyThatItem() {
+        //Given
+        var cartId = UUID.randomUUID();
+        var itemId1 = UUID.randomUUID();
+        var itemId2 = UUID.randomUUID();
+        var zeroQuantiItem2 = 0;
+
+        var item = CartItem.builder()
+                .priceCents(product.getPrice())
+                .quantity(2)
+                .product(product)
+                .build();
+        item.setId(itemId1);
+
+        var item2 = CartItem.builder()
+                .priceCents(product.getPrice())
+                .quantity(1)
+                .product(product)
+                .build();
+        item2.setId(itemId2);
+
+        Cart cart = new Cart();
+        cart.setId(cartId);
+        cart.addItem(item);
+        cart.addItem(item2);
+
+        ArgumentCaptor<Cart> cartArgumentCaptor = ArgumentCaptor.forClass(Cart.class);
+
+        //When
+        when(findCartService.findById(cartId)).thenReturn(cart);
+        cartsService.updateQuantity(cartId, itemId2, zeroQuantiItem2);
+
+        //Then
+        verify(cartsRepository).save(cartArgumentCaptor.capture());
+        var cartUpdated = cartArgumentCaptor.getValue();
+
+        assertThat(cartUpdated.getItems()).hasSize(1);
+        assertThat(cartUpdated.getItems().getFirst()).isEqualTo(item);
+        assertThat(cartUpdated.getTotalCents()).isEqualTo(item.getPriceCents() * item.getQuantity());
+    }
+
+    @Test
+    void updateQuantity_whenItemQuantityIsUpdate_updatedOnlyThatItem() {
+        //Given
+        var cartId = UUID.randomUUID();
+        var itemId1 = UUID.randomUUID();
+        var itemId2 = UUID.randomUUID();
+        var item1NewQuantity = 1;
+
+        var item = CartItem.builder()
+                .priceCents(product.getPrice())
+                .quantity(2)
+                .product(product)
+                .build();
+        item.setId(itemId1);
+
+        var item2 = CartItem.builder()
+                .priceCents(product.getPrice())
+                .quantity(1)
+                .product(product)
+                .build();
+        item2.setId(itemId2);
+
+        Cart cart = new Cart();
+        cart.setId(cartId);
+        cart.addItem(item);
+        cart.addItem(item2);
+        var expectedTotalCents = product.getPrice() * 2; //2 Products - same price
+
+        ArgumentCaptor<Cart> cartArgumentCaptor = ArgumentCaptor.forClass(Cart.class);
+
+        //When
+        when(findCartService.findById(cartId)).thenReturn(cart);
+        cartsService.updateQuantity(cartId, itemId1, item1NewQuantity);
+
+        //Then
+        verify(cartsRepository).save(cartArgumentCaptor.capture());
+        var cartUpdated = cartArgumentCaptor.getValue();
+
+        assertThat(cartUpdated.getItems()).hasSize(2);
+        assertThat(cartUpdated.getItems().getFirst().getQuantity()).isEqualTo(item1NewQuantity);
+        assertThat(cartUpdated.getItems().getLast().getQuantity()).isEqualTo(item2.getQuantity());
+        assertThat(cartUpdated.getTotalCents()).isEqualTo(expectedTotalCents);
+    }
 }

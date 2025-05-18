@@ -3,6 +3,7 @@ package br.com.fiap.controlepedidos.adapters.driver.apirest.controllers;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.CartsApi;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CartAssociateCustomerRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CreateItemRequest;
+import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.UpdateItemQuantityRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.out.CartResponseDto;
 import br.com.fiap.controlepedidos.core.application.services.carts.CartAssociateCustomerService;
 import br.com.fiap.controlepedidos.core.application.services.carts.CreateUpdateCartService;
@@ -57,13 +58,23 @@ public class CartsController implements CartsApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteById(UUID cartId) {
+    public ResponseEntity<Void> deleteCartById(UUID cartId) {
         deleteCartService.deleteById(cartId);
         return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<CartResponseDto> removeItem(UUID cartId, UUID itemId) {
+    public ResponseEntity<CartResponseDto> removeItem(final UUID cartId,
+                                                      final UUID itemId) {
         return ResponseEntity.ok(CartResponseDto.fromDomain(createUpdateCartService.removeItem(cartId, itemId)));
     }
+
+    @Override
+    public ResponseEntity<CartResponseDto> updateItemQuantity(final UUID cartId,
+                                                              final UUID itemId,
+                                                              final UpdateItemQuantityRequest updateItemQuantityRequest) {
+        return ResponseEntity.ok(CartResponseDto.fromDomain(createUpdateCartService.updateQuantity(cartId, itemId, updateItemQuantityRequest.quantity())));
+    }
+
+
 }

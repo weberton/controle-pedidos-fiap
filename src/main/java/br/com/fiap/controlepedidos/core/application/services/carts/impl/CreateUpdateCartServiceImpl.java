@@ -26,7 +26,7 @@ public class CreateUpdateCartServiceImpl implements CreateUpdateCartService {
     }
 
     @Override
-    public Cart create(CartItem cartItem) {
+    public Cart create(final CartItem cartItem) {
         CartItem newCartItem = newCartItem(cartItem);
         Cart cart = new Cart();
         cart.addItem(newCartItem);
@@ -34,13 +34,14 @@ public class CreateUpdateCartServiceImpl implements CreateUpdateCartService {
     }
 
     @Override
-    public Cart addItem(UUID cartId, CartItem cartItem) {
+    public Cart addItem(final UUID cartId,
+                        final CartItem cartItem) {
         Cart cart = this.findCartService.findById(cartId);
         cart.addItem(newCartItem(cartItem));
         return this.cartsRepository.save(cart);
     }
 
-    private CartItem newCartItem(CartItem cartItem) {
+    private CartItem newCartItem(final CartItem cartItem) {
         Product product = this.findProductByIdService.findById(cartItem.getProduct().getId());
         return cartItem.toBuilder()
                 .priceCents(product.getPrice())
@@ -48,10 +49,20 @@ public class CreateUpdateCartServiceImpl implements CreateUpdateCartService {
     }
 
     @Override
-    public Cart removeItem(UUID cartId, UUID itemId) {
+    public Cart removeItem(final UUID cartId,
+                           final UUID itemId) {
         Cart cart = this.findCartService.findById(cartId);
         cart.removeItem(itemId);
 
+        return cartsRepository.save(cart);
+    }
+
+    @Override
+    public Cart updateQuantity(final UUID cartId,
+                               final UUID itemId,
+                               final int quantity) {
+        Cart cart = this.findCartService.findById(cartId);
+        cart.updateItemQuantity(itemId, quantity);
         return cartsRepository.save(cart);
     }
 }

@@ -251,7 +251,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /api/v1/carts/{cartId}/items/{productId}:
+  /api/v1/carts/{cartId}/items/{itemId}:
    patch:
      tags:
        - Carts
@@ -263,10 +263,10 @@ paths:
          description: Identificador único do carrinho (UUID)
          schema:
            type: string
-       - name: productId
+       - name: itemId
          in: path
          required: true
-         description: Identificador único do produto a ser removido
+         description: Identificador único do item a ser atualizado
          schema:
            type: string
      requestBody:

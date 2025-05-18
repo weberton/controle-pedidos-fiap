@@ -11,4 +11,6 @@ public interface CreateUpdateCartService {
     Cart addItem(UUID cartId, CartItem cartItem);
 
     Cart removeItem(UUID cartId, UUID itemId);
+
+    Cart updateQuantity(UUID cartId, UUID itemId, int quantity);
 }

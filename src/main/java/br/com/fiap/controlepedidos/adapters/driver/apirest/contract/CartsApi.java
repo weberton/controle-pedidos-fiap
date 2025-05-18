@@ -2,6 +2,7 @@ package br.com.fiap.controlepedidos.adapters.driver.apirest.contract;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CartAssociateCustomerRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CreateItemRequest;
+import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.UpdateItemQuantityRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.out.CartResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -31,8 +32,14 @@ public interface CartsApi {
                                                       @RequestBody @Valid CartAssociateCustomerRequest cartAssociateCustomerRequest);
 
     @DeleteMapping("{cartId}")
-    ResponseEntity<Void> deleteById(@PathVariable UUID cartId);
+    ResponseEntity<Void> deleteCartById(@PathVariable UUID cartId);
 
     @DeleteMapping(value = "{cartId}/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CartResponseDto> removeItem(@PathVariable UUID cartId, @PathVariable UUID itemId);
+
+    @PatchMapping(value = "{cartId}/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<CartResponseDto> updateItemQuantity(@PathVariable UUID cartId,
+                                                       @PathVariable UUID itemId,
+                                                       @RequestBody @Valid UpdateItemQuantityRequest updateItemQuantityRequest);
 }
