@@ -22,7 +22,7 @@ public interface ProductApi {
     ResponseEntity<ProductDTO> findById(@PathVariable UUID id);
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PagedResponse<ProductDTO>> findAll(@PathVariable Pageable pageable);
+    ResponseEntity<PagedResponse<ProductDTO>> findAll(Pageable pageable);
 
     @PutMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ProductDTO> update(@PathVariable UUID id, @RequestBody ProductDTO productDTO);
