@@ -1,6 +1,6 @@
 package br.com.fiap.controlepedidos.core.application.services.customer;
 
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
+import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
 import br.com.fiap.controlepedidos.core.application.services.customer.impl.FindAllCustomersServiceImpl;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 class FindAllCustomersServiceImplTest {
 
     @Mock
-    private ICustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
     @InjectMocks
     private FindAllCustomersServiceImpl findAllCustomers;
 

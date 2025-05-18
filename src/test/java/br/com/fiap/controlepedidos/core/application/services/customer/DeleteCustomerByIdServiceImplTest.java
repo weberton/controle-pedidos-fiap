@@ -1,6 +1,6 @@
 package br.com.fiap.controlepedidos.core.application.services.customer;
 
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
+import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
 import br.com.fiap.controlepedidos.core.application.services.customer.impl.DeleteCustomerByIdServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class DeleteCustomerByIdServiceImplTest {
     @Mock
-    private ICustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @InjectMocks
     private DeleteCustomerByIdServiceImpl deleteCustomerById;

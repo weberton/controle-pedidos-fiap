@@ -1,13 +1,12 @@
-package br.com.fiap.controlepedidos.adapter.rest;
+package br.com.fiap.controlepedidos.adapters.driver.apirest.controllers;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.CustomerApi;
-import br.com.fiap.controlepedidos.adapters.driver.apirest.controllers.CustomerController;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.CustomerDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.exceptions.RestExceptionHandler;
-import br.com.fiap.controlepedidos.core.application.services.customer.ICreateCustomer;
-import br.com.fiap.controlepedidos.core.application.services.customer.IDeleteCustomerById;
-import br.com.fiap.controlepedidos.core.application.services.customer.IFindAllCustomers;
-import br.com.fiap.controlepedidos.core.application.services.customer.IFindCustomerByCPF;
+import br.com.fiap.controlepedidos.core.application.services.customer.CreateCustomerService;
+import br.com.fiap.controlepedidos.core.application.services.customer.DeleteCustomerByIdService;
+import br.com.fiap.controlepedidos.core.application.services.customer.FindAllCustomersService;
+import br.com.fiap.controlepedidos.core.application.services.customer.FindCustomerByCPFService;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.validations.ExistentRecordException;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
@@ -48,13 +47,14 @@ class CustomerControllerTest {
     public static final String MAIL = "email@gmail.com";
 
     @Mock
-    private ICreateCustomer createCustomerService;
+    private CreateCustomerService createCustomerService;
     @Mock
-    private IFindCustomerByCPF findCustomerByCPF;
+    private FindCustomerByCPFService findCustomerByCPF;
     @Mock
-    private IDeleteCustomerById deleteCustomerById;
+    private DeleteCustomerByIdService deleteCustomerById;
     @Mock
-    private IFindAllCustomers findAllCustomerService;
+    private FindAllCustomersService findAllCustomerService;
+
     @InjectMocks
     private CustomerController clienteController;
     private MockMvc mockMvc;
@@ -192,9 +192,7 @@ class CustomerControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-
     private String toJson(CustomerDTO clienteDto) throws JsonProcessingException {
         return objectMapper.writeValueAsString(clienteDto);
     }
-
 }
