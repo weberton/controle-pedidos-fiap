@@ -65,14 +65,12 @@ public class Cart extends AbstractEntity {
         return totalCents;
     }
 
-    @Transient
     public void addItem(CartItem item) {
         item.setCart(this);
         items.add(item);
         recalculateTotal();
     }
 
-    @Transient
     public void removeItem(CartItem item) {
         if (Objects.nonNull(item)) {
             items.removeIf(cartItem -> cartItem.getId().equals(item.getId()));
@@ -94,6 +92,20 @@ public class Cart extends AbstractEntity {
         items.forEach(i -> i.setCart(null));
         items.clear();
         recalculateTotal();
+    }
+
+    public void updateItemQuantity(UUID itemId, int quantity) {
+        if (quantity == 0) {
+            removeItem(itemId);
+        }
+
+        items.stream()
+                .filter(i -> i.getId().equals(itemId))
+                .findFirst()
+                .ifPresent(item -> {
+                    item.setQuantity(quantity);
+                    recalculateTotal();
+                });
     }
 }
 
