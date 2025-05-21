@@ -2,9 +2,11 @@ package br.com.fiap.controlepedidos.core.application.services.carts;
 
 import br.com.fiap.controlepedidos.core.application.ports.CartsRepository;
 import br.com.fiap.controlepedidos.core.application.services.carts.impl.CreateUpdateCartServiceImpl;
+import br.com.fiap.controlepedidos.core.application.services.customer.FindCustomerByIdService;
 import br.com.fiap.controlepedidos.core.application.services.product.FindProductByIdService;
 import br.com.fiap.controlepedidos.core.domain.entities.Cart;
 import br.com.fiap.controlepedidos.core.domain.entities.CartItem;
+import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +33,8 @@ class CreateUpdateCartServiceImplTest {
     private CartsRepository cartsRepository;
     @Mock
     private FindCartService findCartService;
+    @Mock
+    private FindCustomerByIdService findCustomerByIdService;
     @InjectMocks
     private CreateUpdateCartServiceImpl cartsService;
     private Product product;
@@ -59,7 +63,54 @@ class CreateUpdateCartServiceImplTest {
         //When
         when(findProductByIdService.findById(product.getId())).thenReturn(product);
 
-        cartsService.create(item1);
+        cartsService.create(item1, null);
+
+        //Then
+        verify(cartsRepository).save(cartArgumentCaptor.capture());
+
+        Cart capturedCart = cartArgumentCaptor.getValue();
+        CartItem capturedItem = capturedCart.getItems().getFirst();
+
+        assertThat(capturedItem.getPriceCents()).isEqualTo(product.getPrice());
+
+        //customer is null
+        assertThat(capturedCart.getCustomer()).isNull();
+
+        //Verify item subtotal
+        assertThat(capturedItem.calculateSubTotalCents())
+                .isEqualTo(product.getPrice() * item1.getQuantity());
+
+        //Verify cart total
+        assertThat(capturedCart.recalculateTotal())
+                .isEqualTo(product.getPrice() * item1.getQuantity());
+    }
+
+    @Test
+    void create_whenCartIsCreatedWithCustomer_shouldSaveCartWithCustomer() {
+        //Given
+        var cpf = "89673413002";
+        var name = "Name";
+        var email = "email@gmail.com";
+
+        var item1 = CartItem.builder()
+                .quantity(2)
+                .product(product)
+                .build();
+
+        var customer = Customer.builder()
+                .id(UUID.randomUUID())
+                .cpf(cpf)
+                .name(name)
+                .email(email)
+                .build();
+
+        ArgumentCaptor<Cart> cartArgumentCaptor = ArgumentCaptor.forClass(Cart.class);
+
+        //When
+        when(findProductByIdService.findById(product.getId())).thenReturn(product);
+        when(findCustomerByIdService.findById(customer.getId())).thenReturn(customer);
+
+        cartsService.create(item1, customer.getId());
 
         //Then
         verify(cartsRepository).save(cartArgumentCaptor.capture());
@@ -76,21 +127,26 @@ class CreateUpdateCartServiceImplTest {
         //Verify cart total
         assertThat(capturedCart.recalculateTotal())
                 .isEqualTo(product.getPrice() * item1.getQuantity());
+
+        //Verify customer
+        assertThat(capturedCart.getCustomer()).isEqualTo(customer);
     }
 
     @Test
     void create_whenProductDoesNotExist_returnsException() {
         //Given
+        var customerId = UUID.randomUUID();
         var item1 = CartItem.builder()
                 .quantity(2)
                 .product(product)
                 .build();
 
+
         when(findProductByIdService.findById(product.getId())).thenThrow(RecordNotFoundException.class);
 
         //when/then
         assertThrows(RecordNotFoundException.class,
-                () -> cartsService.create(item1));
+                () -> cartsService.create(item1, customerId));
     }
 
     @Test

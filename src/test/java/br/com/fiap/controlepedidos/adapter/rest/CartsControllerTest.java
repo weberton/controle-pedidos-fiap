@@ -3,6 +3,7 @@ package br.com.fiap.controlepedidos.adapter.rest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.controllers.CartsController;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.Category;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CartAssociateCustomerRequest;
+import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CreateCartRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CreateItemRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.UpdateItemQuantityRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.exceptions.RestExceptionHandler;
@@ -70,11 +71,13 @@ class CartsControllerTest {
     void createCart_whenQuantityIsLessThan1_returns400() throws Exception {
         var productId = UUID.randomUUID().toString();
         var quantity = 0;
+        var customerId = UUID.randomUUID();
 
         CreateItemRequest createItemRequest = new CreateItemRequest(productId, quantity);
+        CreateCartRequest createCartRequest = new CreateCartRequest(customerId, createItemRequest);
         mockMvc.perform(post(CartsController.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(toJson(createItemRequest)))
+                        .content(toJson(createCartRequest)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.content()
@@ -86,9 +89,10 @@ class CartsControllerTest {
         var quantity = 0;
 
         CreateItemRequest createItemRequest = new CreateItemRequest(null, quantity);
+        CreateCartRequest createCartRequest = new CreateCartRequest(null, createItemRequest);
         mockMvc.perform(post(CartsController.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(toJson(createItemRequest)))
+                        .content(toJson(createCartRequest)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.content()
@@ -101,13 +105,15 @@ class CartsControllerTest {
 
         var productId = UUID.randomUUID().toString();
         var quantity = 2;
+        var customerId = UUID.randomUUID();
 
-        when(createUpdateCartService.create(any())).thenThrow(RecordNotFoundException.class);
+        when(createUpdateCartService.create(any(), any())).thenThrow(RecordNotFoundException.class);
 
         CreateItemRequest createItemRequest = new CreateItemRequest(productId, quantity);
+        CreateCartRequest createCartRequest = new CreateCartRequest(customerId, createItemRequest);
         mockMvc.perform(post(CartsController.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(toJson(createItemRequest)))
+                        .content(toJson(createCartRequest)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }

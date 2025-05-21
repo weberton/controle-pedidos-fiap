@@ -1,6 +1,7 @@
 package br.com.fiap.controlepedidos.adapters.driver.apirest.contract;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CartAssociateCustomerRequest;
+import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CreateCartRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CreateItemRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.UpdateItemQuantityRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.out.CartResponseDto;
@@ -16,7 +17,7 @@ public interface CartsApi {
     String BASE_URL = "/api/v1/carts";
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CartResponseDto> createCart(@RequestBody @Valid CreateItemRequest item);
+    ResponseEntity<CartResponseDto> createCart(@RequestBody @Valid CreateCartRequest item);
 
     @GetMapping(value = "{cartId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CartResponseDto> findById(@PathVariable UUID cartId);

@@ -131,7 +131,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CartItemRequest'
+              $ref: '#/components/schemas/CreateCartRequest'
       responses:
         201:
           description: Carrinho criado.
@@ -443,6 +443,18 @@ components:
         subtotalCents:
           type: number
           description: Subtotal em centavos (priceCents * quantity)
+
+    CreateCartRequest:
+      type: object
+      required:
+        - item
+      properties:
+        customerId:
+          type: string
+          description: Identificador do cliente(Opcional)
+          required: false
+        item:
+          $ref: '#/components/schemas/CartItemRequest'
 
     CartItemRequest:
       type: object

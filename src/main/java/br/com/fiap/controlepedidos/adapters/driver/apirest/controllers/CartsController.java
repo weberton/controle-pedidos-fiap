@@ -2,6 +2,7 @@ package br.com.fiap.controlepedidos.adapters.driver.apirest.controllers;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.CartsApi;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CartAssociateCustomerRequest;
+import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CreateCartRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CreateItemRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.UpdateItemQuantityRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.out.CartResponseDto;
@@ -34,8 +35,8 @@ public class CartsController implements CartsApi {
     }
 
     @Override
-    public ResponseEntity<CartResponseDto> createCart(final CreateItemRequest item) {
-        Cart cart = createUpdateCartService.create(item.toDomain());
+    public ResponseEntity<CartResponseDto> createCart(final CreateCartRequest createCartRequest) {
+        Cart cart = createUpdateCartService.create(createCartRequest.toDomain(), createCartRequest.customerId());
         return new ResponseEntity<>(CartResponseDto.fromDomain(cart), HttpStatus.CREATED);
     }
 
