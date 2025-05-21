@@ -1,6 +1,6 @@
 package br.com.fiap.controlepedidos.core.application.services.customer;
 
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
+import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
 import br.com.fiap.controlepedidos.core.application.services.customer.impl.FindCustomerByCPFServiceImpl;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.validations.RecordNotFoundException;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class FindCustomerByCPFServiceImplTest {
     @Mock
-    private ICustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
     @InjectMocks
     private FindCustomerByCPFServiceImpl findCustomerByCPF;
 

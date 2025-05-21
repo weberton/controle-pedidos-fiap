@@ -1,145 +1,264 @@
 {
 	"info": {
-		"_postman_id": "8dbf47f5-ef8c-4fe5-a906-3eb2bc33e41c",
+		"_postman_id": "256ebc9a-9549-4a4a-974f-d45830f53c6e",
 		"name": "Controle_Pedidos",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6232888"
+		"_exporter_id": "44842330",
+		"_collection_link": "https://www.postman.com/wel035/controle-pedidos-fiap/collection/44842330-256ebc9a-9549-4a4a-974f-d45830f53c6e?action=share&source=collection_link&creator=44842330"
 	},
 	"item": [
 		{
-			"name": "Registar Por Nome e Email",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"nome\": \"Joao\",\n    \"email\": \"joao@gmail.com\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Registar Por Nome e Email",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Joao\",\n    \"email\": \"joao@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/customers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "localhost:8080/api/v1/clientes",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"clientes"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Registar Por Nome, CPF e Email",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"cpf\": \"30232688869\",\n    \"nome\": \"Maria\",\n    \"email\": \"maria@gmail.com\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Registar Por Nome, CPF e Email",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cpf\": \"30232688869\",\n    \"nome\": \"Maria\",\n    \"email\": \"maria@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/customers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "localhost:8080/api/v1/clientes",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"clientes"
-					]
+				{
+					"name": "Bucar Por CPF",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/clientes/30232688869",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"clientes",
+								"30232688869"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apagar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/customers/c7118eb7-9a6b-4b4e-b291-436e41fd1a4f",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"c7118eb7-9a6b-4b4e-b291-436e41fd1a4f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Todos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/customers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Bucar Por CPF",
-			"request": {
-				"auth": {
-					"type": "noauth"
+			"name": "Products",
+			"item": [
+				{
+					"name": "Criar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\": \"BigMac\",\r\n\t\"price\": 10.5,\r\n\t\"category\": \"LANCHE\",\r\n\t\"description\": \"Dois hamburgueres, alface, queijo, molho especial, cebola, pickles, pão com gergilim\",\r\n\t\"active\": true,\r\n\t\"image\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/products",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
 				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/api/v1/clientes/30232688869",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"clientes",
-						"30232688869"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Apagar",
-			"request": {
-				"auth": {
-					"type": "noauth"
+				{
+					"name": "Buscar por ID",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				},
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/api/v1/clientes/c7118eb7-9a6b-4b4e-b291-436e41fd1a4f",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"clientes",
-						"c7118eb7-9a6b-4b4e-b291-436e41fd1a4f"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Buscar Todos",
-			"request": {
-				"auth": {
-					"type": "noauth"
+				{
+					"name": "Buscar todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/products",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
 				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/api/v1/clientes",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"clientes"
-					]
+				{
+					"name": "Atualizar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price\": 5.5,\r\n    \"description\": \"Dois hamburgueres\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/products/1c8664cc-d166-44f6-a75b-0453308c9972",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"1c8664cc-d166-44f6-a75b-0453308c9972"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apagar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/products/1c8664cc-d166-44f6-a75b-0453308c9972",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"1c8664cc-d166-44f6-a75b-0453308c9972"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }

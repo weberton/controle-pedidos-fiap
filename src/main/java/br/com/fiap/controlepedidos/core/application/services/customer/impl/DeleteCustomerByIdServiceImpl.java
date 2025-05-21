@@ -1,18 +1,19 @@
 package br.com.fiap.controlepedidos.core.application.services.customer.impl;
 
-import br.com.fiap.controlepedidos.core.application.ports.ICustomerRepository;
-import br.com.fiap.controlepedidos.core.application.services.customer.IDeleteCustomerById;
+import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
+import br.com.fiap.controlepedidos.core.application.services.customer.DeleteCustomerByIdService;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-public class DeleteCustomerByIdServiceImpl implements IDeleteCustomerById {
+public class DeleteCustomerByIdServiceImpl implements DeleteCustomerByIdService {
 
-    private final ICustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
-    public DeleteCustomerByIdServiceImpl(ICustomerRepository customerRepository) {
-       this.customerRepository = customerRepository;
+
+    public DeleteCustomerByIdServiceImpl(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
     }
 
     @Override
