@@ -36,7 +36,7 @@ public class Cart extends AbstractEntity {
     private List<CartItem> items = new ArrayList<>();
 
     @Column(name = "total_cents", nullable = false)
-    private int totalCents;
+    private float totalCents;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
@@ -58,10 +58,11 @@ public class Cart extends AbstractEntity {
         recalculateTotal();
     }
 
-    public int recalculateTotal() {
-        this.totalCents = items.stream()
-                .mapToInt(CartItem::calculateSubTotalCents)
+    public float recalculateTotal() {
+        double sum = items.stream()
+                .mapToDouble(CartItem::calculateSubTotalCents)
                 .sum();
+        this.totalCents = (float) sum;
         return totalCents;
     }
 

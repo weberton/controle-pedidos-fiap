@@ -29,12 +29,12 @@ public class CartItem extends AbstractEntity {
     private int quantity;
 
     @Column(name = "price_cents", nullable = false)
-    private int priceCents;
+    private float priceCents;
 
     @Column(name = "subtotal_cents", nullable = false)
-    private int subtotalCents;
+    private float subtotalCents;
 
-    public int calculateSubTotalCents() {
+    public float calculateSubTotalCents() {
         this.subtotalCents = quantity * priceCents;
         return this.subtotalCents;
     }
