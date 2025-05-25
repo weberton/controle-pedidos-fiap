@@ -4,6 +4,6 @@ import br.com.fiap.controlepedidos.core.domain.entities.Order;
 
 import java.util.UUID;
 
-public interface PrepareOrderService {
-    Order startPreparation(UUID orderId) throws Exception;
+public interface StartOrderPreparation {
+    Order perform(UUID orderId) throws Exception;
 }
