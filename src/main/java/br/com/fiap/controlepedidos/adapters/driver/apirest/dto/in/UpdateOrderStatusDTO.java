@@ -4,6 +4,6 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record DoCheckoutRequestDTO(@NotNull(message = CART_ID_REQUIRED) UUID cartId) {
-    private static final String CART_ID_REQUIRED = "ID do carrinho não pode ser nulo";
+public record UpdateOrderStatusDTO(@NotNull(message = ORDER_ID_REQUIRED) UUID orderId) {
+    private static final String ORDER_ID_REQUIRED = "ID do pedido não pode ser nulo";
 }

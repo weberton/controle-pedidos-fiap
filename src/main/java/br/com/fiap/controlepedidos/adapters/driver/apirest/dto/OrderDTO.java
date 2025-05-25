@@ -1,45 +1,23 @@
 package br.com.fiap.controlepedidos.adapters.driver.apirest.dto;
 
+import br.com.fiap.controlepedidos.core.domain.entities.Customer;
+import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigInteger;
 import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record ProductDTO(
+public record OrderDTO(
         UUID id,
-        @NotEmpty(message = "Não não pode ser em branco") String name,
-        @NotNull(message = "Preço não pode ser nulo") double price,
-        @NotNull(message = "Categoria não pode ser nula") Category category,
-        @NotEmpty(message = "Descrição não pode ser em branco") String description,
-        Boolean active,
-        String image
+        String customerName,
+        String status,
+        int orderNumber
 ) {
-
-    public Product convertToModel() {
-        return Product.builder()
-                .id(this.id)
-                .name(this.name)
-                .price((float) this.price)
-                .category(this.category)
-                .description(this.description)
-                //.active(this.active) //TODO Weberton Review
-                .active(true)
-                .image(this.image)
-                .build();
+    public static OrderDTO convertToDTO(Order order, Customer customer) {
+        return new OrderDTO(order.getId(), customer.getName(), order.getOrderStatus().getDescription(), order.getOrderNumber());
     }
-
-    public static ProductDTO convertToDTO(Product product) {
-        return new ProductDTO(
-                product.getId(),
-                product.getName(),
-                product.getPrice(),
-                product.getCategory(),
-                product.getDescription(),
-                product.isActive(),
-                product.getImage());
-    }
-
 }

@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record DoCheckoutRequestDTO(@NotNull(message = CART_ID_REQUIRED) UUID cartId) {
-    private static final String CART_ID_REQUIRED = "ID do carrinho não pode ser nulo";
+public record MercadoPagoQRCodePaymentCallbackDTO(@NotNull(message = ORDER_ID_REQUIRED) UUID orderId,
+                                                  @NotNull(message = PAID_VALUE_REQUIRED) float paidValue) {
+    private static final String ORDER_ID_REQUIRED = "ID da ordem não pode ser nulo";
+    private static final String PAID_VALUE_REQUIRED = "O valor pago não foi informado";
 }
