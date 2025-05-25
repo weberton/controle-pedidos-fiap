@@ -1,8 +1,7 @@
 package br.com.fiap.controlepedidos.core.application.services.order.impl;
 
 import br.com.fiap.controlepedidos.core.application.ports.IOrderRepository;
-import br.com.fiap.controlepedidos.core.application.services.order.GetAllOrdersDoneService;
-import br.com.fiap.controlepedidos.core.application.services.order.GetAllOrdersService;
+import br.com.fiap.controlepedidos.core.application.services.order.GetAllOrdersReadyToPrepareService;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import br.com.fiap.controlepedidos.core.domain.enums.OrderStatus;
 import org.springframework.data.domain.Page;
@@ -11,16 +10,16 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class GetAllOrdersDoneServiceImpl implements GetAllOrdersDoneService {
+public class GetAllOrdersReadyToPrepareServiceImpl implements GetAllOrdersReadyToPrepareService {
 
     private final IOrderRepository orderRepository;
 
-    public GetAllOrdersDoneServiceImpl(IOrderRepository orderRepository) {
+    public GetAllOrdersReadyToPrepareServiceImpl(IOrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
     @Override
     public Page<Order> getAll(Pageable pageable) throws Exception {
-        return orderRepository.findByOrderStatusByLastUpdatedAsc(OrderStatus.DONE, pageable);
+        return orderRepository.findByOrderStatusOrderByUpdatedAtAsc(OrderStatus.RECEIVED, pageable);
     }
 }

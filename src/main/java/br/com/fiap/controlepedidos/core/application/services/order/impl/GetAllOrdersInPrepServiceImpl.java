@@ -1,25 +1,25 @@
 package br.com.fiap.controlepedidos.core.application.services.order.impl;
 
 import br.com.fiap.controlepedidos.core.application.ports.IOrderRepository;
-import br.com.fiap.controlepedidos.core.application.services.order.GetAllOrdersDoneService;
-import br.com.fiap.controlepedidos.core.application.services.order.GetAllOrdersService;
+import br.com.fiap.controlepedidos.core.application.services.order.GetAllOrdersInPrepService;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
+import br.com.fiap.controlepedidos.core.domain.enums.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class GetAllOrdersDoneServiceImpl implements GetAllOrdersDoneService {
+public class GetAllOrdersInPrepServiceImpl implements GetAllOrdersInPrepService {
 
     private final IOrderRepository orderRepository;
 
-    public GetAllOrdersDoneServiceImpl(IOrderRepository orderRepository) {
+    public GetAllOrdersInPrepServiceImpl(IOrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
     @Override
     public Page<Order> getAll(Pageable pageable) throws Exception {
-        return orderRepository.findAll(pageable);
+        return orderRepository.findByOrderStatusOrderByUpdatedAtAsc(OrderStatus.INPREP, pageable);
     }
 }
