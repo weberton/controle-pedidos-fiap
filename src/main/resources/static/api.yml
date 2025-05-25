@@ -35,7 +35,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
     get:
       tags:
         - Customers
@@ -129,14 +128,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CartItemRequest'
+              $ref: '#/components/schemas/CreateCartRequest'
       responses:
         201:
           description: Carrinho criado.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '400':
           description: Requisição inválida (validação ou erro de negócio)
           content:
@@ -167,7 +166,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '404':
           description: Carrinho não encontrado
           content:
@@ -197,7 +196,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '404':
           description: Carrinho não encontrado
           content:
@@ -226,15 +225,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CartItemRequest'
-
+              $ref: '#/components/schemas/CreateItemRequest'
       responses:
         200:
           description: Item adicionado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '400':
           description: Requisição inválida (validação ou erro de negócio)
           content:
@@ -247,7 +245,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /api/v1/carts/{cartId}/items/{productId}:
+  /api/v1/carts/{cartId}/items/{itemId}:
     patch:
       tags:
         - Carts
@@ -259,7 +257,7 @@ paths:
           description: Identificador único do carrinho (UUID)
           schema:
             type: string
-        - name: productId
+        - name: itemId
           in: path
           required: true
           description: Identificador único do produto a ser removido
@@ -270,14 +268,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CartItemRequest'
+              $ref: '#/components/schemas/UpdateItemQuantityRequest'
       responses:
         '200':
           description: Quantidade atualizada
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '400':
           description: Requisição inválida (validação ou erro de negócio).
           content:
@@ -290,7 +288,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
     delete:
       tags:
         - Carts
@@ -302,7 +299,7 @@ paths:
           description: Identificador único do carrinho (UUID)
           schema:
             type: string
-        - name: productId
+        - name: itemId
           in: path
           required: true
           description: Identificador único do produto a ser removido
@@ -314,7 +311,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '404':
           description: Carrinho ou produto não encontrado
           content:
@@ -344,7 +341,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '404':
           description: Carrinho não encontrado
           content:
@@ -521,7 +518,7 @@ components:
           type: string
           format: date-time
           description: Data e hora do erro
-    CartItemResponse:
+    CartItemResponseDto:
       type: object
       properties:
         productId:
@@ -538,7 +535,7 @@ components:
         subtotalCents:
           type: number
           description: Subtotal em centavos (priceCents * quantity)N
-    CartItemRequest:
+    CreateItemRequest:
       type: object
       required:
         - productId
@@ -551,7 +548,7 @@ components:
           type: integer
           description: Quantidade do produto adicionada(>=1)
           minimum: 1
-    CartResponse:
+    CartResponseDto:
       type: object
       properties:
         cartId:
@@ -566,7 +563,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/CartItemResponse'
+            $ref: '#/components/schemas/CartItemResponseDto'
         totalCents:
           type: integer
           description: Soma de todos os subtotalCents do carrinho
@@ -578,6 +575,28 @@ components:
         customerId:
           type: string
           description: Identificador do cliente para associação ao carrinho
+    UpdateItemQuantityRequest:
+      type: integer
+      required:
+        - quantity
+      properties:
+        quantity:
+          type: integer
+          description: Quantidade mínima de itens adicionados ao carrinho
+          minimum: 0
+    CreateCartRequest:
+      type: object
+      required:
+        - customerId
+        - item
+      properties:
+        customerId:
+          type: string
+          description: Identificador único do cliente
+          format: uuid
+        item:
+          type: object
+          $ref: '#/components/schemas/CreateItemRequest'
     ProductDTO:
       type: object
       required:
