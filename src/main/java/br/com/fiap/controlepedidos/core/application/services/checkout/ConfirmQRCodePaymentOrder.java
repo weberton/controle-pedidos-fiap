@@ -4,6 +4,6 @@ import br.com.fiap.controlepedidos.core.domain.entities.Payment;
 
 import java.util.UUID;
 
-public interface StartCheckoutService {
-    public Payment startCheckout(UUID cartId) throws Exception;
+public interface ConfirmQRCodePaymentOrder {
+    public Payment confirmQrCodePayment(UUID orderId, float paidValue) throws Exception;
 }
