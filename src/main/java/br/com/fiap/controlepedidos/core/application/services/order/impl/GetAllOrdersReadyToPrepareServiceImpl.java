@@ -29,7 +29,7 @@ public class GetAllOrdersReadyToPrepareServiceImpl implements GetAllOrdersReadyT
         Page<Order> orders = orderRepository.findByOrderStatusOrderByUpdatedAtAsc(OrderStatus.RECEIVED, pageable);
 
         orders.forEach(order -> {
-            if (order.getCustomer().getId() != null) {
+            if (order.getCustomer() != null) {
                 Customer customer = findCustomerByIdService.findById(order.getCustomer().getId());
                 order.setCustomer(customer);
             }

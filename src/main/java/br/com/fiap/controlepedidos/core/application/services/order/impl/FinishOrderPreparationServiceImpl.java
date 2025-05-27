@@ -28,8 +28,10 @@ public class FinishOrderPreparationServiceImpl implements FinishOrderPreparation
         Order order = findOrderByIdService.getById(orderId);
         order.finishOrderPreparation();
         orderRepository.save(order);
-        Customer customer = findCustomerByIdService.findById(order.getCustomer().getId());
-        order.setCustomer(customer);
+        if (order.getCustomer() != null) {
+            Customer customer = findCustomerByIdService.findById(order.getCustomer().getId());
+            order.setCustomer(customer);
+        }
         return order;
     }
 }

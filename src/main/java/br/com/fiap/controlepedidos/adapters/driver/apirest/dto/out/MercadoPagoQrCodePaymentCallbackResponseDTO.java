@@ -15,7 +15,17 @@ public record MercadoPagoQrCodePaymentCallbackResponseDTO(
 
 
     public static MercadoPagoQrCodePaymentCallbackResponseDTO fromDomain(Payment payment) {
-        return new MercadoPagoQrCodePaymentCallbackResponseDTO(payment.getId(), payment.getOrder().getCustomer().getName()
-                , payment.getOrder().getId(), payment.getOrder().getOrderNumber(), payment.getPaymentStatus().getDescription());
+        String customerName = "N/A";
+        if (payment.getOrder() != null && payment.getOrder().getCustomer() != null && payment.getOrder().getCustomer().getName() != null) {
+            customerName = payment.getOrder().getCustomer().getName();
+        }
+
+        return new MercadoPagoQrCodePaymentCallbackResponseDTO(
+                payment.getId(),
+                customerName,
+                payment.getOrder() != null ? payment.getOrder().getId() : null,
+                payment.getOrder() != null ? payment.getOrder().getOrderNumber() : null,
+                payment.getPaymentStatus() != null ? payment.getPaymentStatus().getDescription() : null
+        );
     }
 }

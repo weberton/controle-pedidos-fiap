@@ -5,7 +5,6 @@ import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.OrderDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.PagedResponse;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.UpdateOrderStatusDTO;
 import br.com.fiap.controlepedidos.core.application.services.order.*;
-import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -133,22 +132,19 @@ public class OrdersController implements OrdersAPI {
     @Override
     public ResponseEntity<OrderDTO> startPreparation(UpdateOrderStatusDTO order) throws Exception {
         Order orderUpdated = startOrderPreparation.perform(order.orderId());
-        Customer customer = orderUpdated.getCustomer();
-        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, customer), HttpStatus.OK);
+        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<OrderDTO> informReady(UpdateOrderStatusDTO order) throws Exception {
         Order orderUpdated = finishOrderPreparationService.perform(order.orderId());
-        Customer customer = orderUpdated.getCustomer();
-        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, customer), HttpStatus.OK);
+        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<OrderDTO> informDone(UpdateOrderStatusDTO order) throws Exception {
         Order orderUpdated = finishOrderService.perform(order.orderId());
-        Customer customer = orderUpdated.getCustomer();
-        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, customer), HttpStatus.OK);
+        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
     }
 
 }

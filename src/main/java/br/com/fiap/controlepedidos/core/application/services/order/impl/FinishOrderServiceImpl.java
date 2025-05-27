@@ -29,8 +29,10 @@ public class FinishOrderServiceImpl implements FinishOrderService {
         Order order = findOrderByIdService.getById(orderId);
         order.finishOrder();
         orderRepository.save(order);
-        Customer customer = findCustomerByIdService.findById(order.getCustomer().getId());
-        order.setCustomer(customer);
+        if(order.getCustomer() != null) {
+            Customer customer = findCustomerByIdService.findById(order.getCustomer().getId());
+            order.setCustomer(customer);
+        }
         return order;
     }
 }

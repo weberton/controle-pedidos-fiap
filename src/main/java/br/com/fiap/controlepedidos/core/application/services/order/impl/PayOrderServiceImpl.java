@@ -25,10 +25,17 @@ public class PayOrderServiceImpl implements PayOrderService {
 
         boolean result = order.payOrder(receivedValue);
 
-
         if (result) {
             orderRepository.save(order);
-            order.setCustomer(findCustomerByIdService.findById(order.getCustomer().getId()));
+
+            if (order.getCustomer() != null) {
+                order.setCustomer(
+                        findCustomerByIdService.findById(order.getCustomer().getId())
+                );
+            } else {
+                order.setCustomer(null);
+            }
+
             Payment payment = new Payment();
             payment.setOrder(order);
             payment.receivePayment();
