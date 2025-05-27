@@ -7,9 +7,9 @@ import java.util.UUID;
 public record CartItemResponseDto(UUID id,
                                   UUID productId,
                                   String name,
-                                  float priceCents,
+                                  int priceCents,
                                   int quantity,
-                                  double subtotalCents) {
+                                  int subtotalCents) {
 
     public static CartItemResponseDto fromDomain(CartItem cartItem) {
         return new CartItemResponseDto(cartItem.getId(),

@@ -11,7 +11,7 @@ import java.util.UUID;
 public record ProductDTO(
         UUID id,
         @NotEmpty(message = "Não não pode ser em branco") String name,
-        @NotNull(message = "Preço não pode ser nulo") int price,
+        @NotNull(message = "Preço não pode ser nulo") Integer price,
         @NotNull(message = "Categoria não pode ser nula") Category category,
         @NotEmpty(message = "Descrição não pode ser em branco") String description,
         Boolean active,
