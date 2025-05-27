@@ -1,4 +1,3 @@
-
 version: "3.9"
 
 volumes:
@@ -11,8 +10,10 @@ services:
       dockerfile: docker/Dockerfile
     ports:
       - "8080:8080"
+      - "5005:5005"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DB_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DB_USER}
@@ -32,7 +33,7 @@ services:
       - MYSQL_USER=${SPRING_DB_USER}
       - MYSQL_PASSWORD=${SPRING_DB_PASS}
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 10s
       retries: 10
