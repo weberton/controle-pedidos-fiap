@@ -44,7 +44,9 @@ public class OrdersController implements OrdersAPI {
             Page<Order> page = getAllOrdersService.getAll(pageable);
 
             Page<OrderDTO> dtoPage = page.map(order ->
-                    OrderDTO.convertToDTO(order, order.getCustomer())
+                    OrderDTO.convertToDTO(order,
+                            order.getCustomer() != null ? order.getCustomer() : null
+                    )
             );
 
             return ResponseEntity.ok(PagedResponse.of(dtoPage));
@@ -52,6 +54,7 @@ public class OrdersController implements OrdersAPI {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+
 
     }
 
@@ -61,7 +64,9 @@ public class OrdersController implements OrdersAPI {
             Page<Order> page = getAllOrdersInPrepService.getAll(pageable);
 
             Page<OrderDTO> dtoPage = page.map(order ->
-                    OrderDTO.convertToDTO(order, order.getCustomer())
+                    OrderDTO.convertToDTO(order,
+                            order.getCustomer() != null ? order.getCustomer() : null
+                    )
             );
 
             return ResponseEntity.ok(PagedResponse.of(dtoPage));
@@ -77,7 +82,9 @@ public class OrdersController implements OrdersAPI {
             Page<Order> page = getAllOrdersReadyService.getAll(pageable);
 
             Page<OrderDTO> dtoPage = page.map(order ->
-                    OrderDTO.convertToDTO(order, order.getCustomer())
+                    OrderDTO.convertToDTO(order,
+                            order.getCustomer() != null ? order.getCustomer() : null
+                    )
             );
 
             return ResponseEntity.ok(PagedResponse.of(dtoPage));
@@ -93,7 +100,9 @@ public class OrdersController implements OrdersAPI {
             Page<Order> page = getAllOrdersDoneService.getAll(pageable);
 
             Page<OrderDTO> dtoPage = page.map(order ->
-                    OrderDTO.convertToDTO(order, order.getCustomer())
+                    OrderDTO.convertToDTO(order,
+                            order.getCustomer() != null ? order.getCustomer() : null
+                    )
             );
 
             return ResponseEntity.ok(PagedResponse.of(dtoPage));
@@ -109,7 +118,9 @@ public class OrdersController implements OrdersAPI {
             Page<Order> page = getAllOrdersReadyToPrepareService.getAll(pageable);
 
             Page<OrderDTO> dtoPage = page.map(order ->
-                    OrderDTO.convertToDTO(order, order.getCustomer())
+                    OrderDTO.convertToDTO(order,
+                            order.getCustomer() != null ? order.getCustomer() : null
+                    )
             );
 
             return ResponseEntity.ok(PagedResponse.of(dtoPage));
@@ -140,39 +151,4 @@ public class OrdersController implements OrdersAPI {
         return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, customer), HttpStatus.OK);
     }
 
-
-    //    @Override
-//    public ResponseEntity<CartResponseDto> createCart(final CreateItemRequest item) {
-//        Cart cart = createUpdateCartService.create(item.toDomain());
-//        return new ResponseEntity<>(CartResponseDto.fromDomain(cart), HttpStatus.CREATED);
-//    }
-//
-//    @Override
-//    public ResponseEntity<CartResponseDto> findById(final UUID cartId) {
-//        return ResponseEntity.ok((CartResponseDto.fromDomain(findCartService.findById(cartId))));
-//    }
-//
-//    @Override
-//    public ResponseEntity<CartResponseDto> addItem(final UUID cartId,
-//                                                   final CreateItemRequest item) {
-//        return ResponseEntity.ok(CartResponseDto.fromDomain(createUpdateCartService.addItem(cartId, item.toDomain())));
-//    }
-//
-//    @Override
-//    public ResponseEntity<CartResponseDto> associateCustomer(final UUID cartId,
-//                                                             final CartAssociateCustomerRequest cartAssociateCustomerRequest) {
-//        return ResponseEntity.ok(CartResponseDto.fromDomain(cartAssociateCustomerService.associateCustomer(cartId,
-//                cartAssociateCustomerRequest.customerId())));
-//    }
-//
-//    @Override
-//    public ResponseEntity<Void> deleteById(UUID cartId) {
-//        deleteCartService.deleteById(cartId);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @Override
-//    public ResponseEntity<CartResponseDto> removeItem(UUID cartId, UUID itemId) {
-//        return ResponseEntity.ok(CartResponseDto.fromDomain(createUpdateCartService.removeItem(cartId, itemId)));
-//    }
 }

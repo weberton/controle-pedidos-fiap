@@ -23,7 +23,7 @@ public class ConfirmQRCodePaymentOrderImpl implements ConfirmQRCodePaymentOrder 
     }
 
     @Override
-    public Payment confirmQrCodePayment(UUID orderId, float paidValue) throws Exception {
+    public Payment confirmQrCodePayment(UUID orderId, int paidValue) throws Exception {
         try {
             Order orderToPay = findOrderByIdService.getById(orderId);
 

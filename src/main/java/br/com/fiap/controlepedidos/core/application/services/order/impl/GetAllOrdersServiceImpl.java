@@ -32,7 +32,7 @@ public class GetAllOrdersServiceImpl implements GetAllOrdersService {
         Page<Order> orders = orderRepository.findAll(pageable);
 
         orders.forEach(order -> {
-            if (order.getCustomer().getId() != null) {
+            if (order.getCustomer() != null) {
                 Customer customer = customerService.findById(order.getCustomer().getId());
                 order.setCustomer(customer);
             }

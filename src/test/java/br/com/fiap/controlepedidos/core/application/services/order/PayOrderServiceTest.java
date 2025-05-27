@@ -1,14 +1,12 @@
 package br.com.fiap.controlepedidos.core.application.services.order;
 
 import br.com.fiap.controlepedidos.core.application.ports.IOrderRepository;
-import br.com.fiap.controlepedidos.core.application.ports.IPaymentGateway;
-import br.com.fiap.controlepedidos.core.application.services.checkout.impl.StartCheckoutServiceImpl;
 import br.com.fiap.controlepedidos.core.application.services.customer.FindCustomerByIdService;
+import br.com.fiap.controlepedidos.core.application.services.order.impl.PayOrderServiceImpl;
 import br.com.fiap.controlepedidos.core.application.services.order.impl.StartOrderPreparationServiceImpl;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import br.com.fiap.controlepedidos.core.domain.entities.Payment;
-import br.com.fiap.controlepedidos.core.domain.enums.PaymentStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,64 +19,52 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class StartOrderPreparationServiceTest {
-
-
+class PayOrderServiceTest {
     @Mock
-    private FindOrderByIdService findOrderByIdService;
+    private IOrderRepository orderRepository;
 
     @Mock
     private FindCustomerByIdService findCustomerByIdService;
 
-    @Mock
-    private IOrderRepository orderRepository;
-
     @InjectMocks
-    private StartOrderPreparationServiceImpl service;
+    private PayOrderServiceImpl payOrderService;
 
     @Test
-    void perform_ShouldStartOrderPreparationAndReturnUpdatedOrder() throws Exception {
-
-        UUID orderId = UUID.randomUUID();
+    void payOrder_ShouldReturnPayment_WhenPaymentIsSuccessful() throws Exception {
         UUID customerId = UUID.randomUUID();
-
         Customer customer = new Customer();
         customer.setId(customerId);
 
-        Order order = new Order();
-        order.setId(orderId);
-        order.setCustomer(customer);
+        Order order = mock(Order.class);
+        when(order.getCustomer()).thenReturn(customer);
+        when(order.payOrder(1000)).thenReturn(true);
 
-        when(findOrderByIdService.getById(orderId)).thenReturn(order);
         when(findCustomerByIdService.findById(customerId)).thenReturn(customer);
 
+        Payment payment = payOrderService.payOrder(order, 1000);
 
-        Order result = service.perform(orderId);
+        assertThat(payment).isNotNull();
+        assertThat(payment.getOrder()).isEqualTo(order);
 
-
-        assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(orderId);
-        assertThat(result.getCustomer()).isEqualTo(customer);
-
-        verify(findOrderByIdService).getById(orderId);
         verify(orderRepository).save(order);
         verify(findCustomerByIdService).findById(customerId);
+        verify(order).payOrder(1000);
     }
 
+
     @Test
-    void perform_ShouldThrowException_WhenOrderNotFound() throws Exception {
+    void payOrder_ShouldReturnEmptyPayment_WhenPaymentIsUnsuccessful() throws Exception {
+        Order order = mock(Order.class);
+        when(order.payOrder(1000)).thenReturn(false);
 
-        UUID orderId = UUID.randomUUID();
-        when(findOrderByIdService.getById(orderId)).thenThrow(new RuntimeException("Order not found"));
+        Payment payment = payOrderService.payOrder(order, 1000);
 
-        try {
-            service.perform(orderId);
-        } catch (Exception ex) {
-            assertThat(ex.getMessage()).isEqualTo("Order not found");
-        }
+        assertThat(payment).isNotNull();
+        assertThat(payment.getOrder()).isNull();
 
-        verify(findOrderByIdService).getById(orderId);
-        verifyNoInteractions(orderRepository, findCustomerByIdService);
+        verify(order).payOrder(1000);
+        verifyNoInteractions(orderRepository);
+        verifyNoInteractions(findCustomerByIdService);
     }
 
 }

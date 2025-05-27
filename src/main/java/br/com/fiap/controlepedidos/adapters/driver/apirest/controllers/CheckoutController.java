@@ -28,6 +28,6 @@ public class CheckoutController implements CheckoutApi {
 
     @Override
     public ResponseEntity<MercadoPagoQrCodePaymentCallbackResponseDTO> confirmPayment(MercadoPagoQRCodePaymentCallbackDTO callbackDetails) throws Exception {
-        return ResponseEntity.ok(MercadoPagoQrCodePaymentCallbackResponseDTO.fromDomain(confirmQRCodePaymentOrder.confirmQrCodePayment(callbackDetails.orderId(), callbackDetails.paidValue())));
+        return ResponseEntity.ok(MercadoPagoQrCodePaymentCallbackResponseDTO.fromDomain(confirmQRCodePaymentOrder.confirmQrCodePayment(callbackDetails.orderId(), callbackDetails.paidValue().intValue() )));
     }
 }

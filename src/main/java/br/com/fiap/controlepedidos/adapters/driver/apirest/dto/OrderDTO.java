@@ -18,7 +18,7 @@ public record OrderDTO(
         int orderNumber
 ) {
     public static OrderDTO convertToDTO(Order order, Customer customer) {
-        String customerName = customer.getName() != null ? customer.getName() : "N/A";
+        String customerName = (customer != null && customer.getName() != null) ? customer.getName() : "N/A";
         return new OrderDTO(
                 order.getId(),
                 customerName,

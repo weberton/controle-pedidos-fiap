@@ -1,12 +1,14 @@
-package br.com.fiap.controlepedidos.core.application.services.checkout;
+package br.com.fiap.controlepedidos.core.application.services.order;
 
+import br.com.fiap.controlepedidos.core.application.ports.IOrderRepository;
 import br.com.fiap.controlepedidos.core.application.ports.IPaymentGateway;
 import br.com.fiap.controlepedidos.core.application.services.checkout.impl.StartCheckoutServiceImpl;
-import br.com.fiap.controlepedidos.core.application.services.order.CreateOrderService;
+import br.com.fiap.controlepedidos.core.application.services.customer.FindCustomerByIdService;
+import br.com.fiap.controlepedidos.core.application.services.order.impl.StartOrderPreparationServiceImpl;
+import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import br.com.fiap.controlepedidos.core.domain.entities.Payment;
 import br.com.fiap.controlepedidos.core.domain.enums.PaymentStatus;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,49 +18,67 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class StartCheckoutServiceTest {
+class StartOrderPreparationServiceTest {
+
 
     @Mock
-    CreateOrderService createOrderService;
+    private FindOrderByIdService findOrderByIdService;
 
     @Mock
-    IPaymentGateway paymentGateway;
+    private FindCustomerByIdService findCustomerByIdService;
 
-    //Arrange
+    @Mock
+    private IOrderRepository orderRepository;
+
     @InjectMocks
-    StartCheckoutServiceImpl service;
+    private StartOrderPreparationServiceImpl service;
 
     @Test
-    void startCheckout_ShouldReturnPaymentToBePerformed() throws Exception {
+    void perform_ShouldStartOrderPreparationAndReturnUpdatedOrder() throws Exception {
 
-        UUID cartId = UUID.randomUUID();
+        UUID orderId = UUID.randomUUID();
+        UUID customerId = UUID.randomUUID();
 
-        Order fakeOrder = new Order();
-        fakeOrder.setId(UUID.randomUUID());
+        Customer customer = new Customer();
+        customer.setId(customerId);
 
-        Payment fakePayment = new Payment();
-        fakePayment.setId(UUID.randomUUID());
-        fakePayment.setPaymentStatus(PaymentStatus.WAITING);
-        fakePayment.setProvider("MercadoPago");
-        fakePayment.setQrCode("some-valid-qr-code");
+        Order order = new Order();
+        order.setId(orderId);
+        order.setCustomer(customer);
 
-        when(createOrderService.createOrder(cartId)).thenReturn(fakeOrder);
-        when(paymentGateway.generatePixQrCodeMercadoPago(fakeOrder)).thenReturn(fakePayment);
+        when(findOrderByIdService.getById(orderId)).thenReturn(order);
+        when(findCustomerByIdService.findById(customerId)).thenReturn(customer);
 
 
-        Payment result = service.startCheckout(cartId);
+        Order result = service.perform(orderId);
+
 
         assertThat(result).isNotNull();
-        assertThat(result.getOrder().getId()).isEqualTo(fakeOrder.getId());
-        assertThat(result.getPaymentStatus()).isEqualTo(PaymentStatus.WAITING);
-        assertThat(result.getProvider()).isEqualTo("MercadoPago");
-        assertThat(result.getQrCode()).isEqualTo("some-valid-qr-code");
+        assertThat(result.getId()).isEqualTo(orderId);
+        assertThat(result.getCustomer()).isEqualTo(customer);
 
-        verify(createOrderService).createOrder(cartId);
-        verify(paymentGateway).generatePixQrCodeMercadoPago(fakeOrder);
+        verify(findOrderByIdService).getById(orderId);
+        verify(orderRepository).save(order);
+        verify(findCustomerByIdService).findById(customerId);
     }
+
+    @Test
+    void perform_ShouldThrowException_WhenOrderNotFound() throws Exception {
+
+        UUID orderId = UUID.randomUUID();
+        when(findOrderByIdService.getById(orderId)).thenThrow(new RuntimeException("Order not found"));
+
+        try {
+            service.perform(orderId);
+        } catch (Exception ex) {
+            assertThat(ex.getMessage()).isEqualTo("Order not found");
+        }
+
+        verify(findOrderByIdService).getById(orderId);
+        verifyNoInteractions(orderRepository, findCustomerByIdService);
+    }
+
 }

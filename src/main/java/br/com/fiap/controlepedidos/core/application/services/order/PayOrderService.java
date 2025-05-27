@@ -7,6 +7,6 @@ import java.util.UUID;
 
 public interface PayOrderService {
 
-    Payment payOrder(Order order, float receivedValue) throws Exception;
+    Payment payOrder(Order order, int receivedValue) throws Exception;
 
 }

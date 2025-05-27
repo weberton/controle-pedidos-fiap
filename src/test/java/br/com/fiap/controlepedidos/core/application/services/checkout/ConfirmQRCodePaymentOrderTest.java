@@ -1,42 +1,62 @@
-package br.com.fiap.controlepedidos.core.application.services.checkout.impl;
+package br.com.fiap.controlepedidos.core.application.services.checkout;
 
-import br.com.fiap.controlepedidos.core.application.services.checkout.ConfirmQRCodePaymentOrder;
+import br.com.fiap.controlepedidos.core.application.services.checkout.impl.ConfirmQRCodePaymentOrderImpl;
 import br.com.fiap.controlepedidos.core.application.services.order.FindOrderByIdService;
 import br.com.fiap.controlepedidos.core.application.services.order.PayOrderService;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import br.com.fiap.controlepedidos.core.domain.entities.Payment;
-import br.com.fiap.controlepedidos.core.domain.enums.OrderStatus;
 import br.com.fiap.controlepedidos.core.domain.enums.PaymentStatus;
-import org.springframework.stereotype.Service;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-@Service
-public class ConfirmQRCodePaymentOrderImpl implements ConfirmQRCodePaymentOrder {
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-    private final FindOrderByIdService findOrderByIdService;
-    private final PayOrderService payOrderService;
+@ExtendWith(MockitoExtension.class)
+class ConfirmQRCodePaymentOrderTest {
 
-    public ConfirmQRCodePaymentOrderImpl(FindOrderByIdService findOrderByIdService, PayOrderService payOrderService) {
-        this.findOrderByIdService = findOrderByIdService;
-        this.payOrderService = payOrderService;
-    }
+    @Mock
+    private FindOrderByIdService findOrderByIdService;
 
-    @Override
-    public Payment confirmQrCodePayment(UUID orderId, float paidValue) throws Exception {
-        try {
-            Order orderToPay = findOrderByIdService.getById(orderId);
+    @Mock
+    private PayOrderService payOrderService;
 
-            Payment result = payOrderService.payOrder(orderToPay, paidValue);
+    @InjectMocks
+    private ConfirmQRCodePaymentOrderImpl service;
 
-            if (result.getPaymentStatus().equals(PaymentStatus.PAID)) {
-                return result;
-            } else {
-                //TODO ao implementar pagamento é necessário atualizar o pagamento aqui também.
-                return new Payment();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @Test
+    void confirmPayment_ShouldReturnPaymentWithStatusPaid() throws Exception {
+
+        UUID orderId = UUID.randomUUID();
+        Order fakeOrderToPay = new Order();
+        fakeOrderToPay.setId(orderId);
+        fakeOrderToPay.setTotalCents(2250);
+
+        Payment fakePayment = new Payment();
+        fakePayment.setId(UUID.randomUUID());
+        fakePayment.setPaymentStatus(PaymentStatus.PAID);
+        fakePayment.setProvider("MercadoPago");
+        fakePayment.setQrCode("some-valid-qr-code");
+
+        when(findOrderByIdService.getById(orderId)).thenReturn(fakeOrderToPay);
+        when(payOrderService.payOrder(fakeOrderToPay, 2250)).thenReturn(fakePayment);
+
+
+        Payment result = service.confirmQrCodePayment(orderId, 2250);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getPaymentStatus()).isEqualTo(PaymentStatus.PAID);
+        assertThat(result.getProvider()).isEqualTo("MercadoPago");
+        assertThat(result.getQrCode()).isEqualTo("some-valid-qr-code");
+
+        verify(findOrderByIdService).getById(orderId);
+        verify(payOrderService).payOrder(fakeOrderToPay, 2250);
     }
 }
