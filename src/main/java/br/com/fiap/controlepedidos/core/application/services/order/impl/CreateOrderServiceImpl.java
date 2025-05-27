@@ -30,7 +30,7 @@ public class CreateOrderServiceImpl implements CreateOrderService {
 
             newOrder.setCart(cart);
             newOrder.setCustomer(cart.getCustomer()); //TODO ideal é implementar o get customer by ID
-            newOrder.setTotalCents((float) cart.getTotalCents());
+            newOrder.setTotalCents(cart.getTotalCents());
 
             orderRepository.save(newOrder);
 

@@ -3,7 +3,9 @@ package br.com.fiap.controlepedidos.adapter.rest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.controllers.CartsController;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.Category;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CartAssociateCustomerRequest;
+import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CreateCartRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.CreateItemRequest;
+import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.UpdateItemQuantityRequest;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.exceptions.RestExceptionHandler;
 import br.com.fiap.controlepedidos.core.application.services.carts.CartAssociateCustomerService;
 import br.com.fiap.controlepedidos.core.application.services.carts.CreateUpdateCartService;
@@ -37,6 +39,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(MockitoExtension.class)
@@ -68,11 +71,13 @@ class CartsControllerTest {
     void createCart_whenQuantityIsLessThan1_returns400() throws Exception {
         var productId = UUID.randomUUID().toString();
         var quantity = 0;
+        var customerId = UUID.randomUUID();
 
         CreateItemRequest createItemRequest = new CreateItemRequest(productId, quantity);
+        CreateCartRequest createCartRequest = new CreateCartRequest(customerId, createItemRequest);
         mockMvc.perform(post(CartsController.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(toJson(createItemRequest)))
+                        .content(toJson(createCartRequest)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.content()
@@ -84,9 +89,10 @@ class CartsControllerTest {
         var quantity = 0;
 
         CreateItemRequest createItemRequest = new CreateItemRequest(null, quantity);
+        CreateCartRequest createCartRequest = new CreateCartRequest(null, createItemRequest);
         mockMvc.perform(post(CartsController.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(toJson(createItemRequest)))
+                        .content(toJson(createCartRequest)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.content()
@@ -99,13 +105,15 @@ class CartsControllerTest {
 
         var productId = UUID.randomUUID().toString();
         var quantity = 2;
+        var customerId = UUID.randomUUID();
 
-        when(createUpdateCartService.create(any())).thenThrow(RecordNotFoundException.class);
+        when(createUpdateCartService.create(any(), any())).thenThrow(RecordNotFoundException.class);
 
         CreateItemRequest createItemRequest = new CreateItemRequest(productId, quantity);
+        CreateCartRequest createCartRequest = new CreateCartRequest(customerId, createItemRequest);
         mockMvc.perform(post(CartsController.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(toJson(createItemRequest)))
+                        .content(toJson(createCartRequest)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
@@ -226,6 +234,43 @@ class CartsControllerTest {
         mockMvc.perform(delete(CartsController.BASE_URL + "/" + cartId))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void updateItemQuantity_whenQuantityIs0_shouldReturn200() throws Exception {
+        //Given
+        var cartId = UUID.randomUUID();
+        var itemId = UUID.randomUUID();
+        var newQuantity = 0;
+        var updateItemQuantityRequest = new UpdateItemQuantityRequest(newQuantity);
+
+        Cart cart = new Cart();
+        cart.setId(cartId);
+
+        //When
+        when(createUpdateCartService.updateQuantity(cartId, itemId, newQuantity)).thenReturn(cart);
+
+        //Then
+        mockMvc.perform(patch(CartsController.BASE_URL + "/" + cartId + "/items/" + itemId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(updateItemQuantityRequest)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void updateItemQuantity_whenQuantityLessThan0_shouldReturn400() throws Exception {
+        var cartId = UUID.randomUUID();
+        var itemId = UUID.randomUUID();
+        var updateItemQuantityRequest = new UpdateItemQuantityRequest(-1);
+
+        mockMvc.perform(patch(CartsController.BASE_URL + "/" + cartId + "/items/" + itemId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(updateItemQuantityRequest)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(content()
+                        .string(CoreMatchers.containsString(UpdateItemQuantityRequest.INVALID_QUANTITY)));
     }
 
     private String toJson(Object createItemRequest) throws JsonProcessingException {

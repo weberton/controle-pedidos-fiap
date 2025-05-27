@@ -24,7 +24,7 @@ public class Product {
     @JdbcTypeCode(Types.BINARY)
     private UUID id;
     private String name;
-    private Float price;
+    private int price;
     private Category category;
     private String description;
     private boolean active = true;

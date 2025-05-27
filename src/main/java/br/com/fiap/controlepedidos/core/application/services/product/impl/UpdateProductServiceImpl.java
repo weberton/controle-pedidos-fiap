@@ -25,7 +25,7 @@ public class UpdateProductServiceImpl implements UpdateProductService {
                 .orElseThrow(() -> new RecordNotFoundException("Produto com ID %s não encontrado.".formatted(product.id())));
 
         persistedProduct.setName(product.name() != null ? product.name() : persistedProduct.getName());
-        persistedProduct.setPrice(persistedProduct.getPrice());
+        persistedProduct.setPrice(product.price());
         persistedProduct.setCategory(product.category() != null ? product.category() : persistedProduct.getCategory());
         persistedProduct.setDescription(product.description() != null ? product.description() : persistedProduct.getDescription());
         persistedProduct.setActive(product.active() != null ? product.active() : persistedProduct.isActive());

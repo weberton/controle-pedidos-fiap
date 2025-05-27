@@ -5,7 +5,7 @@ CREATE TABLE orders
     customer_id  BINARY(16)       NULL,
     cart_id      BINARY(16)       NULL,
     order_status VARCHAR(40) NULL,
-    total_cents  float     NOT NULL,
+    total_cents  INTEGER     NOT NULL,
     created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (order_id),

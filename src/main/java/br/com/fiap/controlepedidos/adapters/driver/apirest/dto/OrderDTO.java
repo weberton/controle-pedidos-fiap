@@ -18,6 +18,12 @@ public record OrderDTO(
         int orderNumber
 ) {
     public static OrderDTO convertToDTO(Order order, Customer customer) {
-        return new OrderDTO(order.getId(), customer.getName(), order.getOrderStatus().getDescription(), order.getOrderNumber());
+        String customerName = customer.getName() != null ? customer.getName() : "N/A";
+        return new OrderDTO(
+                order.getId(),
+                customerName,
+                order.getOrderStatus().getDescription(),
+                order.getOrderNumber()
+        );
     }
 }

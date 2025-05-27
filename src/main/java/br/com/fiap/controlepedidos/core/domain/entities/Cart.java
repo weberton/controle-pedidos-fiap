@@ -36,7 +36,7 @@ public class Cart extends AbstractEntity {
     private List<CartItem> items = new ArrayList<>();
 
     @Column(name = "total_cents", nullable = false)
-    private float totalCents;
+    private int totalCents;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
@@ -58,22 +58,19 @@ public class Cart extends AbstractEntity {
         recalculateTotal();
     }
 
-    public float recalculateTotal() {
-        double sum = items.stream()
-                .mapToDouble(CartItem::calculateSubTotalCents)
+    public int recalculateTotal() {
+        this.totalCents = items.stream()
+                .mapToInt(CartItem::calculateSubTotalCents)
                 .sum();
-        this.totalCents = (float) sum;
         return totalCents;
     }
 
-    @Transient
     public void addItem(CartItem item) {
         item.setCart(this);
         items.add(item);
         recalculateTotal();
     }
 
-    @Transient
     public void removeItem(CartItem item) {
         if (Objects.nonNull(item)) {
             items.removeIf(cartItem -> cartItem.getId().equals(item.getId()));
@@ -96,5 +93,18 @@ public class Cart extends AbstractEntity {
         items.clear();
         recalculateTotal();
     }
-}
 
+    public void updateItemQuantity(UUID itemId, int quantity) {
+        if (quantity == 0) {
+            removeItem(itemId);
+        }
+
+        items.stream()
+                .filter(i -> i.getId().equals(itemId))
+                .findFirst()
+                .ifPresent(item -> {
+                    item.setQuantity(quantity);
+                    recalculateTotal();
+                });
+    }
+}

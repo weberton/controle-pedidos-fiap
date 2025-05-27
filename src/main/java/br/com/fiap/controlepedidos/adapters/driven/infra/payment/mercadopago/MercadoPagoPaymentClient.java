@@ -81,7 +81,7 @@ public class MercadoPagoPaymentClient implements IPaymentGateway {
         requestBody.setTitle("Titulo da Compra");
         requestBody.setDescription("Order: " + order.getId() + " para o carrinho" + order.getCart().getId());
         requestBody.setCallBackUrl("https://www.yourserver.com/notifications");
-        requestBody.setTotalAmount(order.getTotalCents());
+        requestBody.setTotalAmount(requestBody.convertTotalCentsToDTO(order.getTotalCents()));
         requestBody.setItems(getPaymentItems(order));
 
         return requestBody;
@@ -98,10 +98,10 @@ public class MercadoPagoPaymentClient implements IPaymentGateway {
             dto.setCategory(String.valueOf(item.getProduct().getCategory()));
             dto.setTitle(item.getProduct().getName());
             dto.setDescription(item.getProduct().getDescription());
-            dto.setProductPrice(item.getProduct().getPrice());
+            dto.setProductPrice(dto.convertTotalCentsToDTO(item.getProduct().getPrice()));
             dto.setQuantity(item.getQuantity());
             dto.setProductUnit("UN");
-            dto.setTotalAmount(item.getSubtotalCents());
+            dto.setTotalAmount(dto.convertTotalCentsToDTO(item.getSubtotalCents()));
 
             requestBodyItem.add(dto);
         }

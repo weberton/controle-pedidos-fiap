@@ -4,6 +4,7 @@ import br.com.fiap.controlepedidos.core.domain.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Random;
 
@@ -39,7 +40,7 @@ public class Order extends AbstractEntity {
     private OrderStatus orderStatus;
 
     @Column(name = "total_cents", nullable = false)
-    private float totalCents;
+    private int totalCents;
 
     @Column(name = "order_number", nullable = false)
     private int orderNumber;

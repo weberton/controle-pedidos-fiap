@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -22,8 +23,14 @@ public class MercadoPagoPaymentRequestDTO {
     private String callBackUrl;
 
     @JsonProperty("total_amount")
-    private Float totalAmount;
+    private BigDecimal totalAmount;
 
     private List<MercadoPagoPaymentItemDTO> items;
+
+    public BigDecimal convertTotalCentsToDTO(int totalCents) {
+        return new BigDecimal(totalCents).divide(new BigDecimal(100));
+    }
+
+
 
 }

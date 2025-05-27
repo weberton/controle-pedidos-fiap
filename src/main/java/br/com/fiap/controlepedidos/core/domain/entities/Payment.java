@@ -4,6 +4,7 @@ import br.com.fiap.controlepedidos.core.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -33,7 +34,7 @@ public class Payment extends AbstractEntity {
     private PaymentStatus paymentStatus;
 
     @Column(name = "paymentValue_cents", nullable = false)
-    private Float totalCents;
+    private int totalCents;
 
     @Column(name = "paymentprovider", nullable = false)
     private String provider;
