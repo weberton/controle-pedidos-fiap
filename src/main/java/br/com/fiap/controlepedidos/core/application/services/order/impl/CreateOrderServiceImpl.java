@@ -22,21 +22,16 @@ public class CreateOrderServiceImpl implements CreateOrderService {
     }
 
     @Override
-    public Order createOrder(UUID cartId) throws Exception {
-        try {
-            Order newOrder = new Order();
-            Cart cart = findCartService.findById(cartId);
+    public Order createOrder(UUID cartId) {
+        Order newOrder = new Order();
+        Cart cart = findCartService.findById(cartId);
 
-            newOrder.setCart(cart);
-            newOrder.setCustomer(cart.getCustomer()); //TODO ideal é implementar o get customer by ID
-            newOrder.setTotalCents(cart.getTotalCents());
+        newOrder.setCart(cart);
+        newOrder.setCustomer(cart.getCustomer()); //TODO ideal é implementar o get customer by ID
+        newOrder.setTotalCents(cart.getTotalCents());
 
-            orderRepository.save(newOrder);
+        orderRepository.save(newOrder);
 
-            return newOrder;
-
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        return newOrder;
     }
 }

@@ -20,18 +20,14 @@ public class FindOrderByIdServiceImpl implements FindOrderByIdService {
     }
 
     @Override
-    public Order getById(UUID orderId) throws Exception {
-        try {
-            Optional<Order> result = orderRepository.findById(orderId);
+    public Order getById(UUID orderId) {
 
-            if (result.isPresent()) {
-                return result.get();
-            } else {
-                throw new RecordNotFoundException("Pedido com ID %s não encontrado.".formatted(orderId));
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // ou loga com SLF4J
-            throw e; // pra propagar
+        Optional<Order> result = orderRepository.findById(orderId);
+
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            throw new RecordNotFoundException("Pedido com ID %s não encontrado.".formatted(orderId));
         }
     }
 }

@@ -40,7 +40,7 @@ public class Payment extends AbstractEntity {
     private String provider;
 
     @Column(name = "qr_code", nullable = false)
-    private String QrCode;
+    private String qrCode;
 
     public Payment() {
         this.prePersist();
