@@ -5,7 +5,7 @@ CREATE TABLE payments
     created_at         TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at         TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     payment_status     VARCHAR(40)     NOT NULL,
-    paymentValue_cents INTEGER         NOT NULL,
+    paymentvalue_cents INTEGER         NOT NULL,
     paymentprovider    VARCHAR(255)    NOT NULL,
     qr_code            VARCHAR(255)    NOT NULL,
     PRIMARY KEY (payment_id),

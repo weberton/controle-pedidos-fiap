@@ -31,9 +31,10 @@ public class Payment extends AbstractEntity {
     private OffsetDateTime updatedAt;
 
     @Column(name = "payment_status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
-    @Column(name = "paymentValue_cents", nullable = false)
+    @Column(name = "paymentvalue_cents", nullable = false)
     private int totalCents;
 
     @Column(name = "paymentprovider", nullable = false)
