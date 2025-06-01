@@ -4,7 +4,6 @@ import br.com.fiap.controlepedidos.core.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Entity

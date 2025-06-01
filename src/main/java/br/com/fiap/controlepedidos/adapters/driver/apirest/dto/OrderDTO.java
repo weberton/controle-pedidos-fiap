@@ -2,12 +2,8 @@ package br.com.fiap.controlepedidos.adapters.driver.apirest.dto;
 
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
-import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
-import java.math.BigInteger;
 import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

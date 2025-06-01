@@ -3,7 +3,6 @@ package br.com.fiap.controlepedidos.core.application.services.order;
 import br.com.fiap.controlepedidos.core.application.ports.IOrderRepository;
 import br.com.fiap.controlepedidos.core.application.services.customer.FindCustomerByIdService;
 import br.com.fiap.controlepedidos.core.application.services.order.impl.PayOrderServiceImpl;
-import br.com.fiap.controlepedidos.core.application.services.order.impl.StartOrderPreparationServiceImpl;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import br.com.fiap.controlepedidos.core.domain.entities.Payment;

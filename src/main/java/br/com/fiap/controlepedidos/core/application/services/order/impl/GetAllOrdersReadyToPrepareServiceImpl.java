@@ -1,6 +1,5 @@
 package br.com.fiap.controlepedidos.core.application.services.order.impl;
 
-import br.com.fiap.controlepedidos.core.application.ports.CustomerRepository;
 import br.com.fiap.controlepedidos.core.application.ports.IOrderRepository;
 import br.com.fiap.controlepedidos.core.application.services.customer.FindCustomerByIdService;
 import br.com.fiap.controlepedidos.core.application.services.order.GetAllOrdersReadyToPrepareService;

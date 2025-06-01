@@ -4,7 +4,6 @@ import br.com.fiap.controlepedidos.core.application.ports.IOrderRepository;
 import br.com.fiap.controlepedidos.core.application.services.carts.FindCartService;
 import br.com.fiap.controlepedidos.core.application.services.order.CreateOrderService;
 import br.com.fiap.controlepedidos.core.domain.entities.Cart;
-import br.com.fiap.controlepedidos.core.domain.entities.CartItem;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import org.springframework.stereotype.Service;
 

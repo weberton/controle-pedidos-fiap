@@ -1,7 +1,5 @@
 package br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in;
 
-import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.ProductDTO;
-import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;

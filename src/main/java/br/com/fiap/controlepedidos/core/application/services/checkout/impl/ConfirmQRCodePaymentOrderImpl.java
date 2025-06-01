@@ -5,7 +5,6 @@ import br.com.fiap.controlepedidos.core.application.services.order.FindOrderById
 import br.com.fiap.controlepedidos.core.application.services.order.PayOrderService;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import br.com.fiap.controlepedidos.core.domain.entities.Payment;
-import br.com.fiap.controlepedidos.core.domain.enums.OrderStatus;
 import br.com.fiap.controlepedidos.core.domain.enums.PaymentStatus;
 import org.springframework.stereotype.Service;
 

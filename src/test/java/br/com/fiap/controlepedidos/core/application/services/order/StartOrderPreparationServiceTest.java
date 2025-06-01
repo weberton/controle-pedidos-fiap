@@ -1,14 +1,10 @@
 package br.com.fiap.controlepedidos.core.application.services.order;
 
 import br.com.fiap.controlepedidos.core.application.ports.IOrderRepository;
-import br.com.fiap.controlepedidos.core.application.ports.IPaymentGateway;
-import br.com.fiap.controlepedidos.core.application.services.checkout.impl.StartCheckoutServiceImpl;
 import br.com.fiap.controlepedidos.core.application.services.customer.FindCustomerByIdService;
 import br.com.fiap.controlepedidos.core.application.services.order.impl.StartOrderPreparationServiceImpl;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
-import br.com.fiap.controlepedidos.core.domain.entities.Payment;
-import br.com.fiap.controlepedidos.core.domain.enums.PaymentStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
