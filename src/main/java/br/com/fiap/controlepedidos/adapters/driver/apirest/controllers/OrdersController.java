@@ -25,7 +25,14 @@ public class OrdersController implements OrdersAPI {
     private final GetAllOrdersReadyToPrepareService getAllOrdersReadyToPrepareService;
 
 
-    public OrdersController(FinishOrderService finishOrderService, StartOrderPreparation startOrderPreparation, FinishOrderPreparationService finishOrderPreparationService, GetAllOrdersService getAllOrdersService, GetAllOrdersInPrepService getAllOrdersInPrepService, GetAllOrdersReadyService getAllOrdersReadyService, GetAllOrdersDoneService getAllOrdersDoneService, GetAllOrdersReadyToPrepareService getAllOrdersReadyToPrepareService) {
+    public OrdersController(FinishOrderService finishOrderService,
+                            StartOrderPreparation startOrderPreparation,
+                            FinishOrderPreparationService finishOrderPreparationService,
+                            GetAllOrdersService getAllOrdersService,
+                            GetAllOrdersInPrepService getAllOrdersInPrepService,
+                            GetAllOrdersReadyService getAllOrdersReadyService,
+                            GetAllOrdersDoneService getAllOrdersDoneService,
+                            GetAllOrdersReadyToPrepareService getAllOrdersReadyToPrepareService) {
         this.finishOrderService = finishOrderService;
         this.startOrderPreparation = startOrderPreparation;
         this.finishOrderPreparationService = finishOrderPreparationService;
@@ -130,19 +137,19 @@ public class OrdersController implements OrdersAPI {
     }
 
     @Override
-    public ResponseEntity<OrderDTO> startPreparation(UpdateOrderStatusDTO order) throws Exception {
+    public ResponseEntity<OrderDTO> startPreparation(UpdateOrderStatusDTO order) {
         Order orderUpdated = startOrderPreparation.perform(order.orderId());
         return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<OrderDTO> informReady(UpdateOrderStatusDTO order) throws Exception {
+    public ResponseEntity<OrderDTO> informReady(UpdateOrderStatusDTO order) {
         Order orderUpdated = finishOrderPreparationService.perform(order.orderId());
         return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<OrderDTO> informDone(UpdateOrderStatusDTO order) throws Exception {
+    public ResponseEntity<OrderDTO> informDone(UpdateOrderStatusDTO order) {
         Order orderUpdated = finishOrderService.perform(order.orderId());
         return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
     }

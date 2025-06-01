@@ -6,6 +6,6 @@ import java.util.UUID;
 
 public interface CreateOrderService {
 
-    Order createOrder(UUID cartId) throws Exception;
+    Order createOrder(UUID cartId);
 
 }

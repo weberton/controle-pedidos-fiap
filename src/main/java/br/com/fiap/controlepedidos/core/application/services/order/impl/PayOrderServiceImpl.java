@@ -20,7 +20,7 @@ public class PayOrderServiceImpl implements PayOrderService {
     }
 
     @Override
-    public Payment payOrder(Order order, int receivedValue) throws Exception {
+    public Payment payOrder(Order order, int receivedValue) {
 
         boolean result = order.payOrder(receivedValue);
 

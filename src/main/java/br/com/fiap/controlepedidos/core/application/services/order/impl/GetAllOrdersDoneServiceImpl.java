@@ -19,7 +19,7 @@ public class GetAllOrdersDoneServiceImpl implements GetAllOrdersDoneService {
     }
 
     @Override
-    public Page<Order> getAll(Pageable pageable) throws Exception {
+    public Page<Order> getAll(Pageable pageable) {
         return orderRepository.findByOrderStatusOrderByUpdatedAtAsc(OrderStatus.DONE, pageable);
     }
 }

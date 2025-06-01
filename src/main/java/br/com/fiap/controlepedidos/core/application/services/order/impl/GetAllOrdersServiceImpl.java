@@ -22,7 +22,7 @@ public class GetAllOrdersServiceImpl implements GetAllOrdersService {
     }
 
     @Override
-    public Page<Order> getAll(Pageable pageable) throws Exception {
+    public Page<Order> getAll(Pageable pageable) {
 
         Page<Order> orders = orderRepository.findAll(pageable);
 

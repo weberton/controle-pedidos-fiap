@@ -19,7 +19,7 @@ public class GetAllOrdersInPrepServiceImpl implements GetAllOrdersInPrepService 
     }
 
     @Override
-    public Page<Order> getAll(Pageable pageable) throws Exception {
+    public Page<Order> getAll(Pageable pageable) {
         return orderRepository.findByOrderStatusOrderByUpdatedAtAsc(OrderStatus.INPREP, pageable);
     }
 }
