@@ -24,11 +24,11 @@ public class StartOrderPreparationServiceImpl implements StartOrderPreparation {
     }
 
     @Override
-    public Order perform(UUID orderId) throws Exception {
+    public Order perform(UUID orderId) {
         Order order = findOrderByIdService.getById(orderId);
         order.startOrderPreparation();
         orderRepository.save(order);
-        if(order.getCustomer() != null) {
+        if (order.getCustomer() != null) {
             Customer customer = findCustomerByIdService.findById(order.getCustomer().getId());
             order.setCustomer(customer);
         }

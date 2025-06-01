@@ -3,11 +3,13 @@ package br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago;
 import br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago.dto.MercadoPagoPaymentItemDTO;
 import br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago.dto.MercadoPagoPaymentRequestDTO;
 import br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago.dto.MercadoPagoPaymentResponseDTO;
+import br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago.exceptions.MercadoPagoConnectionException;
 import br.com.fiap.controlepedidos.core.application.ports.IPaymentGateway;
 import br.com.fiap.controlepedidos.core.domain.entities.CartItem;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import br.com.fiap.controlepedidos.core.domain.entities.Payment;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -20,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class MercadoPagoPaymentClient implements IPaymentGateway {
 
@@ -68,14 +71,12 @@ public class MercadoPagoPaymentClient implements IPaymentGateway {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao chamar a API do Mercado Pago: " + e.getMessage(), e);
+            log.error("Error response from Mercado Pago API.", e);
+            throw new MercadoPagoConnectionException("Erro ao chamar a API do Mercado Pago: " + e.getMessage(), e);
         }
     }
 
     private MercadoPagoPaymentRequestDTO parseOrdertoRequestDTO(Order order) {
-        /*
-            private List<MercadoPagoPaymentItemDTO> items;
-        */
         MercadoPagoPaymentRequestDTO requestBody = new MercadoPagoPaymentRequestDTO();
         requestBody.setOrderId(String.valueOf(order.getId()));
         requestBody.setTitle("Titulo da Compra");

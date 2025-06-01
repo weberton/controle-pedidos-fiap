@@ -23,7 +23,7 @@ public class GetAllOrdersReadyServiceImpl implements GetAllOrdersReadyService {
     }
 
     @Override
-    public Page<Order> getAll(Pageable pageable) throws Exception {
+    public Page<Order> getAll(Pageable pageable) {
 
         Page<Order> orders = orderRepository.findByOrderStatusOrderByUpdatedAtAsc(OrderStatus.READY, pageable);
 

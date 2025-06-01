@@ -4,10 +4,13 @@ import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.OrderDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.PagedResponse;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.UpdateOrderStatusDTO;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping(OrdersAPI.BASE_URL)
 public interface OrdersAPI {
@@ -30,11 +33,11 @@ public interface OrdersAPI {
 
 
     @PutMapping(value = "/startPreparation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<OrderDTO> startPreparation(@RequestBody @Valid UpdateOrderStatusDTO order) throws Exception;
+    ResponseEntity<OrderDTO> startPreparation(@RequestBody @Valid UpdateOrderStatusDTO order);
 
     @PutMapping(value = "/informReady", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<OrderDTO> informReady(@RequestBody @Valid UpdateOrderStatusDTO order) throws Exception;
+    ResponseEntity<OrderDTO> informReady(@RequestBody @Valid UpdateOrderStatusDTO order);
 
     @PutMapping(value = "/informDone", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<OrderDTO> informDone(@RequestBody @Valid UpdateOrderStatusDTO order) throws Exception;
+    ResponseEntity<OrderDTO> informDone(@RequestBody @Valid UpdateOrderStatusDTO order);
 }

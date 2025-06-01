@@ -29,7 +29,7 @@ class PayOrderServiceTest {
     private PayOrderServiceImpl payOrderService;
 
     @Test
-    void payOrder_ShouldReturnPayment_WhenPaymentIsSuccessful() throws Exception {
+    void payOrder_ShouldReturnPayment_WhenPaymentIsSuccessful() {
         UUID customerId = UUID.randomUUID();
         Customer customer = new Customer();
         customer.setId(customerId);
@@ -52,7 +52,7 @@ class PayOrderServiceTest {
 
 
     @Test
-    void payOrder_ShouldReturnEmptyPayment_WhenPaymentIsUnsuccessful() throws Exception {
+    void payOrder_ShouldReturnEmptyPayment_WhenPaymentIsUnsuccessful() {
         Order order = mock(Order.class);
         when(order.payOrder(1000)).thenReturn(false);
 

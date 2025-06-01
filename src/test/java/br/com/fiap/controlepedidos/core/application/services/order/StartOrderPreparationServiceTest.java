@@ -33,7 +33,7 @@ class StartOrderPreparationServiceTest {
     private StartOrderPreparationServiceImpl service;
 
     @Test
-    void perform_ShouldStartOrderPreparationAndReturnUpdatedOrder() throws Exception {
+    void perform_ShouldStartOrderPreparationAndReturnUpdatedOrder() {
 
         UUID orderId = UUID.randomUUID();
         UUID customerId = UUID.randomUUID();
@@ -62,7 +62,7 @@ class StartOrderPreparationServiceTest {
     }
 
     @Test
-    void perform_ShouldThrowException_WhenOrderNotFound() throws Exception {
+    void perform_ShouldThrowException_WhenOrderNotFound() {
 
         UUID orderId = UUID.randomUUID();
         when(findOrderByIdService.getById(orderId)).thenThrow(new RuntimeException("Order not found"));

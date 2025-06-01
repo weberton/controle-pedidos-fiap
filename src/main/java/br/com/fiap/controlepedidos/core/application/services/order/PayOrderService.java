@@ -4,7 +4,5 @@ import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import br.com.fiap.controlepedidos.core.domain.entities.Payment;
 
 public interface PayOrderService {
-
-    Payment payOrder(Order order, int receivedValue) throws Exception;
-
+    Payment payOrder(Order order, int receivedValue);
 }

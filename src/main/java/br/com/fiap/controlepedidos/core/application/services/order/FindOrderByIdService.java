@@ -5,7 +5,5 @@ import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import java.util.UUID;
 
 public interface FindOrderByIdService {
-
-    Order getById(UUID orderId) throws Exception;
-
+    Order getById(UUID orderId);
 }

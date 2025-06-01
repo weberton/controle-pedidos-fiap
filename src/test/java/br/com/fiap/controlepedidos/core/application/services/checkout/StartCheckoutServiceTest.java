@@ -33,7 +33,7 @@ class StartCheckoutServiceTest {
     StartCheckoutServiceImpl service;
 
     @Test
-    void startCheckout_ShouldReturnPaymentToBePerformed() throws Exception {
+    void startCheckout_ShouldReturnPaymentToBePerformed() {
 
         UUID cartId = UUID.randomUUID();
 
