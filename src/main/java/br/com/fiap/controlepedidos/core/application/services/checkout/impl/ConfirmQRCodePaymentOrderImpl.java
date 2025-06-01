@@ -22,20 +22,17 @@ public class ConfirmQRCodePaymentOrderImpl implements ConfirmQRCodePaymentOrder 
     }
 
     @Override
-    public Payment confirmQrCodePayment(UUID orderId, int paidValue) throws Exception {
-        try {
-            Order orderToPay = findOrderByIdService.getById(orderId);
+    public Payment confirmQrCodePayment(UUID orderId, int paidValue) {
 
-            Payment result = payOrderService.payOrder(orderToPay, paidValue);
+        Order orderToPay = findOrderByIdService.getById(orderId);
 
-            if (result.getPaymentStatus().equals(PaymentStatus.PAID)) {
-                return result;
-            } else {
-                //TODO ao implementar pagamento é necessário atualizar o pagamento aqui também.
-                return new Payment();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        Payment result = payOrderService.payOrder(orderToPay, paidValue);
+
+        if (result.getPaymentStatus().equals(PaymentStatus.PAID)) {
+            return result;
+        } else {
+            //TODO ao implementar pagamento é necessário atualizar o pagamento aqui também.
+            return new Payment();
         }
     }
 }

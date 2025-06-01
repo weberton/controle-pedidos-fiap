@@ -21,13 +21,13 @@ public class CheckoutController implements CheckoutApi {
     }
 
     @Override
-    public ResponseEntity<PaymentDataResponseDTO> doCheckout(DoCheckoutRequestDTO cartData) throws Exception {
+    public ResponseEntity<PaymentDataResponseDTO> doCheckout(DoCheckoutRequestDTO cartData) {
         return ResponseEntity.ok(PaymentDataResponseDTO.fromDomain(startCheckoutService.startCheckout(cartData.cartId())));
     }
 
 
     @Override
-    public ResponseEntity<MercadoPagoQrCodePaymentCallbackResponseDTO> confirmPayment(MercadoPagoQRCodePaymentCallbackDTO callbackDetails) throws Exception {
+    public ResponseEntity<MercadoPagoQrCodePaymentCallbackResponseDTO> confirmPayment(MercadoPagoQRCodePaymentCallbackDTO callbackDetails) {
         return ResponseEntity.ok(MercadoPagoQrCodePaymentCallbackResponseDTO.fromDomain(confirmQRCodePaymentOrder.confirmQrCodePayment(callbackDetails.orderId(), callbackDetails.paidValue().intValue() )));
     }
 }

@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface GetAllOrdersInPrepService {
-    Page<Order> getAll(Pageable pageable) throws Exception;
+    Page<Order> getAll(Pageable pageable);
 }

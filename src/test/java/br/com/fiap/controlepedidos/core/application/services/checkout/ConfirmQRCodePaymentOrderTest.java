@@ -32,7 +32,7 @@ class ConfirmQRCodePaymentOrderTest {
     private ConfirmQRCodePaymentOrderImpl service;
 
     @Test
-    void confirmPayment_ShouldReturnPaymentWithStatusPaid() throws Exception {
+    void confirmPayment_ShouldReturnPaymentWithStatusPaid() {
 
         UUID orderId = UUID.randomUUID();
         Order fakeOrderToPay = new Order();

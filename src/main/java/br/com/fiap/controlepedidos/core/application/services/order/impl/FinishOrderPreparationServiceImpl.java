@@ -24,7 +24,7 @@ public class FinishOrderPreparationServiceImpl implements FinishOrderPreparation
     }
 
     @Override
-    public Order perform(UUID orderId) throws Exception {
+    public Order perform(UUID orderId) {
         Order order = findOrderByIdService.getById(orderId);
         order.finishOrderPreparation();
         orderRepository.save(order);

@@ -21,7 +21,7 @@ public class StartCheckoutServiceImpl implements StartCheckoutService {
     }
 
     @Override
-    public Payment startCheckout(UUID cartId) throws Exception {
+    public Payment startCheckout(UUID cartId) {
 
         //Creating Order and Payment to Request Payment Gateway
         Order newOrder = createOrderService.createOrder(cartId);
