@@ -34,10 +34,10 @@ class PayOrderServiceTest {
         Customer customer = new Customer();
         customer.setId(customerId);
 
-        Order order = mock(Order.class);
-        when(order.getCustomer()).thenReturn(customer);
-        when(order.payOrder(1000)).thenReturn(true);
-
+        Order order = Order.builder()
+                .customer(customer)
+                .totalCents(1000)
+                .build();
         when(findCustomerByIdService.findById(customerId)).thenReturn(customer);
 
         Payment payment = payOrderService.payOrder(order, 1000);
@@ -47,21 +47,25 @@ class PayOrderServiceTest {
 
         verify(orderRepository).save(order);
         verify(findCustomerByIdService).findById(customerId);
-        verify(order).payOrder(1000);
     }
 
 
     @Test
     void payOrder_ShouldReturnEmptyPayment_WhenPaymentIsUnsuccessful() {
-        Order order = mock(Order.class);
-        when(order.payOrder(1000)).thenReturn(false);
+        UUID customerId = UUID.randomUUID();
+        Customer customer = new Customer();
+        customer.setId(customerId);
+
+        Order order = Order.builder()
+                .customer(customer)
+                .totalCents(2000)
+                .build();
 
         Payment payment = payOrderService.payOrder(order, 1000);
 
         assertThat(payment).isNotNull();
         assertThat(payment.getOrder()).isNull();
 
-        verify(order).payOrder(1000);
         verifyNoInteractions(orderRepository);
         verifyNoInteractions(findCustomerByIdService);
     }
