@@ -73,7 +73,7 @@ public class Order extends AbstractEntity {
         return random.nextInt(10_000) + 1;
     }
 
-    public boolean payOrder(float value) {
+    public boolean payOrder(int value) {
         if (value == totalCents) {
             this.orderStatus = OrderStatus.RECEIVED;
             return true;
