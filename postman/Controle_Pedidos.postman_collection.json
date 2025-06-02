@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "256ebc9a-9549-4a4a-974f-d45830f53c6e",
+		"_postman_id": "8dbf47f5-ef8c-4fe5-a906-3eb2bc33e41c",
 		"name": "Controle_Pedidos",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "44842330",
-		"_collection_link": "https://www.postman.com/wel035/controle-pedidos-fiap/collection/44842330-256ebc9a-9549-4a4a-974f-d45830f53c6e?action=share&source=collection_link&creator=44842330"
+		"_exporter_id": "6232888"
 	},
 	"item": [
 		{
@@ -12,6 +11,23 @@
 			"item": [
 				{
 					"name": "Registar Por Nome e Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(201);",
+									"  const responseJson = pm.response.json();",
+									"  pm.expect(responseJson.name).to.be.a(\"string\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -20,7 +36,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nome\": \"Joao\",\n    \"email\": \"joao@gmail.com\"\n}",
+							"raw": "{\n    \"nome\": \"teste4\",\n    \"email\": \"teste4@gmail.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -60,7 +76,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/customers",
+							"raw": "localhost:8080/api/v1/clientes",
 							"host": [
 								"localhost"
 							],
@@ -68,7 +84,7 @@
 							"path": [
 								"api",
 								"v1",
-								"customers"
+								"clientes"
 							]
 						}
 					},
@@ -83,31 +99,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/clientes/30232688869",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"clientes",
-								"30232688869"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Apagar",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/v1/customers/c7118eb7-9a6b-4b4e-b291-436e41fd1a4f",
+							"raw": "localhost:8080/api/v1/customers/30232688869",
 							"host": [
 								"localhost"
 							],
@@ -116,7 +108,7 @@
 								"api",
 								"v1",
 								"customers",
-								"c7118eb7-9a6b-4b4e-b291-436e41fd1a4f"
+								"30232688869"
 							]
 						}
 					},
@@ -131,7 +123,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/customers",
+							"raw": "localhost:8080/api/v1/clientes",
 							"host": [
 								"localhost"
 							],
@@ -139,7 +131,31 @@
 							"path": [
 								"api",
 								"v1",
-								"customers"
+								"clientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apagar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/clientes/c7118eb7-9a6b-4b4e-b291-436e41fd1a4f",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"clientes",
+								"c7118eb7-9a6b-4b4e-b291-436e41fd1a4f"
 							]
 						}
 					},
@@ -151,13 +167,13 @@
 			"name": "Products",
 			"item": [
 				{
-					"name": "Criar",
+					"name": "Create Product",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"name\": \"BigMac\",\r\n\t\"price\": 10.5,\r\n\t\"category\": \"LANCHE\",\r\n\t\"description\": \"Dois hamburgueres, alface, queijo, molho especial, cebola, pickles, pão com gergilim\",\r\n\t\"active\": true,\r\n\t\"image\": \"\"\r\n}",
+							"raw": "{\n    \"name\": \"Coca-cola\",\n    \"price\": 350,\n    \"category\": \"BEBIDA\",\n    \"description\": \"Colca cola 350ml\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -180,20 +196,304 @@
 					"response": []
 				},
 				{
-					"name": "Buscar por ID",
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/products?pageSize=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/products?pageSize=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Create_Empty",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productId\": \"dcdf451b-c0fa-4984-a293-f76204ad93c1\",\n    \"quantity\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/carts",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/carts/fbaf2ead-2d5a-4e6b-b664-6782eaee636a",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carts",
+								"fbaf2ead-2d5a-4e6b-b664-6782eaee636a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Item Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productId\": \"3880c41b-61a0-49c8-9c77-7a353677a9a2\",\n    \"quantity\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/carts/fbaf2ead-2d5a-4e6b-b664-6782eaee636a/items",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carts",
+								"fbaf2ead-2d5a-4e6b-b664-6782eaee636a",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "identify",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": \"8cb846ba-7159-4d41-94b9-709ca5c18aea\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/carts/bc78284e-f814-478d-9571-6b552d79b969/identify",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carts",
+								"bc78284e-f814-478d-9571-6b552d79b969",
+								"identify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Cart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/carts/bc78284e-f814-478d-9571-6b552d79b969",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carts",
+								"bc78284e-f814-478d-9571-6b552d79b969"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Cart Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/carts/e66333eb-ac87-46af-af2e-98b9ab4eec00/items/36a26659-ed97-4eab-8b46-553ae4726d2f",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carts",
+								"e66333eb-ac87-46af-af2e-98b9ab4eec00",
+								"items",
+								"36a26659-ed97-4eab-8b46-553ae4726d2f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Quantity",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/carts/fbaf2ead-2d5a-4e6b-b664-6782eaee636a/items/2ab4fbb2-e497-44a8-bde0-c40542546183",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carts",
+								"fbaf2ead-2d5a-4e6b-b664-6782eaee636a",
+								"items",
+								"2ab4fbb2-e497-44a8-bde0-c40542546183"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "checkout",
+			"item": [
+				{
+					"name": "Checkout Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cartId\": \"d27586c3-d747-452e-9184-1671055274b5\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/checkout",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConfirmPayment",
 					"request": {
 						"method": "GET",
 						"header": []
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "orders",
+			"item": [
 				{
-					"name": "Buscar todos",
+					"name": "Get All",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/products",
+							"raw": "localhost:8080/api/v1/orders/getAll",
 							"host": [
 								"localhost"
 							],
@@ -201,20 +501,21 @@
 							"path": [
 								"api",
 								"v1",
-								"products"
+								"orders",
+								"getAll"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Atualizar",
+					"name": "Start Preparation",
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"price\": 5.5,\r\n    \"description\": \"Dois hamburgueres\"\r\n}",
+							"raw": "{\n    \"orderId\": \"12a054d7-9e35-4b40-9715-640168a97fa9\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -222,7 +523,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/products/1c8664cc-d166-44f6-a75b-0453308c9972",
+							"raw": "localhost:8080/api/v1/orders/startPreparation",
 							"host": [
 								"localhost"
 							],
@@ -230,20 +531,29 @@
 							"path": [
 								"api",
 								"v1",
-								"products",
-								"1c8664cc-d166-44f6-a75b-0453308c9972"
+								"orders",
+								"startPreparation"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Apagar",
+					"name": "Start Preparation Copy",
 					"request": {
-						"method": "DELETE",
+						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"12a054d7-9e35-4b40-9715-640168a97fa9\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:8080/api/v1/products/1c8664cc-d166-44f6-a75b-0453308c9972",
+							"raw": "localhost:8080/api/v1/orders/informReady",
 							"host": [
 								"localhost"
 							],
@@ -251,8 +561,8 @@
 							"path": [
 								"api",
 								"v1",
-								"products",
-								"1c8664cc-d166-44f6-a75b-0453308c9972"
+								"orders",
+								"informReady"
 							]
 						}
 					},
