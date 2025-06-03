@@ -24,7 +24,7 @@ public class DeleteProductImplService implements DeleteProductByIdService {
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
             product.setActive(false);
-            productRepository.save(product);
+            productRepository.delete(product);
         }
     }
 }
