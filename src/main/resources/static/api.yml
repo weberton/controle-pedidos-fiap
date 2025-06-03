@@ -367,7 +367,108 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
+  /api/v1/products:
+    post:
+      summary: Criar produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDTO'
+      responses:
+        '201':
+          description: Produto criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+      tags:
+        - Products
+    get:
+      summary: Listar produtos (paginado)
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 20
+        - in: query
+          name: sort
+          schema:
+            type: string
+            description: "Campos de ordenaço, separados por vírgula"
+      responses:
+        '200':
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResponseProductDTO'
+      tags:
+        - Products
+  /api/v1/products/{id}:
+    get:
+      summary: Buscar produto por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Produto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+      tags:
+        - Products
+    put:
+      summary: Atualizar produto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDTO'
+      responses:
+        '200':
+          description: Produto atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+      tags:
+        - Products
+    delete:
+      summary: Deletar produto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Produto deletado com sucesso
+      tags:
+        - Products
 components:
   schemas:
     CustomerDTO:
@@ -497,6 +598,58 @@ components:
         customerId:
           type: string
           description: Identificador do cliente para associação ao carrinho
+    ProductDTO:
+      type: object
+      required:
+        - name
+        - price
+        - category
+        - description
+      properties:
+        id:
+          type: string
+          description: Identificador único do produto (UUID)
+          format: uuid
+        name:
+          type: string
+          description: Nome do produto
+        price:
+          type: integer
+          description: Preço do produto
+        category:
+          type: string
+          enum: [ LANCHE, ACOMPANHAMENTO, BEBIDA, SOBREMESA ]
+          description: Categoria do produto (LANCHE, ACOMPANHAMENTO, BEBIDA, SOBREMESA)
+        description:
+          type: string
+          description: Descrição dos itens que compõem o produto
+        active:
+          type: boolean
+          description: Flag
+        image:
+          type: string
+          description: Imagem do produto
+    PagedResponseProductDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDTO'
+        pageable:
+          type: object
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        last:
+          type: boolean
+        first:
+          type: boolean
+        size:
+          type: integer
+        number:
+          type: integer
 
 tags:
   - name: Carts
