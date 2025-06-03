@@ -83,6 +83,14 @@ SPRING_DB_PASS=spring
 
 ```
 
+### Documentação swagger
+A documentação em swagger com exemplos de requisições para testar a API está disponível em:
+
+```shell
+http://localhost:8080/swagger-ui/index.html
+```
+
+
 ### Coleção Postman
 A coleção Postman com exemplos de requisições para testar a API está disponível em:
 
