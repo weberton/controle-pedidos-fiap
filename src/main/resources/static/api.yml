@@ -360,7 +360,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /products:
+  /api/v1/products:
     post:
       summary: Criar produto
       requestBody:
@@ -405,7 +405,7 @@ paths:
                 $ref: '#/components/schemas/PagedResponseProductDTO'
       tags:
         - Products
-  /products/{id}:
+  /api/v1/products/{id}:
     get:
       summary: Buscar produto por ID
       parameters:

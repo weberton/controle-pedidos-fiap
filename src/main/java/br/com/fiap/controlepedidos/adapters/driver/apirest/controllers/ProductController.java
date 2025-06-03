@@ -6,6 +6,7 @@ import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.ProductDTO;
 import br.com.fiap.controlepedidos.core.application.services.product.*;
 import br.com.fiap.controlepedidos.core.domain.entities.Product;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,16 @@ public class ProductController implements ProductApi {
     private final CreateProductService createProductService;
     private final FindProductByIdService findProductService;
     private final FindAllProductsService findAllProductService;
+    private final FindAllByCategory findAllByCategory;
     private final UpdateProductService updateProductService;
     private final DeleteProductByIdService deleteProductService;
 
-    public ProductController(CreateProductService createProductService, FindProductByIdService findProductService, FindAllProductsService findAllProductService,
+    public ProductController(CreateProductService createProductService, FindProductByIdService findProductService, FindAllProductsService findAllProductService, FindAllByCategory findAllByCategory,
                              UpdateProductService updateProductService, DeleteProductByIdService deleteProductService) {
         this.createProductService = createProductService;
         this.findProductService = findProductService;
         this.findAllProductService = findAllProductService;
+        this.findAllByCategory = findAllByCategory;
         this.updateProductService = updateProductService;
         this.deleteProductService = deleteProductService;
     }
@@ -46,6 +49,13 @@ public class ProductController implements ProductApi {
     public ResponseEntity<PagedResponse<ProductDTO>> findAll(final Pageable pageable) {
         Page<ProductDTO> products = findAllProductService.findAll(pageable).map(ProductDTO::convertToDTO);
         return ResponseEntity.ok(PagedResponse.of(products));
+    }
+
+    @Override
+    public ResponseEntity<PagedResponse<ProductDTO>> findAllByCategory(String category,
+                                                                       int page,
+                                                                       int size) {
+        return ResponseEntity.ok(findAllByCategory.findAll(category, PageRequest.of(page, size)));
     }
 
     @Override

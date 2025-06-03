@@ -1,10 +1,7 @@
 package br.com.fiap.controlepedidos.core.domain.entities;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.Category;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 
@@ -25,6 +22,7 @@ public class Product {
     private UUID id;
     private String name;
     private Integer price;
+    @Enumerated(EnumType.STRING)
     private Category category;
     private String description;
     private boolean active = true;

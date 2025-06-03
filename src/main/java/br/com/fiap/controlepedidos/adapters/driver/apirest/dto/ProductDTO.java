@@ -10,7 +10,7 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ProductDTO(
         UUID id,
-        @NotEmpty(message = "Não não pode ser em branco") String name,
+        @NotEmpty(message = "Nome não pode ser em branco") String name,
         @NotNull(message = "Preço não pode ser nulo") Integer price,
         @NotNull(message = "Categoria não pode ser nula") Category category,
         @NotEmpty(message = "Descrição não pode ser em branco") String description,
