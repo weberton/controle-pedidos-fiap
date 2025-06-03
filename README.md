@@ -5,11 +5,19 @@ Projeto backend para controle de pedidos de uma lanchonete, utilizando Spring Bo
 ![Cobertura de Código](.github/badges/jacoco.svg)
 ![Cobertura de Branches](.github/badges/branches.svg)
 
+## Introdução
+
+Esse projeto foi criando o intuito de criar um sistema de controle de pedidos para uma lanchonete, onde é possível que o cliente crie seus pedidos, realize o pagamento e acompanhe o status desse pedido até o passo final de retirada. Já o estabelecimento pode gerenciar os pedidos, gerenciar os produtos, podendo adicionar, remover ou editar os itens disponíveis para os clientes e também gerenciar campanhas de marketing para pessoas que se cadastraram com e-mail no sistema. A cozinha fica responsável pelo recebimento do pedido, confecção e atualizações dos status para que o cliente possa acompanhar.
+
 ## Pré-requisitos
 - Java 21+
 - MySQL 8+
 
-## Configuração do Banco de Dados
+## Iniciando projeto
+
+### Rodando local
+
+#### Configuração do Banco de Dados
 1) Criar o banco de dados:
 ```sql
 CREATE DATABASE controle_pedidos CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -21,20 +29,20 @@ spring.datasource.username=SEU_USUARIO
 spring.datasource.password=SUA_SENHA
 
 ```
-### Migração de Banco
+#### Migração de Banco
 As tabelas são gerenciadas automaticamente pelo Flyway.
 
 Ao iniciar a aplicação, o Flyway aplica as migrations que estão em:
 ```shell
 src/main/resources/db/migration
 ```
-### Rodando a aplicação
+#### Rodando a aplicação
 ```shell
 ./mvnw spring-boot:run
 
 ```
 
-## 🐳 Rodando com Docker
+### Rodando com Docker
 Este projeto pode ser executado facilmente usando Docker e Docker Compose, sem a necessidade de configurar o ambiente local manualmente.
 
 **Pré-requisitos**
@@ -58,22 +66,30 @@ http://localhost:8080
 ```
 O banco de dados MySQL estará acessível internamente pelo serviço mysql na porta 3306.
 
-⚠️ O Flyway se encarrega de criar as tabelas automaticamente na inicialização da aplicação.
+ O Flyway se encarrega de criar as tabelas automaticamente na inicialização da aplicação.
 
-### 🔐 Variáveis de Ambiente
+### 
+ Variáveis de Ambiente
 As variáveis de configuração, como URL, usuário e senha do banco de dados, estão centralizadas em um arquivo .env.
 Este arquivo não é versionado por segurança. Crie um manualmente na raiz do projeto com o seguinte conteúdo de exemplo:
 
 ```shell
 MYSQL_DB=controle_pedidos
 MYSQL_USER=spring
-MYSQL_ROOT_PASSWORD=spring
 
 SPRING_DB_URL=jdbc:mysql://mysql:3306/controle_pedidos
 SPRING_DB_USER=spring
 SPRING_DB_PASS=spring
 
 ```
+
+### Documentação swagger
+A documentação em swagger com exemplos de requisições para testar a API está disponível em:
+
+```shell
+http://localhost:8080/swagger-ui/index.html
+```
+
 
 ### Coleção Postman
 A coleção Postman com exemplos de requisições para testar a API está disponível em:
