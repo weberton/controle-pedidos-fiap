@@ -38,7 +38,7 @@ class DeleteServiceTest {
         deleteImpl.delete(id);
 
         assertFalse(product.isActive());
-        verify(productRepository).save(product);
+        verify(productRepository).delete(product);
     }
 
     @Test
