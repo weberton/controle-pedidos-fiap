@@ -35,7 +35,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
     get:
       tags:
         - Customers
@@ -62,7 +61,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /api/v1/customers/{cpf}:
     get:
       tags:
@@ -93,7 +91,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /api/v1/customers/{id}:
     delete:
       tags:
@@ -138,7 +135,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '400':
           description: Requisição inválida (validação ou erro de negócio)
           content:
@@ -169,7 +166,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '404':
           description: Carrinho não encontrado
           content:
@@ -199,7 +196,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '404':
           description: Carrinho não encontrado
           content:
@@ -212,7 +209,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /api/v1/carts/{cartId}/items:
     post:
       tags:
@@ -229,15 +225,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CartItemRequest'
-
+              $ref: '#/components/schemas/CreateItemRequest'
       responses:
         200:
           description: Item adicionado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '400':
           description: Requisição inválida (validação ou erro de negócio)
           content:
@@ -250,81 +245,79 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /api/v1/carts/{cartId}/items/{itemId}:
-   patch:
-     tags:
-       - Carts
-     summary: Atualiza quantidade de um item no carrinho
-     parameters:
-       - name: cartId
-         in: path
-         required: true
-         description: Identificador único do carrinho (UUID)
-         schema:
-           type: string
-       - name: itemId
-         in: path
-         required: true
-         description: Identificador único do item a ser atualizado
-         schema:
-           type: string
-     requestBody:
-       required: true
-       content:
-         application/json:
-           schema:
-             $ref: '#/components/schemas/CartItemRequest'
-     responses:
-       '200':
-         description: Quantidade atualizada
-         content:
-           application/json:
-             schema:
-               $ref: '#/components/schemas/CartResponse'
-       '400':
-         description: Requisição inválida (validação ou erro de negócio).
-         content:
-           application/json:
-             schema:
-               $ref: '#/components/schemas/ErrorResponse'
-       '500':
-         description: Erro interno do servidor
-         content:
-           application/json:
-             schema:
-               $ref: '#/components/schemas/ErrorResponse'
-
-   delete:
-     tags:
-       - Carts
-     summary: Remove um item de um carrinho existente
-     parameters:
-       - name: cartId
-         in: path
-         required: true
-         description: Identificador único do carrinho (UUID)
-         schema:
-           type: string
-       - name: productId
-         in: path
-         required: true
-         description: Identificador único do produto a ser removido
-         schema:
-           type: string
-     responses:
-      '200':
-        description: Item removido com sucesso
+    patch:
+      tags:
+        - Carts
+      summary: Atualiza quantidade de um item no carrinho
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: Identificador único do carrinho (UUID)
+          schema:
+            type: string
+        - name: itemId
+          in: path
+          required: true
+          description: Identificador único do produto a ser removido
+          schema:
+            type: string
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CartResponse'
-      '404':
-        description: Carrinho ou produto não encontrado
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ErrorResponse'
+              $ref: '#/components/schemas/UpdateItemQuantityRequest'
+      responses:
+        '200':
+          description: Quantidade atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponseDto'
+        '400':
+          description: Requisição inválida (validação ou erro de negócio).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Carts
+      summary: Remove um item de um carrinho existente
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: Identificador único do carrinho (UUID)
+          schema:
+            type: string
+        - name: itemId
+          in: path
+          required: true
+          description: Identificador único do produto a ser removido
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Item removido com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponseDto'
+        '404':
+          description: Carrinho ou produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /api/v1/carts/{cartId}/identify:
     post:
       tags:
@@ -348,7 +341,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CartResponse'
+                $ref: '#/components/schemas/CartResponseDto'
         '404':
           description: Carrinho não encontrado
           content:
@@ -367,7 +360,108 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
+  /products:
+    post:
+      summary: Criar produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDTO'
+      responses:
+        '201':
+          description: Produto criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+      tags:
+        - Products
+    get:
+      summary: Listar produtos (paginado)
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 20
+        - in: query
+          name: sort
+          schema:
+            type: string
+            description: "Campos de ordenaço, separados por vírgula"
+      responses:
+        '200':
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResponseProductDTO'
+      tags:
+        - Products
+  /products/{id}:
+    get:
+      summary: Buscar produto por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Produto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+      tags:
+        - Products
+    put:
+      summary: Atualizar produto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDTO'
+      responses:
+        '200':
+          description: Produto atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+      tags:
+        - Products
+    delete:
+      summary: Deletar produto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Produto deletado com sucesso
+      tags:
+        - Products
 components:
   schemas:
     CustomerDTO:
@@ -393,7 +487,6 @@ components:
         - cpf
         - nome
         - email
-
     PagedResponseCustomerDTO:
       type: object
       properties:
@@ -415,7 +508,6 @@ components:
           type: integer
         number:
           type: integer
-
     ErrorResponse:
       type: object
       properties:
@@ -426,7 +518,7 @@ components:
           type: string
           format: date-time
           description: Data e hora do erro
-    CartItemResponse:
+    CartItemResponseDto:
       type: object
       properties:
         productId:
@@ -442,21 +534,8 @@ components:
           description: Quantidade do produto adicionada
         subtotalCents:
           type: number
-          description: Subtotal em centavos (priceCents * quantity)
-
-    CreateCartRequest:
-      type: object
-      required:
-        - item
-      properties:
-        customerId:
-          type: string
-          description: Identificador do cliente(Opcional)
-          required: false
-        item:
-          $ref: '#/components/schemas/CartItemRequest'
-
-    CartItemRequest:
+          description: Subtotal em centavos (priceCents * quantity)N
+    CreateItemRequest:
       type: object
       required:
         - productId
@@ -469,8 +548,7 @@ components:
           type: integer
           description: Quantidade do produto adicionada(>=1)
           minimum: 1
-
-    CartResponse:
+    CartResponseDto:
       type: object
       properties:
         cartId:
@@ -485,7 +563,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/CartItemResponse'
+            $ref: '#/components/schemas/CartItemResponseDto'
         totalCents:
           type: integer
           description: Soma de todos os subtotalCents do carrinho
@@ -497,9 +575,84 @@ components:
         customerId:
           type: string
           description: Identificador do cliente para associação ao carrinho
-
+    UpdateItemQuantityRequest:
+      type: integer
+      required:
+        - quantity
+      properties:
+        quantity:
+          type: integer
+          description: Quantidade mínima de itens adicionados ao carrinho
+          minimum: 0
+    CreateCartRequest:
+      type: object
+      required:
+        - customerId
+        - item
+      properties:
+        customerId:
+          type: string
+          description: Identificador único do cliente
+          format: uuid
+        item:
+          type: object
+          $ref: '#/components/schemas/CreateItemRequest'
+    ProductDTO:
+      type: object
+      required:
+        - name
+        - price
+        - category
+        - description
+      properties:
+        id:
+          type: string
+          description: Identificador único do produto (UUID)
+          format: uuid
+        name:
+          type: string
+          description: Nome do produto
+        price:
+          type: integer
+          description: Preço do produto
+        category:
+          type: string
+          enum: [ LANCHE, ACOMPANHAMENTO, BEBIDA, SOBREMESA ]
+          description: Categoria do produto (LANCHE, ACOMPANHAMENTO, BEBIDA, SOBREMESA)
+        description:
+          type: string
+          description: Descrição dos itens que compõem o produto
+        active:
+          type: boolean
+          description: Flag
+        image:
+          type: string
+          description: Imagem do produto
+    PagedResponseProductDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDTO'
+        pageable:
+          type: object
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        last:
+          type: boolean
+        first:
+          type: boolean
+        size:
+          type: integer
+        number:
+          type: integer
 tags:
   - name: Carts
     description: Endpoints para gerenciamento de carrinhos de compra.
   - name: Customers
     description: Endpoints para gerenciamento de clientes.
+  - name: Products
+    description: Endpoints para gerenciamento de produtos.
