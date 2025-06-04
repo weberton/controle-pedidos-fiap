@@ -97,3 +97,37 @@ A coleção Postman com exemplos de requisições para testar a API está dispon
 ```shell
 postman/controle-pedidos.postman_collection.json
 ```
+
+## Me
+Help me update the readme file.
+
+I want to add a section where I explain the github actions/workflow. Mention that the PR have checks, test should and sonar is enableed
+
+Also the folder bagde with test coverage
+
+## AI Assistant
+I'll help you update the README.md file by adding a section about GitHub Actions/workflow and clarifying the badges. Here's the suggested addition to include after the badges section and before the "Introdução" section:
+
+```markdown
+## CI/CD & Code Quality
+
+### GitHub Actions
+Este projeto utiliza GitHub Actions para garantir a qualidade e integridade do código. Todos os Pull Requests passam pelos seguintes checks automatizados:
+
+- **Testes Unitários**: Execução automática de todos os testes para garantir que novas mudanças não quebrem funcionalidades existentes
+- **Cobertura de Código**: Análise de cobertura de testes usando JaCoCo, visualizada através dos badges acima
+- **Análise Sonar**: Verificação de qualidade de código através do SonarCloud, incluindo:
+  - Code smells
+  - Vulnerabilidades
+  - Débitos técnicos
+  - Duplicação de código
+  - Complexidade ciclomática
+
+### Badges
+Os badges no topo do README são atualizados automaticamente e mostram:
+- ![Cobertura de Código](.github/badges/jacoco.svg) - Porcentagem total de cobertura de código
+- ![Cobertura de Branches](.github/badges/branches.svg) - Porcentagem de cobertura de branches
+
+Estes badges são gerados automaticamente após cada execução bem-sucedida do workflow de CI/CD e refletem o estado atual do projeto.
+```
+
