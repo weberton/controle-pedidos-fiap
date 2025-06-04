@@ -105,10 +105,6 @@ I want to add a section where I explain the github actions/workflow. Mention tha
 
 Also the folder bagde with test coverage
 
-## AI Assistant
-I'll help you update the README.md file by adding a section about GitHub Actions/workflow and clarifying the badges. Here's the suggested addition to include after the badges section and before the "Introdução" section:
-
-
 ## CI/CD & Code Quality
 
 ### GitHub Actions
