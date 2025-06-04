@@ -98,13 +98,6 @@ A coleção Postman com exemplos de requisições para testar a API está dispon
 postman/controle-pedidos.postman_collection.json
 ```
 
-## Me
-Help me update the readme file.
-
-I want to add a section where I explain the github actions/workflow. Mention that the PR have checks, test should and sonar is enableed
-
-Also the folder bagde with test coverage
-
 ## CI/CD & Code Quality
 
 ### GitHub Actions
