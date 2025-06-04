@@ -108,7 +108,7 @@ Also the folder bagde with test coverage
 ## AI Assistant
 I'll help you update the README.md file by adding a section about GitHub Actions/workflow and clarifying the badges. Here's the suggested addition to include after the badges section and before the "Introdução" section:
 
-```markdown
+
 ## CI/CD & Code Quality
 
 ### GitHub Actions
@@ -130,4 +130,5 @@ Os badges no topo do README são atualizados automaticamente e mostram:
 
 Estes badges são gerados automaticamente após cada execução bem-sucedida do workflow de CI/CD e refletem o estado atual do projeto.
 ```
+
 
