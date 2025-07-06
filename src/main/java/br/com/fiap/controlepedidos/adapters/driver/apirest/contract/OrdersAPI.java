@@ -31,7 +31,6 @@ public interface OrdersAPI {
     @GetMapping(value = "/getAllToPrepare", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PagedResponse<OrderDTO>> getAllToPrepare(Pageable pageable);
 
-
     @PutMapping(value = "/startPreparation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<OrderDTO> startPreparation(@RequestBody @Valid UpdateOrderStatusDTO order);
 
@@ -40,4 +39,7 @@ public interface OrdersAPI {
 
     @PutMapping(value = "/informDone", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<OrderDTO> informDone(@RequestBody @Valid UpdateOrderStatusDTO order);
+
+    @GetMapping(value = "/getAllInProcess", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<PagedResponse<OrderDTO>> getAllInProcess(Pageable pageable);
 }

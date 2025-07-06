@@ -13,6 +13,8 @@ public interface IOrderRepository extends JpaRepository<Order, UUID> {
 
     Page<Order> findByOrderStatusOrderByUpdatedAtAsc(OrderStatus status, Pageable pageable);
 
+    Page<Order> findByOrderStatusOrderByCreatedAtDesc(OrderStatus status, Pageable pageable);
+
     @EntityGraph(attributePaths = {
             "cart",
             "cart.items",

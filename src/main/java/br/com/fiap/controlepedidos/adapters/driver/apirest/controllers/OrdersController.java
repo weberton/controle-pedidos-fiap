@@ -5,7 +5,6 @@ import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.OrderDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.PagedResponse;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.UpdateOrderStatusDTO;
 import br.com.fiap.controlepedidos.core.application.services.order.*;
-import br.com.fiap.controlepedidos.core.domain.entities.CartItem;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,6 +23,7 @@ public class OrdersController implements OrdersAPI {
     private final GetAllOrdersReadyService getAllOrdersReadyService;
     private final GetAllOrdersDoneService getAllOrdersDoneService;
     private final GetAllOrdersReadyToPrepareService getAllOrdersReadyToPrepareService;
+    private final GetAllOrdersInProcessService getAllOrdersInProcess;
 
 
     public OrdersController(FinishOrderService finishOrderService,
@@ -33,7 +33,7 @@ public class OrdersController implements OrdersAPI {
                             GetAllOrdersInPrepService getAllOrdersInPrepService,
                             GetAllOrdersReadyService getAllOrdersReadyService,
                             GetAllOrdersDoneService getAllOrdersDoneService,
-                            GetAllOrdersReadyToPrepareService getAllOrdersReadyToPrepareService) {
+                            GetAllOrdersReadyToPrepareService getAllOrdersReadyToPrepareService, GetAllOrdersInProcessService getAllOrdersInProcess) {
         this.finishOrderService = finishOrderService;
         this.startOrderPreparation = startOrderPreparation;
         this.finishOrderPreparationService = finishOrderPreparationService;
@@ -42,6 +42,7 @@ public class OrdersController implements OrdersAPI {
         this.getAllOrdersReadyService = getAllOrdersReadyService;
         this.getAllOrdersDoneService = getAllOrdersDoneService;
         this.getAllOrdersReadyToPrepareService = getAllOrdersReadyToPrepareService;
+        this.getAllOrdersInProcess = getAllOrdersInProcess;
     }
 
     @Override
@@ -161,4 +162,17 @@ public class OrdersController implements OrdersAPI {
         return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer(), orderUpdated.getCart().getItems()), HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<PagedResponse<OrderDTO>> getAllInProcess(Pageable pageable) {
+        Page<Order> page = getAllOrdersInProcess.getAllOrdersInProcess(pageable);
+
+        Page<OrderDTO> dtoPage = page.map(order ->
+                OrderDTO.convertToDTO(order,
+                        order.getCustomer() != null ? order.getCustomer() : null,
+                        order.getCart() != null ? order.getCart().getItems() : null
+                )
+        );
+
+        return ResponseEntity.ok(PagedResponse.of(dtoPage));
+    }
 }
