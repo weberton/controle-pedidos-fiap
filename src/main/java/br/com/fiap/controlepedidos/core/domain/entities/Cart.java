@@ -27,6 +27,26 @@ public class Cart extends AbstractEntity {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public List<CartItem> getItems() {
+        return items;
+    }
+
+    public int getTotalCents() {
+        return totalCents;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
     @OneToMany(
             mappedBy = "cart",
             cascade = CascadeType.ALL,

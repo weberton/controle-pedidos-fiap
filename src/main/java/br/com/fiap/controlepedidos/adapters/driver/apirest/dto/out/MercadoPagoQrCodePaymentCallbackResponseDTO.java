@@ -1,9 +1,10 @@
 package br.com.fiap.controlepedidos.adapters.driver.apirest.dto.out;
 
-import br.com.fiap.controlepedidos.core.domain.entities.Payment;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.UUID;
+import br.com.fiap.controlepedidos.core.domain.entities.Payment;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record MercadoPagoQrCodePaymentCallbackResponseDTO(

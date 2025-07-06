@@ -20,7 +20,29 @@ public class Customer {
     private UUID id;
     private String cpf;
     private String name;
+
+    public String getName() {
+        return name;
+    }
+
     private String email;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
     @Version
     private Long version;
 

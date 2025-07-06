@@ -19,6 +19,38 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class Payment extends AbstractEntity {
 
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public void setTotalCents(int totalCents) {
+        this.totalCents = totalCents;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", unique = true)
     private Order order;
@@ -28,6 +60,30 @@ public class Payment extends AbstractEntity {
 
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public int getTotalCents() {
+        return totalCents;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public String getQrCode() {
+        return qrCode;
+    }
 
     @Column(name = "payment_status", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -70,4 +126,6 @@ public class Payment extends AbstractEntity {
     public void cancelPayment() {
         this.paymentStatus = PaymentStatus.CANCELLED;
     }
+
+
 }
