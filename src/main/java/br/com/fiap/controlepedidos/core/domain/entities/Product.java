@@ -54,6 +54,35 @@ public class Product {
     }
 
     private Integer price;
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     private Category category;
     private String description;
     private boolean active = true;

@@ -5,6 +5,7 @@ import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.OrderDTO;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.PagedResponse;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.in.UpdateOrderStatusDTO;
 import br.com.fiap.controlepedidos.core.application.services.order.*;
+import br.com.fiap.controlepedidos.core.domain.entities.CartItem;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -49,9 +50,11 @@ public class OrdersController implements OrdersAPI {
         try {
             Page<Order> page = getAllOrdersService.getAll(pageable);
 
+
             Page<OrderDTO> dtoPage = page.map(order ->
                     OrderDTO.convertToDTO(order,
-                            order.getCustomer() != null ? order.getCustomer() : null
+                            order.getCustomer() != null ? order.getCustomer() : null,
+                            order.getCart() != null ? order.getCart().getItems() : null
                     )
             );
 
@@ -71,7 +74,8 @@ public class OrdersController implements OrdersAPI {
 
             Page<OrderDTO> dtoPage = page.map(order ->
                     OrderDTO.convertToDTO(order,
-                            order.getCustomer() != null ? order.getCustomer() : null
+                            order.getCustomer() != null ? order.getCustomer() : null,
+                            order.getCart() != null ? order.getCart().getItems() : null
                     )
             );
 
@@ -89,7 +93,8 @@ public class OrdersController implements OrdersAPI {
 
             Page<OrderDTO> dtoPage = page.map(order ->
                     OrderDTO.convertToDTO(order,
-                            order.getCustomer() != null ? order.getCustomer() : null
+                            order.getCustomer() != null ? order.getCustomer() : null,
+                            order.getCart() != null ? order.getCart().getItems() : null
                     )
             );
 
@@ -107,7 +112,8 @@ public class OrdersController implements OrdersAPI {
 
             Page<OrderDTO> dtoPage = page.map(order ->
                     OrderDTO.convertToDTO(order,
-                            order.getCustomer() != null ? order.getCustomer() : null
+                            order.getCustomer() != null ? order.getCustomer() : null,
+                            order.getCart() != null ? order.getCart().getItems() : null
                     )
             );
 
@@ -125,7 +131,8 @@ public class OrdersController implements OrdersAPI {
 
             Page<OrderDTO> dtoPage = page.map(order ->
                     OrderDTO.convertToDTO(order,
-                            order.getCustomer() != null ? order.getCustomer() : null
+                            order.getCustomer() != null ? order.getCustomer() : null,
+                            order.getCart() != null ? order.getCart().getItems() : null
                     )
             );
 
@@ -139,19 +146,19 @@ public class OrdersController implements OrdersAPI {
     @Override
     public ResponseEntity<OrderDTO> startPreparation(UpdateOrderStatusDTO order) {
         Order orderUpdated = startOrderPreparation.perform(order.orderId());
-        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
+        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer(), orderUpdated.getCart().getItems()), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<OrderDTO> informReady(UpdateOrderStatusDTO order) {
         Order orderUpdated = finishOrderPreparationService.perform(order.orderId());
-        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
+        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer(), orderUpdated.getCart().getItems()), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<OrderDTO> informDone(UpdateOrderStatusDTO order) {
         Order orderUpdated = finishOrderService.perform(order.orderId());
-        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
+        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer(), orderUpdated.getCart().getItems()), HttpStatus.OK);
     }
 
 }

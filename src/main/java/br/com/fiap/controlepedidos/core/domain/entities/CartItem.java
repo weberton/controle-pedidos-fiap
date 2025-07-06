@@ -21,6 +21,26 @@ public class CartItem extends AbstractEntity {
         return cart;
     }
 
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPriceCents(int priceCents) {
+        this.priceCents = priceCents;
+    }
+
+    public void setSubtotalCents(int subtotalCents) {
+        this.subtotalCents = subtotalCents;
+    }
+
     public Product getProduct() {
         return product;
     }

@@ -71,7 +71,7 @@ public class MercadoPagoPaymentClient implements IPaymentGateway {
             }
 
         } catch (Exception e) {
-            log.error("Error response from Mercado Pago API.", e);
+//            log.error("Error response from Mercado Pago API.", e);
             throw new MercadoPagoConnectionException("Erro ao chamar a API do Mercado Pago: " + e.getMessage(), e);
         }
     }
