@@ -17,26 +17,6 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 public class CartItem extends AbstractEntity {
 
-    public Cart getCart() {
-        return cart;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public int getPriceCents() {
-        return priceCents;
-    }
-
-    public int getSubtotalCents() {
-        return subtotalCents;
-    }
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
