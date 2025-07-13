@@ -2,7 +2,6 @@ package br.com.fiap.controlepedidos.core.application.services.payment.impl;
 
 import br.com.fiap.controlepedidos.core.application.ports.IPaymentRepository;
 import br.com.fiap.controlepedidos.core.application.services.payment.IConfirmPaymentService;
-import br.com.fiap.controlepedidos.core.application.services.payment.ICreatePaymentService;
 import br.com.fiap.controlepedidos.core.domain.entities.Payment;
 import br.com.fiap.controlepedidos.core.domain.enums.PaymentStatus;
 import br.com.fiap.controlepedidos.core.domain.validations.*;
@@ -35,19 +34,19 @@ public class ConfirmPaymentServiceImpl implements IConfirmPaymentService {
         Payment dbPayment = this.paymentRepository.findById(payment.getId())
                 .orElseThrow(() -> new RecordNotFoundException("Pagamento não encontrado."));
 
-        if (dbPayment.getPaymentStatus().equals(PaymentStatus.PAID)) {
-            throw new PaymentAlreadyConfirmedException("Pagamento já realizado anteriormente.");
-        }
-
-        if (dbPayment.getPaymentStatus().equals(PaymentStatus.CANCELLED)) {
-            throw new CancelledPaymentException("Pagamento já cancelado anteriormente.");
-        }
-
-        if (!EnumSet.allOf(PaymentStatus.class).contains(dbPayment.getPaymentStatus())) {
+        if (dbPayment.getPaymentStatus() == null || !EnumSet.allOf(PaymentStatus.class).contains(dbPayment.getPaymentStatus())) {
             throw new InvalidPaymentStatusException("Status de pagamento inválido.");
         }
 
-        if (payment.getOrder().getId() == null) {
+        if (PaymentStatus.PAID.equals(dbPayment.getPaymentStatus())) {
+            throw new PaymentAlreadyConfirmedException("Pagamento já realizado anteriormente.");
+        }
+
+        if (PaymentStatus.CANCELLED.equals(dbPayment.getPaymentStatus())) {
+            throw new CancelledPaymentException("Pagamento já cancelado anteriormente.");
+        }
+
+        if (payment.getOrder() == null || payment.getOrder().getId() == null) {
             throw new PaymentWithoutOrderException("Um pagamento deve estar vinculado a um pedido.");
         }
 

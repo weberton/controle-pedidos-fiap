@@ -20,12 +20,10 @@ public class CancelPaymentServiceImpl implements ICancelPaymentService {
 
     @Override
     public Payment cancelPayment(Payment payment) {
-
-        if (payment.getOrder().getId() == null) {
+        if (payment.getOrder() == null || payment.getOrder().getId() == null) {
             throw new PaymentWithoutOrderException("Um pagamento deve estar vinculado a um pedido.");
         }
         payment.cancelPayment();
-
         return this.paymentRepository.save(payment);
     }
 }
