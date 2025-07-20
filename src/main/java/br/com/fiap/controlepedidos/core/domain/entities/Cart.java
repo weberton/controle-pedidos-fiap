@@ -23,49 +23,10 @@ import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 public class Cart extends AbstractEntity {
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public void setItems(List<CartItem> items) {
-        this.items = items;
-    }
-
-    public void setTotalCents(int totalCents) {
-        this.totalCents = totalCents;
-    }
-
-    public void setCreatedAt(OffsetDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(OffsetDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public List<CartItem> getItems() {
-        return items;
-    }
-
-    public int getTotalCents() {
-        return totalCents;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public OffsetDateTime getUpdatedAt() {
-        return updatedAt;
-    }
 
     @OneToMany(
             mappedBy = "cart",
@@ -148,4 +109,3 @@ public class Cart extends AbstractEntity {
                 });
     }
 }
-

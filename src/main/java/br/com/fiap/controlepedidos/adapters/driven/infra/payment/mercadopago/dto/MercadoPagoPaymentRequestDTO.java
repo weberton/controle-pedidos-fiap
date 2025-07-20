@@ -13,30 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class MercadoPagoPaymentRequestDTO {
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setCallBackUrl(String callBackUrl) {
-        this.callBackUrl = callBackUrl;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public void setItems(List<MercadoPagoPaymentItemDTO> items) {
-        this.items = items;
-    }
-
     @JsonProperty("external_reference")
     private String orderId;
 
@@ -54,7 +30,6 @@ public class MercadoPagoPaymentRequestDTO {
     public BigDecimal convertTotalCentsToDTO(int totalCents) {
         return new BigDecimal(totalCents).divide(new BigDecimal(100));
     }
-
 
 
 }
