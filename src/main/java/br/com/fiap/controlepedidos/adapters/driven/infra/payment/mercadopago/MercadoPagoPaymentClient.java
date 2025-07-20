@@ -70,7 +70,7 @@ public class MercadoPagoPaymentClient implements IPaymentGateway {
                 return parsePaymentDetails(objectMapper.readValue(responseBuilder.toString(), MercadoPagoPaymentResponseDTO.class));
             }
 
-        } catch (Exception e) {g
+        } catch (Exception e) {
             throw new MercadoPagoConnectionException("Erro ao chamar a API do Mercado Pago: " + e.getMessage(), e);
         }
     }
