@@ -15,38 +15,6 @@ public class MercadoPagoPaymentItemDTO {
     @JsonProperty("sku_number")
     private String productId;
 
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setProductPrice(BigDecimal productPrice) {
-        this.productPrice = productPrice;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setProductUnit(String productUnit) {
-        this.productUnit = productUnit;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
     @JsonProperty("category")
     private String category;
 
