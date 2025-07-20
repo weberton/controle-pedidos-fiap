@@ -4,7 +4,6 @@ import br.com.fiap.controlepedidos.core.application.services.checkout.ConfirmQRC
 import br.com.fiap.controlepedidos.core.application.services.order.FindOrderByIdService;
 import br.com.fiap.controlepedidos.core.application.services.order.PayOrderService;
 import br.com.fiap.controlepedidos.core.application.services.payment.ICancelPaymentService;
-import br.com.fiap.controlepedidos.core.application.services.payment.IConfirmPaymentService;
 import br.com.fiap.controlepedidos.core.domain.entities.Order;
 import br.com.fiap.controlepedidos.core.domain.entities.Payment;
 import br.com.fiap.controlepedidos.core.domain.enums.PaymentStatus;

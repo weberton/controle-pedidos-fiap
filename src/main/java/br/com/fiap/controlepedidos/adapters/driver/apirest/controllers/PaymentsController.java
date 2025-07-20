@@ -1,7 +1,6 @@
 package br.com.fiap.controlepedidos.adapters.driver.apirest.controllers;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.PaymentsAPI;
-import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.out.CartResponseDto;
 import br.com.fiap.controlepedidos.adapters.driver.apirest.dto.out.PaymentStatusResponseDTO;
 import br.com.fiap.controlepedidos.core.application.services.payment.IFindPaymentByOrderId;
 import br.com.fiap.controlepedidos.core.domain.entities.Payment;
