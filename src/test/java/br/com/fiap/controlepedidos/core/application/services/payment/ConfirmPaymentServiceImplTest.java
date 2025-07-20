@@ -91,24 +91,24 @@ class ConfirmPaymentServiceImplTest {
 
     @Test
     void confirmPayment_shouldThrowWhenOrderIdIsNull() {
-        UUID paymentId = UUID.randomUUID();
+        UUID testPaymentId  = UUID.randomUUID();
 
-        Order order = new Order();
-        order.setId(null);
+        Order testOrder  = new Order();
+        testOrder .setId(null);
 
-        Payment inputPayment = new Payment();
-        inputPayment.setId(paymentId);
-        inputPayment.setOrder(order);
-        inputPayment.setTotalCents(1000);
+        Payment testInputPayment  = new Payment();
+        testInputPayment .setId(testPaymentId);
+        testInputPayment .setOrder(testOrder );
+        testInputPayment .setTotalCents(1000);
 
-        Payment dbPayment = new Payment();
-        dbPayment.setId(paymentId);
-        dbPayment.setPaymentStatus(PaymentStatus.WAITING);
-        dbPayment.setTotalCents(1000);
+        Payment testDbPayment  = new Payment();
+        testDbPayment .setId(testPaymentId);
+        testDbPayment .setPaymentStatus(PaymentStatus.WAITING);
+        testDbPayment .setTotalCents(1000);
 
-        when(paymentRepository.findById(paymentId)).thenReturn(Optional.of(dbPayment));
+        when(paymentRepository.findById(testPaymentId)).thenReturn(Optional.of(testDbPayment ));
 
-        assertThatThrownBy(() -> confirmPaymentService.confirmPayment(inputPayment))
+        assertThatThrownBy(() -> confirmPaymentService.confirmPayment(testInputPayment))
                 .isInstanceOf(PaymentWithoutOrderException.class)
                 .hasMessageContaining("Um pagamento deve estar vinculado a um pedido.");
     }
