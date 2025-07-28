@@ -69,7 +69,7 @@ public class Order extends AbstractEntity {
     }
 
     private int generateRandomOrderNumber() {
-        Random random = new Random();
+        Random random = new Random(); //NOSONAR
         return random.nextInt(10_000) + 1;
     }
 

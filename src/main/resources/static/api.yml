@@ -656,3 +656,5 @@ tags:
     description: Endpoints para gerenciamento de carrinhos de compra.
   - name: Customers
     description: Endpoints para gerenciamento de clientes.
+  - name: Products
+    description: Endpoints para gerenciamento de produtos.
