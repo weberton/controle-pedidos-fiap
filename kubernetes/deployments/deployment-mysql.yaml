@@ -1,0 +1,54 @@
+# mysql-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  labels:
+    app: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate 
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD 
+          valueFrom:
+            secretKeyRef:
+              name: secret-pedidos
+              key: MYSQL_ROOT_PASSWORD
+              optional: false
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: configmaps-pedidos
+              key: mysql_database
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: secret-pedidos
+              key: MYSQL_USER
+              optional: false
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secret-pedidos
+              key: MYSQL_PASSWORD
+              optional: false
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim 
