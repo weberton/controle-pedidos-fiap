@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: controlepedidos
-          image: webertonfaria/controlepedidos:latest
+          image: soatgrupo33/controlepedidos:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           resources:
