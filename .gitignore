@@ -36,3 +36,4 @@ build/
 **/terraform.tfstate
 **/terraform.tfstate.backup
 terraform/aws/.terraform/**
+terraform/aws/**

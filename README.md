@@ -118,6 +118,116 @@ Os badges no topo do README são atualizados automaticamente e mostram:
 - ![Cobertura de Branches](.github/badges/branches.svg) - Porcentagem de cobertura de branches
 
 Estes badges são gerados automaticamente após cada execução bem-sucedida do workflow de CI/CD e refletem o estado atual do projeto.
-```
 
+## Implantação na Nuvem com Terraform e AWS
+Além de rodar localmente ou com Docker, agora você pode subir toda a infraestrutura do projeto na AWS usando Terraform e Kubernetes.
+
+### Pré-requisitos
+Antes de começar, você vai precisar:
+
+- [Terraform instalado](https://developer.hashicorp.com/terraform/install)
+- [Conta na AWS](https://aws.amazon.com/)
+- [AWS CLI instalado](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+
+1. Criar suas credenciais na AWS
+   - Acesse o Console da AWS → vá em IAM. 
+   - Crie um usuário com acesso programático. 
+   - Dê permissões de administrador ou permissões específicas para EC2, EKS, VPC, etc. 
+   - Após a criação, anote o Access Key ID e o Secret Access Key.
+   
+2. Configurar AWS CLI
+```
+aws configure
+```
+  - Digite suas credenciais, região (ex: us-east-1) e formato de saída (json ou table).
+
+3. Inicializar e aplicar Terraform
+   - Acess o diretório *terraform*
+   - Execute os comandos abaixo
+   ```
+   terraform init
+   terraform plan
+   terraform apply
+   ```
+   Isso vai provisionar toda a infraestrutura necessária: VPC, EKS (Kubernetes), e recursos relacionados.
+
+### Deploy da Aplicação com Kubernetes
+1. Conectar-se ao cluster EKS
+```
+aws eks update-kubeconfig --name controlepedidos-cluster --region us-east-1
+```
+2. Criar o namespace
+   - Todos os recursos deste projeto são criados dentro do namespace controle-pedidos. Crie esse namespace com:
+  ```
+  kubectl create namespace controle-pedidos
+
+  ```
+3. Aplicar os arquivos do Kubernetes
+   - Acesse o diretório k8s
+   - O usuário e senha do BD podem ser trocados no arquivo mysql-secret.yaml(caso necessário)**[Optional]**
+   - Todos os arquivos já especificam o namespace controle-pedidos, então você não precisa adicioná-lo manualmente nos comandos.
+   - Com o cluster EKS pronto e configurado no seu kubectl, aplique os arquivos na ordem:
+  ```
+kubectl apply -f mysql-secret.yaml
+kubectl apply -f app-configmap.yaml
+kubectl apply -f mysql-deployment.yaml
+kubectl apply -f app-deployment.yaml
+kubectl apply -f app-hpa.yaml
+kubectl apply -f loadbalancer.yaml
+  ```
+4. Acessar a aplicação via LoadBalancer
+   - Após aplicar o loadbalancer.yml, execute:
+   ```
+     kubectl get svc controlepedidos -n controle-pedidos
+   ```
+   - Você verá algo como:
+   ```
+   NAME              TYPE           CLUSTER-IP     EXTERNAL-IP                                                              PORT(S)        AGE
+   controlepedidos   LoadBalancer   172.20.60.85   a4a91eea98d404b2bafe383e838fdaf0-529162874.us-east-1.elb.amazonaws.com   80:30080/TCP   3m20s
+
+   ```
+   - Acesse a aplicação
+   ```
+   curl --location 'http://a4a91eea98d404b2bafe383e838fdaf0-529162874.us-east-1.elb.amazonaws.com/api/v1/customers'
+   ```
+   - Substitua o IP externo
+   
+5. Rollout e Logs
+   - Reiniciar o deploy (rollout)
+   ```
+   kubectl rollout restart deployment controlepedidos -n controle-pedidos
+   ```
+   - Ver os logs da aplicação
+   ```
+   kubectl logs deployment/controlepedidos -n controle-pedidos -f
+   ```
+   - 
+
+#### Destruindo os Recursos (Cleanup)
+Se você quiser remover todos os recursos criados para liberar espaço ou evitar cobranças na AWS, siga os passos abaixo.
+
+1. Deletar recursos do Kubernetes
+   - A forma mais simples e eficiente de remover todos os recursos criados é deletando o namespace controle-pedidos:
+   ```
+   kubectl delete namespace controle-pedidos
+   ```
+   - Isso irá remover:
+     - Deployments (aplicação e MySQL)
+     - Services (incluindo LoadBalancer)
+     - Secrets e ConfigMaps 
+     - PVCs e pods associados 
+     - ⚠️ Esse comando não remove o cluster EKS, apenas os recursos que foram aplicados dentro do namespace.
+     
+2. Destruir infraestrutura na AWS com Terraform
+Se você criou a infraestrutura usando Terraform (EKS, VPC, etc), volte para o diretório onde estão os arquivos .tf e execute:
+```
+terraform destroy
+```
+Esse comando irá:
+- Apagar o cluster EKS 
+- Remover a VPC, subnets, internet gateways, etc 
+- Liberar os recursos alocados na sua conta AWS
+  
+**Importante**: certifique-se de que você realmente quer apagar tudo. Essa operação é irreversível.
+3. 
 
