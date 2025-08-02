@@ -20,7 +20,9 @@ public class Customer {
     private UUID id;
     private String cpf;
     private String name;
+
     private String email;
+
     @Version
     private Long version;
 

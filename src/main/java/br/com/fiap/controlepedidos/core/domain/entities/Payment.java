@@ -29,6 +29,7 @@ public class Payment extends AbstractEntity {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
+
     @Column(name = "payment_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
@@ -70,4 +71,6 @@ public class Payment extends AbstractEntity {
     public void cancelPayment() {
         this.paymentStatus = PaymentStatus.CANCELLED;
     }
+
+
 }

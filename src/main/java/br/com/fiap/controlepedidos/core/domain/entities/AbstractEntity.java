@@ -22,4 +22,8 @@ abstract class AbstractEntity {
             id = UUID.randomUUID();
         }
     }
+
+    public UUID getId() {
+        return id;
+    }
 }
