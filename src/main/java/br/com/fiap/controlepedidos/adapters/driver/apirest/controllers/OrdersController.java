@@ -23,6 +23,7 @@ public class OrdersController implements OrdersAPI {
     private final GetAllOrdersReadyService getAllOrdersReadyService;
     private final GetAllOrdersDoneService getAllOrdersDoneService;
     private final GetAllOrdersReadyToPrepareService getAllOrdersReadyToPrepareService;
+    private final GetAllOrdersInProcessService getAllOrdersInProcess;
 
 
     public OrdersController(FinishOrderService finishOrderService,
@@ -32,7 +33,7 @@ public class OrdersController implements OrdersAPI {
                             GetAllOrdersInPrepService getAllOrdersInPrepService,
                             GetAllOrdersReadyService getAllOrdersReadyService,
                             GetAllOrdersDoneService getAllOrdersDoneService,
-                            GetAllOrdersReadyToPrepareService getAllOrdersReadyToPrepareService) {
+                            GetAllOrdersReadyToPrepareService getAllOrdersReadyToPrepareService, GetAllOrdersInProcessService getAllOrdersInProcess) {
         this.finishOrderService = finishOrderService;
         this.startOrderPreparation = startOrderPreparation;
         this.finishOrderPreparationService = finishOrderPreparationService;
@@ -41,6 +42,7 @@ public class OrdersController implements OrdersAPI {
         this.getAllOrdersReadyService = getAllOrdersReadyService;
         this.getAllOrdersDoneService = getAllOrdersDoneService;
         this.getAllOrdersReadyToPrepareService = getAllOrdersReadyToPrepareService;
+        this.getAllOrdersInProcess = getAllOrdersInProcess;
     }
 
     @Override
@@ -49,9 +51,11 @@ public class OrdersController implements OrdersAPI {
         try {
             Page<Order> page = getAllOrdersService.getAll(pageable);
 
+
             Page<OrderDTO> dtoPage = page.map(order ->
                     OrderDTO.convertToDTO(order,
-                            order.getCustomer() != null ? order.getCustomer() : null
+                            order.getCustomer() != null ? order.getCustomer() : null,
+                            order.getCart() != null ? order.getCart().getItems() : null
                     )
             );
 
@@ -71,7 +75,8 @@ public class OrdersController implements OrdersAPI {
 
             Page<OrderDTO> dtoPage = page.map(order ->
                     OrderDTO.convertToDTO(order,
-                            order.getCustomer() != null ? order.getCustomer() : null
+                            order.getCustomer() != null ? order.getCustomer() : null,
+                            order.getCart() != null ? order.getCart().getItems() : null
                     )
             );
 
@@ -89,7 +94,8 @@ public class OrdersController implements OrdersAPI {
 
             Page<OrderDTO> dtoPage = page.map(order ->
                     OrderDTO.convertToDTO(order,
-                            order.getCustomer() != null ? order.getCustomer() : null
+                            order.getCustomer() != null ? order.getCustomer() : null,
+                            order.getCart() != null ? order.getCart().getItems() : null
                     )
             );
 
@@ -107,7 +113,8 @@ public class OrdersController implements OrdersAPI {
 
             Page<OrderDTO> dtoPage = page.map(order ->
                     OrderDTO.convertToDTO(order,
-                            order.getCustomer() != null ? order.getCustomer() : null
+                            order.getCustomer() != null ? order.getCustomer() : null,
+                            order.getCart() != null ? order.getCart().getItems() : null
                     )
             );
 
@@ -125,7 +132,8 @@ public class OrdersController implements OrdersAPI {
 
             Page<OrderDTO> dtoPage = page.map(order ->
                     OrderDTO.convertToDTO(order,
-                            order.getCustomer() != null ? order.getCustomer() : null
+                            order.getCustomer() != null ? order.getCustomer() : null,
+                            order.getCart() != null ? order.getCart().getItems() : null
                     )
             );
 
@@ -139,19 +147,32 @@ public class OrdersController implements OrdersAPI {
     @Override
     public ResponseEntity<OrderDTO> startPreparation(UpdateOrderStatusDTO order) {
         Order orderUpdated = startOrderPreparation.perform(order.orderId());
-        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
+        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer(), orderUpdated.getCart().getItems()), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<OrderDTO> informReady(UpdateOrderStatusDTO order) {
         Order orderUpdated = finishOrderPreparationService.perform(order.orderId());
-        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
+        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer(), orderUpdated.getCart().getItems()), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<OrderDTO> informDone(UpdateOrderStatusDTO order) {
         Order orderUpdated = finishOrderService.perform(order.orderId());
-        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer()), HttpStatus.OK);
+        return new ResponseEntity<>(OrderDTO.convertToDTO(orderUpdated, orderUpdated.getCustomer(), orderUpdated.getCart().getItems()), HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<PagedResponse<OrderDTO>> getAllInProcess(Pageable pageable) {
+        Page<Order> page = getAllOrdersInProcess.getAllOrdersInProcess(pageable);
+
+        Page<OrderDTO> dtoPage = page.map(order ->
+                OrderDTO.convertToDTO(order,
+                        order.getCustomer() != null ? order.getCustomer() : null,
+                        order.getCart() != null ? order.getCart().getItems() : null
+                )
+        );
+
+        return ResponseEntity.ok(PagedResponse.of(dtoPage));
+    }
 }

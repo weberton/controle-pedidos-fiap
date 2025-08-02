@@ -31,6 +31,10 @@ public class GetAllOrdersServiceImpl implements GetAllOrdersService {
                 Customer customer = customerService.findById(order.getCustomer().getId());
                 order.setCustomer(customer);
             }
+
+            if (order.getCart() != null && order.getCart().getItems() != null) {
+                order.setCart(order.getCart());
+            }
         });
 
         return orders;
