@@ -24,6 +24,62 @@ public class Order extends AbstractEntity {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public void setTotalCents(int totalCents) {
+        this.totalCents = totalCents;
+    }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public int getTotalCents() {
+        return totalCents;
+    }
+
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private Cart cart;
@@ -43,7 +99,6 @@ public class Order extends AbstractEntity {
 
     @Column(name = "order_number", nullable = false)
     private int orderNumber;
-
 
     public Order() {
         prePersist();

@@ -2,7 +2,7 @@ package br.com.fiap.controlepedidos.core.domain.enums;
 
 public enum PaymentStatus {
     WAITING("Aguardando"),
-    PAID("Pago"),
+    PAID("Aprovado"),
     CANCELLED("Cancelado");
 
     private final String desc;

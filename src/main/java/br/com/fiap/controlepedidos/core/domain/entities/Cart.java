@@ -20,6 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
+
 @EqualsAndHashCode(callSuper = true)
 public class Cart extends AbstractEntity {
 
