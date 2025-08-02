@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 public class MercadoPagoProperties {
 
     private String accessToken;
+
     private String endpoint;
-
-
 }

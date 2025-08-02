@@ -100,7 +100,6 @@ public class Order extends AbstractEntity {
     @Column(name = "order_number", nullable = false)
     private int orderNumber;
 
-
     public Order() {
         prePersist();
     }
