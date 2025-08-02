@@ -25,34 +25,6 @@ public class Product {
     private UUID id;
     private String name;
 
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
     private Integer price;
     private Category category;
     private String description;
