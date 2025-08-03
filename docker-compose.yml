@@ -36,27 +36,3 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
-
-  swagger-exporter:
-    image: curlimages/curl:latest
-    container_name: swagger_exporter
-    depends_on:
-      - controlepedidos
-    entrypoint: >
-      sh -c "
-        echo '⏳ Aguardando aplicação subir...';
-        for i in $(seq 1 90); do
-          if curl -s http://controlepedidos:8080/v3/api-docs.yaml -o /output/api.yaml; then
-            echo '✅ Swagger gerado com sucesso!';
-            exit 0;
-          else
-            echo '⏳ Tentativa $i...';
-            sleep 1;
-          fi
-        done
-        echo '❌ Timeout: não foi possível gerar o Swagger.';
-        exit 1;
-      "
-    volumes:
-      - ./src/main/resources/static:/output
-
