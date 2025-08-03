@@ -9,3 +9,9 @@ variable "cluster_name" {
 variable "node_instance_type" {
   default = "t3.small"
 }
+
+variable "eks_admin_principal_arn" {
+  type        = string
+  description = "ARN do usuário terá acesso ao cluster EKS"
+  default = "arn:aws:iam::967246349191:root" #replace it
+}

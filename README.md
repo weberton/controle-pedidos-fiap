@@ -134,6 +134,7 @@ Antes de começar, você vai precisar:
    - Crie um usuário com acesso programático. 
    - Dê permissões de administrador ou permissões específicas para EC2, EKS, VPC, etc. 
    - Após a criação, anote o Access Key ID e o Secret Access Key.
+   - Substitua o usuário no arquivo [variables](https://github.com/weberton/controle-pedidos-fiap/blob/main/terraform/aws/variables.tf), variable *eks_admin_principal_arn* 
    
 2. Configurar AWS CLI
 ```
@@ -191,6 +192,7 @@ kubectl apply -f loadbalancer.yaml
    curl --location 'http://a4a91eea98d404b2bafe383e838fdaf0-529162874.us-east-1.elb.amazonaws.com/api/v1/customers'
    ```
    - Substitua o IP externo
+   - **O loadbalancer pode demorar alguns minutos para ficar disponível** 
    
 5. Rollout e Logs
    - Reiniciar o deploy (rollout)
