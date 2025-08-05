@@ -510,11 +510,14 @@ components:
         id:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         name:
           type: string
+          example: X-Tudo
         price:
           type: integer
           format: int32
+          example: 3200
         category:
           type: string
           enum:
@@ -522,10 +525,13 @@ components:
             - BEBIDA
             - ACOMPANHAMENTO
             - SOBREMESA
+          example: LANCHE
         description:
           type: string
+          example: Pao de brioche, hamburguer angus 120g, maionese caseira temperada, cebola roxa, alface americana, mostarda com mel, ketchup
         active:
           type: boolean
+          example: true
         image:
           type: string
       required:
@@ -539,6 +545,7 @@ components:
         orderId:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
       required:
         - orderId
     OrderDTO:
@@ -547,25 +554,33 @@ components:
         id:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         customerName:
           type: string
+          example: Carlos Antonio
         status:
           type: string
+          example: CREATED
         orderNumber:
           type: integer
           format: int32
+          example: 12784
     CustomerDTO:
       type: object
       properties:
         id:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         cpf:
           type: string
+          example: 12345678900
         nome:
           type: string
+          example: Carlos Antonio
         email:
           type: string
+          example: carlos_antonio@teste.com
       required:
         - email
         - nome
@@ -575,6 +590,7 @@ components:
         cartId:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
       required:
         - cartId
     PaymentDataResponseDTO:
@@ -583,20 +599,26 @@ components:
         orderID:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         paymentStatus:
           type: string
+          example: PAID
         provider:
           type: string
+          example: Mercado Pago
         qrCode:
           type: string
+          example: sadibnibnilsa-dsabn2ej90dj902j-ddnqwolnn1e2o
     MercadoPagoQRCodePaymentCallbackDTO:
       type: object
       properties:
         orderId:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         paidValue:
           type: number
+          example: 4200
       required:
         - orderId
         - paidValue
@@ -606,22 +628,28 @@ components:
         paymentId:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         customerName:
           type: string
+          example: Carlos Antonio
         orderId:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         orderNumber:
           type: integer
           format: int32
+          example: 13572
         status:
           type: string
+          example: PAID
     CreateCartRequest:
       type: object
       properties:
         customerId:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         item:
           $ref: "#/components/schemas/CreateItemRequest"
     CreateItemRequest:
@@ -629,10 +657,12 @@ components:
       properties:
         productId:
           type: string
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         quantity:
           type: integer
           format: int32
           minimum: 1
+          example: 2
       required:
         - productId
     CartItemResponseDto:
@@ -641,29 +671,37 @@ components:
         id:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         productId:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         name:
           type: string
+          example: Carlos Antonio
         priceCents:
           type: integer
           format: int32
+          example: 92
         quantity:
           type: integer
           format: int32
+          example: 2
         subtotalCents:
           type: integer
           format: int32
+          example: 3200
     CartResponseDto:
       type: object
       properties:
         cartId:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         customerId:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         items:
           type: array
           items:
@@ -671,12 +709,14 @@ components:
         totalCents:
           type: integer
           format: int32
+          example: 3241
     CartAssociateCustomerRequest:
       type: object
       properties:
         customerId:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
       required:
         - customerId
     UpdateItemQuantityRequest:
@@ -686,6 +726,7 @@ components:
           type: integer
           format: int32
           minimum: 0
+          example: 2
     Pageable:
       type: object
       properties:
@@ -693,10 +734,12 @@ components:
           type: integer
           format: int32
           minimum: 0
+          example: 2
         size:
           type: integer
           format: int32
           minimum: 1
+          example: 2
         sort:
           type: array
           items:
