@@ -1,104 +1,16 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
-  title: API para Controle de Pedidos - FIAP
-  description: Documentação da API para o totem de autoatendimento.
-  version: 1.0.0
-
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Generated server url
 paths:
-  /api/v1/customers:
-    post:
-      tags:
-        - Customers
-      summary: Criar novo cliente
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomerDTO'
-      responses:
-        '201':
-          description: Cliente criado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerDTO'
-        '400':
-          description: Requisição inválida (validação ou erro de negócio)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Erro interno do servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+  /products/{id}:
     get:
       tags:
-        - Customers
-      summary: Listar clientes com paginação
-      parameters:
-        - name: page
-          in: query
-          schema:
-            type: integer
-        - name: size
-          in: query
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Lista de clientes
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PagedResponseCustomerDTO'
-        '500':
-          description: Erro interno do servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /api/v1/customers/{cpf}:
-    get:
-      tags:
-        - Customers
-      summary: Buscar cliente por CPF
-      parameters:
-        - name: cpf
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Cliente encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerDTO'
-        '404':
-          description: Cliente não encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Erro interno do servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /api/v1/customers/{id}:
-    delete:
-      tags:
-        - Customers
-      summary: Deletar cliente por ID
+        - product-controller
+      operationId: findById
       parameters:
         - name: id
           in: path
@@ -107,554 +19,785 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          description: Cliente deletado com sucesso
-        '404':
-          description: Cliente não encontrado
+        "200":
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Erro interno do servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /api/v1/carts:
-    post:
-      tags:
-        - Carts
-      summary: Cria um novo carrinho e adiciona um item
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateCartRequest'
-      responses:
-        201:
-          description: Carrinho criado.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CartResponse'
-        '400':
-          description: Requisição inválida (validação ou erro de negócio)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Erro interno do servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /api/v1/carts/{cartId}:
-    get:
-      tags:
-        - Carts
-      summary: Recupera o estado atual do carrinho
-      parameters:
-        - name: cartId
-          in: path
-          required: true
-          description: Identificador único do carrinho (UUID)
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Carrinho encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CartResponse'
-        '404':
-          description: Carrinho não encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Erro interno do servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    delete:
-      tags:
-        - Carts
-      summary: Limpa todos os itens de um carrinho
-      parameters:
-        - name: cartId
-          in: path
-          required: true
-          description: Identificador único do carrinho (UUID)
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Carrinho esvaziado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CartResponse'
-        '404':
-          description: Carrinho não encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Erro interno do servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /api/v1/carts/{cartId}/items:
-    post:
-      tags:
-        - Carts
-      summary: Adiciona um item a um carrinho existente
-      parameters:
-        - name: cartId
-          in: path
-          required: true
-          description: Identificador único do carrinho (UUID)
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CartItemRequest'
-
-      responses:
-        200:
-          description: Item adicionado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CartResponse'
-        '400':
-          description: Requisição inválida (validação ou erro de negócio)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Erro interno do servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /api/v1/carts/{cartId}/items/{itemId}:
-   patch:
-     tags:
-       - Carts
-     summary: Atualiza quantidade de um item no carrinho
-     parameters:
-       - name: cartId
-         in: path
-         required: true
-         description: Identificador único do carrinho (UUID)
-         schema:
-           type: string
-       - name: itemId
-         in: path
-         required: true
-         description: Identificador único do item a ser atualizado
-         schema:
-           type: string
-     requestBody:
-       required: true
-       content:
-         application/json:
-           schema:
-             $ref: '#/components/schemas/CartItemRequest'
-     responses:
-       '200':
-         description: Quantidade atualizada
-         content:
-           application/json:
-             schema:
-               $ref: '#/components/schemas/CartResponse'
-       '400':
-         description: Requisição inválida (validação ou erro de negócio).
-         content:
-           application/json:
-             schema:
-               $ref: '#/components/schemas/ErrorResponse'
-       '500':
-         description: Erro interno do servidor
-         content:
-           application/json:
-             schema:
-               $ref: '#/components/schemas/ErrorResponse'
-
-   delete:
-     tags:
-       - Carts
-     summary: Remove um item de um carrinho existente
-     parameters:
-       - name: cartId
-         in: path
-         required: true
-         description: Identificador único do carrinho (UUID)
-         schema:
-           type: string
-       - name: productId
-         in: path
-         required: true
-         description: Identificador único do produto a ser removido
-         schema:
-           type: string
-     responses:
-      '200':
-        description: Item removido com sucesso
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CartResponse'
-      '404':
-        description: Carrinho ou produto não encontrado
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ErrorResponse'
-  /api/v1/carts/{cartId}/identify:
-    post:
-      tags:
-        - Carts
-      summary: Associa customerId a um carrinho anônimo
-      parameters:
-        - name: cartId
-          in: path
-          required: true
-          description: Identificador único do carrinho (UUID)
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CartAssociateCustomerRequest'
-      responses:
-        '200':
-          description: Carrinho atualizado com customerId
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CartResponse'
-        '404':
-          description: Carrinho não encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: Conflito – carrinho já possui um customer associado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Erro interno do servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /api/v1/products:
-    post:
-      summary: Criar produto
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductDTO'
-      responses:
-        '201':
-          description: Produto criado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductDTO'
-      tags:
-        - Products
-    get:
-      summary: Listar produtos (paginado)
-      parameters:
-        - in: query
-          name: page
-          schema:
-            type: integer
-            default: 0
-        - in: query
-          name: size
-          schema:
-            type: integer
-            default: 20
-        - in: query
-          name: sort
-          schema:
-            type: string
-            description: "Campos de ordenaço, separados por vírgula"
-      responses:
-        '200':
-          description: Lista de produtos
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PagedResponseProductDTO'
-      tags:
-        - Products
-  /api/v1/products/{id}:
-    get:
-      summary: Buscar produto por ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          description: Produto encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductDTO'
-      tags:
-        - Products
+                $ref: "#/components/schemas/ProductDTO"
     put:
-      summary: Atualizar produto
+      tags:
+        - product-controller
+      operationId: update
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           required: true
           schema:
             type: string
             format: uuid
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductDTO'
+              $ref: "#/components/schemas/ProductDTO"
+        required: true
       responses:
-        '200':
-          description: Produto atualizado com sucesso
+        "200":
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductDTO'
-      tags:
-        - Products
+                $ref: "#/components/schemas/ProductDTO"
     delete:
-      summary: Deletar produto
+      tags:
+        - product-controller
+      operationId: deleteById
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           required: true
           schema:
             type: string
             format: uuid
       responses:
-        '204':
-          description: Produto deletado com sucesso
+        "200":
+          description: OK
+  /orders/startPreparation:
+    put:
       tags:
-        - Products
+        - orders-controller
+      operationId: startPreparation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrderStatusDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderDTO"
+  /orders/informReady:
+    put:
+      tags:
+        - orders-controller
+      operationId: informReady
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrderStatusDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderDTO"
+  /orders/informDone:
+    put:
+      tags:
+        - orders-controller
+      operationId: informDone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrderStatusDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderDTO"
+  /products:
+    get:
+      tags:
+        - product-controller
+      operationId: findAll
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResponseProductDTO"
+    post:
+      tags:
+        - product-controller
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDTO"
+  /customers:
+    get:
+      tags:
+        - customer-controller
+      operationId: findAll_1
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResponseCustomerDTO"
+    post:
+      tags:
+        - customer-controller
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerDTO"
+  /checkout:
+    post:
+      tags:
+        - checkout-controller
+      operationId: doCheckout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DoCheckoutRequestDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentDataResponseDTO"
+  /checkout/confirmMercadoPagoQRCodePayment:
+    post:
+      tags:
+        - checkout-controller
+      operationId: confirmPayment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MercadoPagoQRCodePaymentCallbackDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MercadoPagoQrCodePaymentCallbackResponseDTO"
+  /carts:
+    post:
+      tags:
+        - carts-controller
+      operationId: createCart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCartRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartResponseDto"
+  /carts/{cartId}/items:
+    post:
+      tags:
+        - carts-controller
+      operationId: addItem
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateItemRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartResponseDto"
+  /carts/{cartId}/identify:
+    post:
+      tags:
+        - carts-controller
+      operationId: associateCustomer
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartAssociateCustomerRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartResponseDto"
+  /carts/{cartId}/items/{itemId}:
+    delete:
+      tags:
+        - carts-controller
+      operationId: removeItem
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartResponseDto"
+    patch:
+      tags:
+        - carts-controller
+      operationId: updateItemQuantity
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateItemQuantityRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartResponseDto"
+  /orders/getAll:
+    get:
+      tags:
+        - orders-controller
+      operationId: getAll
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResponseOrderDTO"
+  /orders/getAllToPrepare:
+    get:
+      tags:
+        - orders-controller
+      operationId: getAllToPrepare
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResponseOrderDTO"
+  /orders/getAllReady:
+    get:
+      tags:
+        - orders-controller
+      operationId: getAllReady
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResponseOrderDTO"
+  /orders/getAllInPreparation:
+    get:
+      tags:
+        - orders-controller
+      operationId: getAllInPreparation
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResponseOrderDTO"
+  /orders/getAllDone:
+    get:
+      tags:
+        - orders-controller
+      operationId: getAllDone
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResponseOrderDTO"
+  /customers/{cpf}:
+    get:
+      tags:
+        - customer-controller
+      operationId: findByCPF
+      parameters:
+        - name: cpf
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerDTO"
+  /carts/{cartId}:
+    get:
+      tags:
+        - carts-controller
+      operationId: findById_1
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartResponseDto"
+    delete:
+      tags:
+        - carts-controller
+      operationId: deleteCartById
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+  /customers/{id}:
+    delete:
+      tags:
+        - customer-controller
+      operationId: deleteById_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
 components:
   schemas:
+    ProductDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+        name:
+          type: string
+          example: X-Tudo
+        price:
+          type: integer
+          format: int32
+          example: 3200
+        category:
+          type: string
+          enum:
+            - LANCHE
+            - BEBIDA
+            - ACOMPANHAMENTO
+            - SOBREMESA
+          example: LANCHE
+        description:
+          type: string
+          example: Pao de brioche, hamburguer angus 120g, maionese caseira temperada, cebola roxa, alface americana, mostarda com mel, ketchup
+        active:
+          type: boolean
+          example: true
+        image:
+          type: string
+      required:
+        - category
+        - description
+        - name
+        - price
+    UpdateOrderStatusDTO:
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+      required:
+        - orderId
+    OrderDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+        customerName:
+          type: string
+          example: Carlos Antonio
+        status:
+          type: string
+          example: CREATED
+        orderNumber:
+          type: integer
+          format: int32
+          example: 12784
     CustomerDTO:
       type: object
       properties:
         id:
           type: string
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         cpf:
           type: string
-          description: CPF válido
-          example: 38968877009
+          example: 12345678900
         nome:
           type: string
-          description: Nome do cliente
-          example: Joaquim da Silva
+          example: Carlos Antonio
         email:
           type: string
-          format: email
-          example: meuemail@gmail.com
-          description: Email do cliente
+          example: carlos_antonio@teste.com
       required:
-        - cpf
-        - nome
         - email
-
-    PagedResponseCustomerDTO:
-      type: object
-      properties:
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerDTO'
-        pageable:
-          type: object
-        totalPages:
-          type: integer
-        totalElements:
-          type: integer
-        last:
-          type: boolean
-        first:
-          type: boolean
-        size:
-          type: integer
-        number:
-          type: integer
-
-    ErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Mensagem de erro
-        timestamp:
-          type: string
-          format: date-time
-          description: Data e hora do erro
-    CartItemResponse:
-      type: object
-      properties:
-        productId:
-          type: string
-          description: Identificador único do produto
-        name:
-          type: string
-        priceCents:
-          type: number
-          description: Nome do produto
-        quantity:
-          type: integer
-          description: Quantidade do produto adicionada
-        subtotalCents:
-          type: number
-          description: Subtotal em centavos (priceCents * quantity)
-
-    CreateCartRequest:
-      type: object
-      required:
-        - item
-      properties:
-        customerId:
-          type: string
-          description: Identificador do cliente(Opcional)
-          required: false
-        item:
-          $ref: '#/components/schemas/CartItemRequest'
-
-    CartItemRequest:
-      type: object
-      required:
-        - productId
-        - quantity
-      properties:
-        productId:
-          type: string
-          description: Identificador único do produto
-        quantity:
-          type: integer
-          description: Quantidade do produto adicionada(>=1)
-          minimum: 1
-
-    CartResponse:
+        - nome
+    DoCheckoutRequestDTO:
       type: object
       properties:
         cartId:
           type: string
           format: uuid
-          description: Identificador único do carrinho (UUID)
-        customerId:
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+      required:
+        - cartId
+    PaymentDataResponseDTO:
+      type: object
+      properties:
+        orderID:
           type: string
           format: uuid
-          nullable: true
-          description: ID do customer. Pode ser nulo para carrinho anônimo
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CartItemResponse'
-        totalCents:
-          type: integer
-          description: Soma de todos os subtotalCents do carrinho
-    CartAssociateCustomerRequest:
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+        paymentStatus:
+          type: string
+          example: PAID
+        provider:
+          type: string
+          example: Mercado Pago
+        qrCode:
+          type: string
+          example: sadibnibnilsa-dsabn2ej90dj902j-ddnqwolnn1e2o
+    MercadoPagoQRCodePaymentCallbackDTO:
       type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+        paidValue:
+          type: number
+          example: 4200
       required:
-        - customerId
+        - orderId
+        - paidValue
+    MercadoPagoQrCodePaymentCallbackResponseDTO:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+        customerName:
+          type: string
+          example: Carlos Antonio
+        orderId:
+          type: string
+          format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+        orderNumber:
+          type: integer
+          format: int32
+          example: 13572
+        status:
+          type: string
+          example: PAID
+    CreateCartRequest:
+      type: object
       properties:
         customerId:
           type: string
-          description: Identificador do cliente para associação ao carrinho
-    ProductDTO:
+          format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+        item:
+          $ref: "#/components/schemas/CreateItemRequest"
+    CreateItemRequest:
       type: object
+      properties:
+        productId:
+          type: string
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+        quantity:
+          type: integer
+          format: int32
+          minimum: 1
+          example: 2
       required:
-        - name
-        - price
-        - category
-        - description
+        - productId
+    CartItemResponseDto:
+      type: object
       properties:
         id:
           type: string
-          description: Identificador único do produto (UUID)
           format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+        productId:
+          type: string
+          format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
         name:
           type: string
-          description: Nome do produto
-        price:
+          example: Carlos Antonio
+        priceCents:
           type: integer
-          description: Preço do produto
-        category:
+          format: int32
+          example: 92
+        quantity:
+          type: integer
+          format: int32
+          example: 2
+        subtotalCents:
+          type: integer
+          format: int32
+          example: 3200
+    CartResponseDto:
+      type: object
+      properties:
+        cartId:
           type: string
-          enum: [ LANCHE, ACOMPANHAMENTO, BEBIDA, SOBREMESA ]
-          description: Categoria do produto (LANCHE, ACOMPANHAMENTO, BEBIDA, SOBREMESA)
-        description:
+          format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+        customerId:
           type: string
-          description: Descrição dos itens que compõem o produto
-        active:
-          type: boolean
-          description: Flag
-        image:
+          format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItemResponseDto"
+        totalCents:
+          type: integer
+          format: int32
+          example: 3241
+    CartAssociateCustomerRequest:
+      type: object
+      properties:
+        customerId:
           type: string
-          description: Imagem do produto
+          format: uuid
+          example: 1c8664cc-d166-44f6-a75b-0453308c9972
+      required:
+        - customerId
+    UpdateItemQuantityRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          minimum: 0
+          example: 2
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+          example: 2
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+          example: 2
+        sort:
+          type: array
+          items:
+            type: string
     PagedResponseProductDTO:
       type: object
       properties:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/ProductDTO'
-        pageable:
-          type: object
-        totalPages:
+            $ref: "#/components/schemas/ProductDTO"
+        pageNumber:
           type: integer
-        totalElements:
-          type: integer
-        last:
-          type: boolean
-        first:
-          type: boolean
+          format: int32
         size:
           type: integer
-        number:
+          format: int32
+        totalElements:
           type: integer
-
-tags:
-  - name: Carts
-    description: Endpoints para gerenciamento de carrinhos de compra.
-  - name: Customers
-    description: Endpoints para gerenciamento de clientes.
-  - name: Products
-    description: Endpoints para gerenciamento de produtos.
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    PagedResponseOrderDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderDTO"
+        pageNumber:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    PagedResponseCustomerDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomerDTO"
+        pageNumber:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
