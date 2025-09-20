@@ -6,6 +6,21 @@ servers:
   - url: http://localhost:8080/api/v1
     description: Generated server url
 paths:
+  /health:
+    get:
+      tags:
+        - health-controller
+      summary: Health check da aplicação
+      description: Verifica se a aplicação está rodando corretamente.
+      operationId: healthCheck
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Application is running"
   /products/{id}:
     get:
       tags:
@@ -709,7 +724,7 @@ components:
         totalCents:
           type: integer
           format: int32
-          example: 3241
+          example: 4200
     CartAssociateCustomerRequest:
       type: object
       properties:
@@ -725,25 +740,26 @@ components:
         quantity:
           type: integer
           format: int32
-          minimum: 0
+          minimum: 1
           example: 2
+      required:
+        - quantity
     Pageable:
       type: object
       properties:
         page:
           type: integer
           format: int32
-          minimum: 0
-          example: 2
+          example: 0
         size:
           type: integer
           format: int32
-          minimum: 1
-          example: 2
+          example: 10
         sort:
           type: array
           items:
             type: string
+            example: name,asc
     PagedResponseProductDTO:
       type: object
       properties:
@@ -751,37 +767,28 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ProductDTO"
-        pageNumber:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        totalElements:
-          type: integer
-          format: int64
+        pageable:
+          $ref: "#/components/schemas/Pageable"
         totalPages:
           type: integer
           format: int32
-    PagedResponseOrderDTO:
-      type: object
-      properties:
-        content:
-          type: array
-          items:
-            $ref: "#/components/schemas/OrderDTO"
-        pageNumber:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
+          example: 5
         totalElements:
           type: integer
           format: int64
-        totalPages:
+          example: 50
+        size:
           type: integer
           format: int32
+          example: 10
+        number:
+          type: integer
+          format: int32
+          example: 0
+        numberOfElements:
+          type: integer
+          format: int32
+          example: 10
     PagedResponseCustomerDTO:
       type: object
       properties:
@@ -789,15 +796,54 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CustomerDTO"
-        pageNumber:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        totalElements:
-          type: integer
-          format: int64
+        pageable:
+          $ref: "#/components/schemas/Pageable"
         totalPages:
           type: integer
           format: int32
+          example: 5
+        totalElements:
+          type: integer
+          format: int64
+          example: 50
+        size:
+          type: integer
+          format: int32
+          example: 10
+        number:
+          type: integer
+          format: int32
+          example: 0
+        numberOfElements:
+          type: integer
+          format: int32
+          example: 10
+    PagedResponseOrderDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderDTO"
+        pageable:
+          $ref: "#/components/schemas/Pageable"
+        totalPages:
+          type: integer
+          format: int32
+          example: 5
+        totalElements:
+          type: integer
+          format: int64
+          example: 50
+        size:
+          type: integer
+          format: int32
+          example: 10
+        number:
+          type: integer
+          format: int32
+          example: 0
+        numberOfElements:
+          type: integer
+          format: int32
+          example: 10
