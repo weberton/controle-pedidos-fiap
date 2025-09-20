@@ -29,6 +29,7 @@ class CreateCustomerServiceTest {
                 .cpf("123")
                 .email("myEmail@gmail.com")
                 .name("Nome")
+                .accountid("")
                 .build();
         when(customerRepository.findByEmail(cliente.getEmail())).thenReturn(Optional.empty());
         when(customerRepository.findByCpf(cliente.getCpf())).thenReturn(Optional.empty());
@@ -44,6 +45,7 @@ class CreateCustomerServiceTest {
                 .cpf("123")
                 .email("myEmail@gmail.com")
                 .name("Nome")
+                .accountid("")
                 .build();
         when(customerRepository.findByEmail(cliente.getEmail())).thenReturn(Optional.of(cliente));
         ExistentRecordException exception = assertThrows(ExistentRecordException.class,
@@ -61,6 +63,7 @@ class CreateCustomerServiceTest {
                 .cpf("123")
                 .email("myEmail@gmail.com")
                 .name("Nome")
+                .accountid("")
                 .build();
 
         when(customerRepository.findByCpf(cliente.getCpf())).thenReturn(Optional.of(cliente));

@@ -30,7 +30,8 @@ class FindCustomerByCPFServiceImplTest {
         var id = UUID.randomUUID();
         var cpf = "34550838035";
         var name = "Name";
-        var customerFromDb = Optional.of(Customer.builder().id(id).cpf(cpf).name(name).build());
+        var accountid = "";
+        var customerFromDb = Optional.of(Customer.builder().id(id).cpf(cpf).name(name).accountid(accountid).build());
 
         when(customerRepository.findByCpf(cpf)).thenReturn(customerFromDb);
 

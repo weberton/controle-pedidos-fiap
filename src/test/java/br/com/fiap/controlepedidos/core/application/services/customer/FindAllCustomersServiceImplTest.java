@@ -28,7 +28,7 @@ class FindAllCustomersServiceImplTest {
     @Test
     void findAllCustomers_shouldCallRepository() {
         var page = Pageable.unpaged();
-        var customer1 = new Customer(UUID.randomUUID(), "anyCpf", "anyName", "email", 1L);
+        var customer1 = new Customer(UUID.randomUUID(), "anyCpf", "anyName", "email", "", 1L);
         var customers = List.of(customer1);
         var expectedResponse = new PageImpl<>(customers);
 
