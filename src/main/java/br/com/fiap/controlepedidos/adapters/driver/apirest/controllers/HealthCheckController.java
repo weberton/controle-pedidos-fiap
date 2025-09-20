@@ -1,4 +1,4 @@
-package br.com.fiap.controlepedidos.adapters.driver.apirest;
+package br.com.fiap.controlepedidos.adapters.driver.apirest.controllers;
 
 import br.com.fiap.controlepedidos.adapters.driver.apirest.contract.HealthCheckApi;
 import org.springframework.http.ResponseEntity;
