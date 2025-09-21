@@ -1,2 +1,2 @@
-ALTER TABLE controle_pedidos.customers
+ALTER TABLE customers
 ADD COLUMN accountid VARCHAR(255) NULL AFTER email;
