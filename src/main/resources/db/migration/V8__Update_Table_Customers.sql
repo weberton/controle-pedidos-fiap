@@ -1,0 +1,2 @@
+ALTER TABLE customers
+ADD COLUMN accountid VARCHAR(255) NULL AFTER email;

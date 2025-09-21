@@ -68,7 +68,7 @@ class CustomerControllerTest {
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .build();
         this.objectMapper = new ObjectMapper();
-        this.customerDto = new CustomerDTO(UUID.randomUUID(), CPF, NOME_COMPLETO, MAIL);
+        this.customerDto = new CustomerDTO(UUID.randomUUID(), CPF, NOME_COMPLETO, MAIL, "");
     }
 
     @Test
@@ -99,7 +99,8 @@ class CustomerControllerTest {
         CustomerDTO clienteComCpfInvalido = new CustomerDTO(this.customerDto.id(),
                 "123",
                 this.customerDto.nome(),
-                this.customerDto.email());
+                this.customerDto.email(),
+                "");
 
         mockMvc.perform(post(CustomerApi.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -116,7 +117,8 @@ class CustomerControllerTest {
         CustomerDTO clienteComEmailInvalido = new CustomerDTO(this.customerDto.id(),
                 this.customerDto.cpf(),
                 this.customerDto.nome(),
-                invalidEmail);
+                invalidEmail,
+                "");
 
         mockMvc.perform(post(CustomerApi.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -133,7 +135,8 @@ class CustomerControllerTest {
         CustomerDTO clienteComEmailInvalido = new CustomerDTO(this.customerDto.id(),
                 this.customerDto.cpf(),
                 invalidName,
-                this.customerDto.email());
+                this.customerDto.email(),
+                "");
 
         mockMvc.perform(post(CustomerApi.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
