@@ -6,14 +6,15 @@ import br.com.fiap.controlepedidos.adapters.driven.infra.azure.apim.cpf.dto.out.
 import br.com.fiap.controlepedidos.adapters.driven.infra.azure.apim.cpf.dto.out.GetAccountResponseDTO;
 import br.com.fiap.controlepedidos.adapters.driven.infra.azure.apim.exception.APIMCommunicationException;
 import br.com.fiap.controlepedidos.adapters.driven.infra.azure.apim.exception.MissingRequiredValueException;
-import br.com.fiap.controlepedidos.adapters.driven.infra.payment.mercadopago.exceptions.MercadoPagoConnectionException;
 import br.com.fiap.controlepedidos.core.application.ports.IAzureAPIMGateway;
 import br.com.fiap.controlepedidos.core.domain.entities.Account;
 import br.com.fiap.controlepedidos.core.domain.entities.Customer;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -21,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class APIMClient implements IAzureAPIMGateway {
@@ -32,6 +34,7 @@ public class APIMClient implements IAzureAPIMGateway {
         this.properties = properties;
         this.objectMapper = objectMapper;
     }
+
     private <T, R> R sendRequest(
             String endpoint,
             String headerValue,
@@ -41,7 +44,6 @@ public class APIMClient implements IAzureAPIMGateway {
         try {
             URL url = new URL(endpoint);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
             conn.setRequestMethod("POST");
             conn.setRequestProperty(properties.getAuthkey(), headerValue);
             conn.setRequestProperty("Content-Type", "application/json");
@@ -65,93 +67,80 @@ public class APIMClient implements IAzureAPIMGateway {
                 }
                 return objectMapper.readValue(responseBuilder.toString(), responseType);
             }
-
+        } catch (JsonProcessingException e) {
+            throw new APIMCommunicationException("Erro ao serializar/deserializar JSON do APIM", e);
+        } catch (IOException e) {
+            throw new APIMCommunicationException("Erro de comunicação com o APIM", e);
         } catch (Exception e) {
-            throw new MercadoPagoConnectionException("Erro ao chamar o APIM " + e.getMessage(), e);
+            throw new APIMCommunicationException("Erro inesperado ao chamar o APIM", e);
         }
     }
 
     @Override
     public Account createCustomerAccountByCPF(Customer customer) {
-        AddAccountRequestDTO request = parseAccountToAddCpfRequestDTO(customer);
+        validateCustomer(customer, false);
+
+        AddAccountRequestDTO request = AddAccountRequestDTO.builder()
+                .cpf(customer.getCpf())
+                .name(customer.getName())
+                .build();
+
         AddAccountResponseDTO response = sendRequest(
                 properties.getAddcpfendpoint(),
                 properties.getAddcpfatuhvalue(),
                 request,
                 AddAccountResponseDTO.class
         );
-        return parseAccountToAddCpfResponseDTO(response);
+
+        return parseAccountToAddCpfResponseDTO(response)
+                .orElseThrow(() -> new APIMCommunicationException("Falha ao criar conta no APIM"));
     }
 
     @Override
     public boolean authenticateCustomerAccountByCPF(Customer customer) {
-        AuthAccountRequestDTO request = parseCustomerToAuthByCpf(customer);
+        validateCustomer(customer, true);
+
+        AuthAccountRequestDTO request = new AuthAccountRequestDTO();
+        request.setUserId(customer.getAccountid());
+
         GetAccountResponseDTO response = sendRequest(
                 properties.getAuthcpfendpoint(),
                 properties.getAuthcpfauthvalue(),
                 request,
                 GetAccountResponseDTO.class
         );
+
         return parseAccountFoundResponseDTO(response);
     }
 
-    private Account parseAccountToAddCpfResponseDTO(AddAccountResponseDTO addAccountResponseDTO) {
-        if (addAccountResponseDTO == null) {
-            throw new APIMCommunicationException("APIM - Resposta nula ao criar conta.");
+    private Optional<Account> parseAccountToAddCpfResponseDTO(AddAccountResponseDTO dto) {
+        if (dto == null || isNullOrEmpty(dto.getUserId())) {
+            throw new APIMCommunicationException("APIM - Resposta inválida ao criar conta.");
         }
-        if (addAccountResponseDTO.getUserId() == null || addAccountResponseDTO.getUserId().isEmpty()) {
-            throw new APIMCommunicationException("APIM - UserId nulo ou vazio ao criar conta.");
-        }
-
-        if ("201".equals(addAccountResponseDTO.getStatusCode())) {
-            return Account.builder()
-                    .userId(addAccountResponseDTO.getUserId())
-                    .build();
-        }
-        return null;
+        return "201".equals(dto.getStatusCode())
+                ? Optional.of(Account.builder().userId(dto.getUserId()).build())
+                : Optional.empty();
     }
 
-    private AddAccountRequestDTO parseAccountToAddCpfRequestDTO(Customer customer) {
-        if (customer == null) {
-            throw new NullPointerException("O cliente não pode ser nulo");
+    private boolean parseAccountFoundResponseDTO(GetAccountResponseDTO dto) {
+        if (dto == null || isNullOrEmpty(dto.getUserId())) {
+            throw new APIMCommunicationException("APIM - Resposta inválida ao autenticar conta.");
         }
-        if (customer.getCpf() == null || customer.getCpf().isEmpty()) {
-            throw new MissingRequiredValueException("O CPF do cliente não pode ser nulo ou vazio");
-        }
-        if (customer.getName() == null || customer.getName().isEmpty()) {
-            throw new MissingRequiredValueException("O nome do cliente não pode ser nulo ou vazio");
-        }
-
-        return AddAccountRequestDTO.builder()
-                .cpf(customer.getCpf())
-                .name(customer.getName())
-                .build();
+        return Objects.equals(dto.getStatusCode(), "200");
     }
 
-    private boolean parseAccountFoundResponseDTO(GetAccountResponseDTO getAccountResponseDTO) {
-        if (getAccountResponseDTO == null) {
-            throw new APIMCommunicationException("APIM - Resposta nula ao autenticar conta.");
+    private void validateCustomer(Customer customer, boolean requireAccountId) {
+        if (customer == null) throw new NullPointerException("O cliente não pode ser nulo");
+        if (isNullOrEmpty(customer.getCpf())) throw new MissingRequiredValueException("CPF não pode ser nulo ou vazio");
+        if (!requireAccountId && isNullOrEmpty(customer.getName())) {
+            throw new MissingRequiredValueException("Nome não pode ser nulo ou vazio");
         }
-        if (getAccountResponseDTO.getUserId() == null || getAccountResponseDTO.getUserId().isEmpty()) {
-            throw new APIMCommunicationException("APIM - UserId nulo ou vazio ao autenticar conta.");
+        if (requireAccountId && isNullOrEmpty(customer.getAccountid())) {
+            throw new MissingRequiredValueException("AccountId não pode ser nulo ou vazio");
         }
-
-        return Objects.equals(getAccountResponseDTO.getStatusCode(), "200");
     }
 
-    private AuthAccountRequestDTO parseCustomerToAuthByCpf(Customer customer) {
-        if (customer == null) {
-            throw new NullPointerException("O cliente não pode ser nulo");
-        }
-        if (customer.getCpf() == null || customer.getCpf().isEmpty()) {
-            throw new MissingRequiredValueException("O CPF do cliente não pode ser nulo ou vazio");
-        }
-        if (customer.getAccountid() == null || customer.getAccountid().isEmpty()) {
-            throw new MissingRequiredValueException("O AccountId do cliente não pode ser nulo ou vazio");
-        }
-
-        AuthAccountRequestDTO dto = new AuthAccountRequestDTO();
-        dto.setUserId(customer.getAccountid());
-        return dto;
+    private boolean isNullOrEmpty(String value) {
+        return value == null || value.isEmpty();
     }
 }
