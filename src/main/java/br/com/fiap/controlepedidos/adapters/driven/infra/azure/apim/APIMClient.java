@@ -32,19 +32,22 @@ public class APIMClient implements IAzureAPIMGateway {
         this.properties = properties;
         this.objectMapper = objectMapper;
     }
-
-    @Override
-    public Account createCustomerAccountByCPF(Customer customer) {
+    private <T, R> R sendRequest(
+            String endpoint,
+            String headerValue,
+            T requestDto,
+            Class<R> responseType
+    ) {
         try {
-            URL url = new URL(properties.getAddcpfendpoint());
+            URL url = new URL(endpoint);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
-            conn.setRequestProperty(properties.getAuthkey(), properties.getAddcpfatuhvalue());
+            conn.setRequestProperty(properties.getAuthkey(), headerValue);
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
 
-            String jsonInput = objectMapper.writeValueAsString(parseAccountToAddCpfRequestDTO(customer));
+            String jsonInput = objectMapper.writeValueAsString(requestDto);
 
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = jsonInput.getBytes(StandardCharsets.UTF_8);
@@ -52,18 +55,15 @@ public class APIMClient implements IAzureAPIMGateway {
             }
 
             int statusCode = conn.getResponseCode();
-
             InputStream inputStream = (statusCode < 400) ? conn.getInputStream() : conn.getErrorStream();
 
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 StringBuilder responseBuilder = new StringBuilder();
                 String line;
-
                 while ((line = reader.readLine()) != null) {
                     responseBuilder.append(line.trim());
                 }
-
-                return parseAccountToAddCpfResponseDTO(objectMapper.readValue(responseBuilder.toString(), AddAccountResponseDTO.class));
+                return objectMapper.readValue(responseBuilder.toString(), responseType);
             }
 
         } catch (Exception e) {
@@ -71,86 +71,69 @@ public class APIMClient implements IAzureAPIMGateway {
         }
     }
 
-    private Account parseAccountToAddCpfResponseDTO(AddAccountResponseDTO addAccountResponseDTO) throws Exception {
-        if (addAccountResponseDTO == null) {
-            throw new APIMCommunicationException("APIM - Não foi possível criar a conta do cliente, resposta nula do APIM.");
-        }
-        if (addAccountResponseDTO.getUserId() == null || addAccountResponseDTO.getUserId().isEmpty()) {
-            throw new APIMCommunicationException("APIM - Não foi possível criar a conta do cliente, UserId nulo ou vazio.");
-        }
-
-        if (addAccountResponseDTO.getStatusCode().equals("201")) {
-
-            return Account.builder()
-                    .userId(addAccountResponseDTO.getUserId())
-                    .build();
-        } else {
-            return null;
-        }
-
-    }
-
-    private AddAccountRequestDTO parseAccountToAddCpfRequestDTO(Customer customer) throws Exception {
-
-        if (customer == null) {
-            throw new NullPointerException("O cliente não pode ser nulo");
-        }
-
-        if (customer.getCpf() == null || customer.getCpf().isEmpty()) {
-            throw new MissingRequiredValueException("O CPF do cliente não pode ser nulo ou vazio");
-        }
-
-        if (customer.getName() == null || customer.getName().isEmpty()) {
-            throw new MissingRequiredValueException("O nome do cliente não pode ser nulo ou vazio");
-        }
-
-        return AddAccountRequestDTO.builder().cpf(customer.getCpf()).name(customer.getName()).build();
+    @Override
+    public Account createCustomerAccountByCPF(Customer customer) {
+        AddAccountRequestDTO request = parseAccountToAddCpfRequestDTO(customer);
+        AddAccountResponseDTO response = sendRequest(
+                properties.getAddcpfendpoint(),
+                properties.getAddcpfatuhvalue(),
+                request,
+                AddAccountResponseDTO.class
+        );
+        return parseAccountToAddCpfResponseDTO(response);
     }
 
     @Override
     public boolean authenticateCustomerAccountByCPF(Customer customer) {
-        try {
-            URL url = new URL(properties.getAuthcpfendpoint());
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        AuthAccountRequestDTO request = parseCustomerToAuthByCpf(customer);
+        GetAccountResponseDTO response = sendRequest(
+                properties.getAuthcpfendpoint(),
+                properties.getAuthcpfauthvalue(),
+                request,
+                GetAccountResponseDTO.class
+        );
+        return parseAccountFoundResponseDTO(response);
+    }
 
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty(properties.getAuthkey(), properties.getAuthcpfauthvalue());
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setDoOutput(true);
-
-            String jsonInput = objectMapper.writeValueAsString(parseCustomerToAuthByCpf(customer));
-
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = jsonInput.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-
-            int statusCode = conn.getResponseCode();
-
-            InputStream inputStream = (statusCode < 400) ? conn.getInputStream() : conn.getErrorStream();
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-                StringBuilder responseBuilder = new StringBuilder();
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-                    responseBuilder.append(line.trim());
-                }
-
-                return parseAccountFoundResponseDTO(objectMapper.readValue(responseBuilder.toString(), GetAccountResponseDTO.class));
-            }
-
-        } catch (Exception e) {
-            throw new MercadoPagoConnectionException("Erro ao chamar o APIM " + e.getMessage(), e);
+    private Account parseAccountToAddCpfResponseDTO(AddAccountResponseDTO addAccountResponseDTO) {
+        if (addAccountResponseDTO == null) {
+            throw new APIMCommunicationException("APIM - Resposta nula ao criar conta.");
         }
+        if (addAccountResponseDTO.getUserId() == null || addAccountResponseDTO.getUserId().isEmpty()) {
+            throw new APIMCommunicationException("APIM - UserId nulo ou vazio ao criar conta.");
+        }
+
+        if ("201".equals(addAccountResponseDTO.getStatusCode())) {
+            return Account.builder()
+                    .userId(addAccountResponseDTO.getUserId())
+                    .build();
+        }
+        return null;
+    }
+
+    private AddAccountRequestDTO parseAccountToAddCpfRequestDTO(Customer customer) {
+        if (customer == null) {
+            throw new NullPointerException("O cliente não pode ser nulo");
+        }
+        if (customer.getCpf() == null || customer.getCpf().isEmpty()) {
+            throw new MissingRequiredValueException("O CPF do cliente não pode ser nulo ou vazio");
+        }
+        if (customer.getName() == null || customer.getName().isEmpty()) {
+            throw new MissingRequiredValueException("O nome do cliente não pode ser nulo ou vazio");
+        }
+
+        return AddAccountRequestDTO.builder()
+                .cpf(customer.getCpf())
+                .name(customer.getName())
+                .build();
     }
 
     private boolean parseAccountFoundResponseDTO(GetAccountResponseDTO getAccountResponseDTO) {
         if (getAccountResponseDTO == null) {
-            throw new APIMCommunicationException("APIM - Não foi possível autenticar a conta do cliente, resposta nula do APIM.");
+            throw new APIMCommunicationException("APIM - Resposta nula ao autenticar conta.");
         }
         if (getAccountResponseDTO.getUserId() == null || getAccountResponseDTO.getUserId().isEmpty()) {
-            throw new APIMCommunicationException("APIM - Não foi possível autenticar a conta do cliente, UserId nulo ou vazio.");
+            throw new APIMCommunicationException("APIM - UserId nulo ou vazio ao autenticar conta.");
         }
 
         return Objects.equals(getAccountResponseDTO.getStatusCode(), "200");
@@ -160,20 +143,15 @@ public class APIMClient implements IAzureAPIMGateway {
         if (customer == null) {
             throw new NullPointerException("O cliente não pode ser nulo");
         }
-
         if (customer.getCpf() == null || customer.getCpf().isEmpty()) {
             throw new MissingRequiredValueException("O CPF do cliente não pode ser nulo ou vazio");
         }
-
         if (customer.getAccountid() == null || customer.getAccountid().isEmpty()) {
             throw new MissingRequiredValueException("O AccountId do cliente não pode ser nulo ou vazio");
         }
 
-        AuthAccountRequestDTO authAccountRequestDTO = new AuthAccountRequestDTO();
-        authAccountRequestDTO.setUserId(customer.getAccountid());
-
-        return authAccountRequestDTO;
+        AuthAccountRequestDTO dto = new AuthAccountRequestDTO();
+        dto.setUserId(customer.getAccountid());
+        return dto;
     }
 }
-
-
