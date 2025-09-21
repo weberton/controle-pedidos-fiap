@@ -5,6 +5,7 @@ import br.com.fiap.controlepedidos.adapters.driven.infra.azure.apim.cpf.dto.in.A
 import br.com.fiap.controlepedidos.adapters.driven.infra.azure.apim.cpf.dto.out.AddAccountResponseDTO;
 import br.com.fiap.controlepedidos.adapters.driven.infra.azure.apim.cpf.dto.out.GetAccountResponseDTO;
 import br.com.fiap.controlepedidos.adapters.driven.infra.azure.apim.exception.APIMCommunicationException;
+import br.com.fiap.controlepedidos.adapters.driven.infra.azure.apim.exception.EntityRequiredException;
 import br.com.fiap.controlepedidos.adapters.driven.infra.azure.apim.exception.MissingRequiredValueException;
 import br.com.fiap.controlepedidos.core.application.ports.IAzureAPIMGateway;
 import br.com.fiap.controlepedidos.core.domain.entities.Account;
@@ -130,7 +131,7 @@ public class APIMClient implements IAzureAPIMGateway {
     }
 
     private void validateCustomer(Customer customer, boolean requireAccountId) {
-        if (customer == null) throw new NullPointerException("O cliente não pode ser nulo");
+        if (customer == null) throw new EntityRequiredException("O cliente não pode ser nulo");
         if (isNullOrEmpty(customer.getCpf())) throw new MissingRequiredValueException("CPF não pode ser nulo ou vazio");
         if (!requireAccountId && isNullOrEmpty(customer.getName())) {
             throw new MissingRequiredValueException("Nome não pode ser nulo ou vazio");
