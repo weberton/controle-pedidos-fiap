@@ -12,7 +12,9 @@ import java.util.UUID;
 public record CustomerDTO(UUID id,
                           @CPF(message = INVALID_CPF) String cpf,
                           @NotEmpty(message = INVALID_NAME) String nome,
-                          @NotEmpty(message = INVALID_EMAIL) @Email(message = INVALID_EMAIL) String email) {
+                          @NotEmpty(message = INVALID_EMAIL) @Email(message = INVALID_EMAIL) String email,
+                          String accountid
+) {
 
     public static final String INVALID_EMAIL = "Emal inválido";
     public static final String INVALID_CPF = "CPF inválido.";
@@ -32,7 +34,8 @@ public record CustomerDTO(UUID id,
         return new CustomerDTO(customer.getId(),
                 customer.getCpf(),
                 customer.getName(),
-                customer.getEmail());
+                customer.getEmail(),
+                customer.getAccountid());
     }
 
 }

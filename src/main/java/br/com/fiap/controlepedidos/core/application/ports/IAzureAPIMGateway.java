@@ -5,5 +5,6 @@ import br.com.fiap.controlepedidos.core.domain.entities.Customer;
 
 public interface IAzureAPIMGateway {
     public Account createCustomerAccountByCPF(Customer customer);
-    public Account authenticateCustomerAccountByCPF(Customer customer);
+
+    public boolean authenticateCustomerAccountByCPF(Customer customer);
 }
