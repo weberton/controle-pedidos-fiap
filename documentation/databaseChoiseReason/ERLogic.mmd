@@ -1,0 +1,60 @@
+erDiagram
+    CUSTOMERS ||--o{ CARTS : "possui"
+    CUSTOMERS ||--o{ ORDERS : "realiza"
+    CARTS ||--o{ CART_ITEMS : "contém"
+    PRODUCTS ||--o{ CART_ITEMS : "é item de"
+    CARTS ||--o{ ORDERS : "pode originar"
+    ORDERS ||--o{ PAYMENTS : "pode ter"
+    
+    CUSTOMERS {
+        BINARY(16) id PK
+        VARCHAR cpf
+        VARCHAR name
+        VARCHAR email
+        BIGINT version
+    }
+    CARTS {
+        BINARY(16) cart_id PK
+        BINARY(16) customer_id FK
+        BIGINT total_cents
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    CART_ITEMS {
+        BINARY(16) cart_item_id PK
+        BINARY(16) cart_id FK
+        BINARY(16) product_id FK
+        INT quantity
+        BIGINT price_cents
+        BIGINT subtotal_cents
+    }
+    PRODUCTS {
+        BINARY(16) id PK
+        VARCHAR name
+        INTEGER price
+        SMALLINT category
+        VARCHAR description
+        BOOLEAN active
+        VARCHAR image
+    }
+    ORDERS {
+        BINARY(16) order_id PK
+        INT order_number
+        BINARY(16) customer_id FK
+        BINARY(16) cart_id FK
+        VARCHAR order_status
+        INTEGER total_cents
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+
+    PAYMENTS {
+        BINARY(16) payment_id PK
+        BINARY(16) order_id FK
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+        VARCHAR payment_status
+        INTEGER paymentvalue_cents
+        VARCHAR paymentprovider
+        VARCHAR qr_code
+    }
